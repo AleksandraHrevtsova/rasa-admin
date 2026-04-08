@@ -16,13 +16,29 @@ const addAuthorizationHeaders = async (config) => {
   return config;
 };
 
-const handleResponseError = async (error) => {
+const refreshTokenIfNeeded = async () => {
+  const user = auth.currentUser;
+  if (!user) return null;
+
+  const newToken = await user.getIdToken(true);
+  setToken(newToken);
+  return newToken;
+};
+
+const refreshToken = async (error) => {
   if (error.response?.status === 401) {
-    console.warn("Unauthorized, clearing token");
-    clearToken();
+    try {
+      const newToken = await refreshTokenIfNeeded();
+      if (newToken) {
+        error.config.headers.Authorization = `Bearer ${newToken}`;
+        return api.request(error.config);
+      }
+    } catch (err) {
+      clearToken();
+    }
   }
   return Promise.reject(error);
 }
 
 api.interceptors.request.use(addAuthorizationHeaders);
-api.interceptors.response.use((response) => response, handleResponseError);
+api.interceptors.response.use((response) => response, refreshToken);

@@ -1,7 +1,7 @@
 import api from '../api';
 import { ENDPOINTS } from '../constants/endpoints';
 
-const { LIST, GET, CREATE, UPDATE, DEACTIVATE } = ENDPOINTS.API.USERS;
+const { LIST, GET, CREATE, UPDATE, DEACTIVATE, ACTIVATE } = ENDPOINTS.API.USERS;
 
 const withId = (url, id) => url.replace(':id', id);
 
@@ -29,8 +29,11 @@ export const updateUser = async (id, updatedUserData) => {
 };
 
 export const deactivateUser = async (id) => {
-  const { data } = await api.post(
-    withId(DEACTIVATE, id)
-  );
+  const { data } = await api.post(withId(DEACTIVATE, id));
+  return data;
+};
+
+export const activateUser = async (id) => {
+  const { data } = await api.post(withId(ACTIVATE, id));
   return data;
 };

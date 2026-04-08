@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router";
+import { Toaster } from 'sonner';
 
 import { NAV } from '../constants/navigation';
 import { ProtectedRoute } from "./ProtectedRoute";
@@ -10,6 +11,7 @@ import User from "../pages/User";
 export default function AppRouter() {
   return (
     <BrowserRouter>
+      <Toaster position="top-right" />
       <Routes>
         <Route path={NAV.login} element={<Login />} />
         <Route path={NAV.home} element={<ProtectedRoute><Users /></ProtectedRoute>} />

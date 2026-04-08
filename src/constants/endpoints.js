@@ -23,18 +23,21 @@ export const ENDPOINTS = {
       CREATE: apiPath + usersPath,
       UPDATE: apiPath + usersPath + '/:id',
       DEACTIVATE: apiPath + usersPath + '/:id/deactivate',
+      ACTIVATE: apiPath + usersPath + '/:id/activate',
     },
     ROLES: {
       LIST: apiPath + rolesPath,
       CREATE: apiPath + rolesPath,
       UPDATE: apiPath + rolesPath + '/:id',
       DEACTIVATE: apiPath + rolesPath + '/:id/deactivate',
+      ACTIVATE: apiPath + rolesPath + '/:id/activate',
     },
     COUNTERPARTIES: {
       LIST: apiPath + counterpartiesPath,
       CREATE: apiPath + counterpartiesPath,
       UPDATE: apiPath + counterpartiesPath + '/:id',
       DEACTIVATE: apiPath + counterpartiesPath + '/:id/deactivate',
+      ACTIVATE: apiPath + counterpartiesPath + '/:id/activate',
     },
   },
   ADMIN: {

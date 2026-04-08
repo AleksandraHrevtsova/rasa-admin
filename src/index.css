@@ -9,6 +9,11 @@
 .react-select-error__control {
   border-color: red !important;
 }
+
+button {
+  cursor: pointer;
+  width: auto;
+}
 /* 
 :root {
   --text: #6b6375;

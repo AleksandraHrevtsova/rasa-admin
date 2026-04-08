@@ -1,8 +1,10 @@
 {
   "edit": "Редагувати",
+  "activate": "Активувати",
   "deactivate": "Деактивувати",
   "save": "Зберегти",
   "cancel": "Скасувати",
+  "back": "Назад",
   "select": "Виберіть",
   "loading": "Завантаження",
 
@@ -12,6 +14,7 @@
   "login.submit": "Увійти",
 
   "users.title": "Користувачі",
+  "users.anyUsers": "Немає користувачів до відображення",
   "users.create": "Створити нового",
   "users.name": "Ім'я",
   "users.email": "Email",
@@ -31,6 +34,12 @@
   "user.password": "Пароль",
   "user.createNew": "Створення користувача",
   "user.editCurrent": "Редагування користувача",
+  "user.deactivated": "Користувача деактивовано",
+  "user.activated": "Користувач успішно активований",
+  "user.updated": "Користувач успішно змінений",
+  "user.created": "Користувач успішно створений",
+  "user.cannotDeactivateSelf": "Ви не можете деактивувати свого користувача",
+  "user.confirmDeactivate": "Чи дійсно Ви хочете деактивувати цього користувача?",
   
   "rules.counterparty": "Оберіть контрагента",
   "rules.hubs": "Оберіть склади",

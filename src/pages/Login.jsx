@@ -3,6 +3,7 @@ import { useLocale } from "../contexts/LocaleContext";
 import { login } from "../services/auth.service";
 import { useLocation, useNavigate } from 'react-router';
 import { NAV } from "../constants/navigation";
+import { Button } from "../components/Button";
 
 export default function Login() {
   const { t } = useLocale();
@@ -42,9 +43,13 @@ export default function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit" className="w-full bg-primary text-white p-2 rounded hover:bg-accent">
-          {t['login.submit']}
-        </button>
+        <Button 
+          type='submit' 
+          label={t['login.submit']}
+          handleClick={null} 
+          action='submit' 
+          isDisabled={!email && !password}
+        />
       </form>
     </div>
   );

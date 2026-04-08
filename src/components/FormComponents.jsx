@@ -44,18 +44,3 @@ const Input = (props) => {
   );
 };
 export const WrappedInput = withFormItemWrapper(Input);
-
-export const FormButton = ({ type, label, handleClick, isAccent }) => {
-  const defaultStyles = 'border p-2 rounded w-full';
-  const accentStyles = 'bg-blue-600 text-white ';
-  const buttonStyle = isAccent ? accentStyles + defaultStyles : defaultStyles;
-  return (
-    <button
-      type={type}
-      onClick={handleClick}
-      className={buttonStyle}
-    >
-      {label}
-    </button>
-  )
-};

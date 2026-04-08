@@ -1,8 +1,10 @@
 {
   "edit": "Редактировать",
+  "activate": "Активировать",
   "deactivate": "Деактивировать",
   "save": "Сохранить",
   "cancel": "Отмена",
+  "back": "Назад",
   "select": "Выбрать",
   "loading": "Загрузить",
 
@@ -11,7 +13,8 @@
   "login.password": "Пароль",
   "login.submit": "Войти",
 
-  "users.title": "Польователи",
+  "users.title": "Пользователи",
+  "users.anyUsers": "Нет пользователей для отображения",
   "users.create": "Создать",
   "users.name": "Имя",
   "users.email": "Email",
@@ -31,6 +34,12 @@
   "user.password": "Пароль",
   "user.createNew": "Создание пользователя",
   "user.editCurrent": "Редактирование пользователя",
+  "user.deactivated": "Пользователь деактивирован",
+  "user.activated": "Пользователь успешно активирован",
+  "user.updated": "Пользователь успешно изменен",
+  "user.created": "Пользователь успешно создан",
+  "user.cannotDeactivateSelf": "Вы не можете деактивировать своего пользователя самостоятельно",
+  "user.confirmDeactivate": "Вы действительно хотите деактивировать этого пользователя?",
 
   "rules.counterparty": "Виберите контрагента",
   "rules.hubs": "Виберите закрепленные склады",

@@ -14,25 +14,23 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onIdTokenChanged(auth, async (user) => {
-      setLoading(true);
-      try {
-        if (user) {
-          const token = await user.getIdToken();
-
+      if (user) {
+        try {
+          const token = await user.getIdToken(true);
           setToken(token);
           setFirebaseUser(user);
 
           const data = await getMe();
           setAppUser(data.user);
-        } else {
-          setFirebaseUser(null);
+        } catch (err) {
+          console.error('Auth sync error:', err);
           setAppUser(null);
           clearToken();
         }
-
-      } catch (err) {
-        console.error('Auth sync error:', err);
+      } else {
+        setFirebaseUser(null);
         setAppUser(null);
+        clearToken();
       }
       setLoading(false);
     });
@@ -42,7 +40,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ firebaseUser, appUser, loading }}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

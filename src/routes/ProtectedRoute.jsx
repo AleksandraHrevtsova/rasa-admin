@@ -9,17 +9,9 @@ export const ProtectedRoute = ({ children }) => {
   const { appUser, loading } = useAuth();
   const location = useLocation();
 
-  if (loading) return <Loading />
+  const locationState = { from: location.pathname + location.search };
 
-  if (appUser) {
-    return children;
-  } else {
-    return (
-      <Navigate 
-        to={NAV.login} 
-        replace
-        state={{ from: location.pathname + location.search }}
-      />
-    );
-  }
+  if (loading) return <Loading />
+  if (!appUser) return <Navigate to={NAV.login} replace state={locationState}/>
+  return children;
 };

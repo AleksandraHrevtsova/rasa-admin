@@ -44,7 +44,6 @@ export const login = async(email, password) => {
     setToken(token);
 
     const { data } = await api.post(LOGIN);
-    console.log('DATA:', data);
     return data;
   } catch (err) {
     console.error('Auth error:', err.code);
@@ -64,6 +63,5 @@ export const logout = async () => {
 
 export const getMe = async () => {
   const { data } = await api.get(ME);
-  console.log('getMe:', data);
   return data;
 };

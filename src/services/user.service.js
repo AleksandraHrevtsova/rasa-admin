@@ -5,35 +5,26 @@ const { LIST, GET, CREATE, UPDATE, DEACTIVATE, ACTIVATE } = ENDPOINTS.API.USERS;
 
 const withId = (url, id) => url.replace(':id', id);
 
-export const getUsers = async (params = {}) => {
-  const { data } = await api.get(LIST, { params });
-  return data;
+export const getUsers = (params = {}) => {
+  return api.get(LIST, { params });
 };
 
-export const getUserById = async (id) => {
-  const { data } = await api.get(withId(GET, id));
-  return data;
+export const getUserById = (id) => {
+  return api.get(withId(GET, id));
 };
 
-export const createUser = async (newUserData) => {
-  const { data } = await api.post(CREATE, newUserData);
-  return data;
+export const createUser = (newUserData) => {
+  return api.post(CREATE, newUserData);
 };
 
-export const updateUser = async (id, updatedUserData) => {
-  const { data } = await api.put(
-    withId(UPDATE, id),
-    updatedUserData
-  );
-  return data;
+export const updateUser = (id, updatedUserData) => {
+  return api.put(withId(UPDATE, id), updatedUserData);
 };
 
-export const deactivateUser = async (id) => {
-  const { data } = await api.post(withId(DEACTIVATE, id));
-  return data;
+export const deactivateUser = (id) => {
+  return api.post(withId(DEACTIVATE, id));
 };
 
-export const activateUser = async (id) => {
-  const { data } = await api.post(withId(ACTIVATE, id));
-  return data;
+export const activateUser = (id) => {
+  return api.post(withId(ACTIVATE, id));
 };

@@ -13,6 +13,16 @@
   "login.password": "Пароль",
   "login.submit": "Войти",
 
+  "logout.title": "Выйти",
+
+  "table.filter": "Фильтр",
+  "table.noData": "Нет данных для отображения",
+  "table.showInactive": "Активные",
+  "table.showActive": "Не активные",
+  "table.page": "Страница",
+  "table.of": "из",
+  "table.rows": "строк",
+
   "users.title": "Пользователи",
   "users.anyUsers": "Нет пользователей для отображения",
   "users.create": "Создать",
@@ -49,5 +59,12 @@
   "rules.email": "Введите email",
   "rules.incorrectEmail": "Некорректний email",
   "rules.password": "Введите пароль не менее 6 символов",
-  "rules.passwordMinLength": "Не менее 6 символов"
+  "rules.passwordMinLength": "Не менее 6 символов",
+
+  "products.title": "Продукты",
+  "counterparties.title": "Контрагенты",
+  "orders.title": "Заказы",
+  "payments.title": "Оплаты",
+  "certificates.title": "Сертификаты",
+  "roles.title": "Роли"
 }

@@ -1,4 +1,4 @@
-const defaultStyles = 'border px-4 py-2 rounded w-full transition-colors duration-200 focus:outline-none';
+const defaultStyles = 'border px-4 py-2 rounded-xs w-full transition-colors duration-200 focus:outline-none';
 const defaultDisableStyles = 'text-white opacity-50 cursor-not-allowed pointer-events-none';
 const actionStyles = {
   submit: {
@@ -22,6 +22,12 @@ const actionStyles = {
   create: {
     base: 'bg-blue-950 text-white',
     hover: 'hover:bg-blue-700',
+    active: 'active:bg-blue-800',
+    disabled: 'bg-blue-600 ' + defaultDisableStyles,
+  },
+  show: {
+    base: 'bg-white text-blue-950',
+    hover: 'hover:bg-blue-700 hover:text-white',
     active: 'active:bg-blue-800',
     disabled: 'bg-blue-600 ' + defaultDisableStyles,
   }

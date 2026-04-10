@@ -13,6 +13,16 @@
   "login.password": "Пароль",
   "login.submit": "Увійти",
 
+  "logout.title": "Вийти",
+
+  "table.filter": "Фильтр",
+  "table.noData": "Немає даних для відображення",
+  "table.showInactive": "Активні",
+  "table.showActive": "Не активні",
+  "table.page": "Сторінка",
+  "table.of": "з",
+  "table.rows": "рядків",
+
   "users.title": "Користувачі",
   "users.anyUsers": "Немає користувачів до відображення",
   "users.create": "Створити нового",
@@ -49,5 +59,12 @@
   "rules.email": "Введіть email",
   "rules.incorrectEmail": "Некоректний email",
   "rules.password": "Введіть пароль щонайменше 6 символів",
-  "rules.passwordMinLength": "Щонайменше 6 символів"
+  "rules.passwordMinLength": "Щонайменше 6 символів",
+
+  "products.title": "Продукти",
+  "counterparties.title": "Контрагенти",
+  "orders.title": "Замовлення",
+  "payments.title": "Оплати",
+  "certificates.title": "Сертифікати",
+  "roles.title": "Ролі"
 }

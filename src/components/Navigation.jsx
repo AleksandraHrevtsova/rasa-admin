@@ -18,19 +18,9 @@ import { useLocale } from "../contexts/LocaleContext";
 import { clearToken } from "../auth/tokenManager";
 
 import { NAV } from "../constants/navigation";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 function SidebarItem({ item, collapsed }) {
-
-  useEffect(() => {
-    if (item.path === NAV.login) { 
-      try {
-        localStorage.clear();
-        clearToken();
-      } catch(err) {
-        console.error('Logout error:', err);
-      }
-    }
-  }, [item.path]);
 
   return (
     <NavLink to={item.path}>
@@ -83,6 +73,12 @@ export const Layout = () => {
     return t[`${key}.title`] || key;
   };
 
+  function logout() {
+    localStorage.clear();
+    clearToken();
+    navigate(NAV.login);
+  };
+
   const navItems = [
     { label: formatLabel('users'), path: NAV.users, icon: Users },
     { label: formatLabel('roles'), path: NAV.roles, icon: Shield },
@@ -107,6 +103,7 @@ export const Layout = () => {
         </div>
 
         <div className="mt-auto flex flex-col gap-2">
+          <LanguageSwitcher />
           {!collapsed && (<div className="text-xl p-2">{appUser.name}</div>)}
           {appUser && (
              <SidebarItem 
@@ -119,12 +116,45 @@ export const Layout = () => {
       </motion.div>
 
       <div className="flex-1 flex flex-col">
-        <div className="md:hidden fixed top-0 left-0 right-0 bg-white border-b flex justify-around p-2 z-50">
-          {navItems.map((item) => (
-            <NavLink key={item.path} to={item.path}>
-              {({ isActive }) => (<item.icon size={22} className={isActive ? 'text-[#423745]' : 'text-gray-400'} />)}
-            </NavLink>)
-          )}
+        <div className="md:hidden fixed top-0 left-0 right-0 bg-white border-b flex items-center justify-between px-3 py-2 z-50">
+          {/* NAV ICONS */}
+          <div className="flex gap-4">
+            {navItems.map((item) => (
+              <NavLink 
+                key={item.path} 
+                to={item.path} 
+                onClick={logout}
+              >
+                {({ isActive }) => (
+                  <item.icon
+                    size={22}
+                    className={isActive ? 'text-blue-950' : 'text-gray-400'}
+                  />
+                )}
+              </NavLink>
+            ))}
+          </div>
+
+          {/* RIGHT SIDE CONTROLS */}
+          <div className="flex items-center gap-3">
+            
+            {/* LANGUAGE SWITCHER */}
+            <LanguageSwitcher compact />
+
+            {/* USER + LOGOUT */}
+            {appUser && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium text-gray-700 max-w-20 truncate">
+                  {appUser.name}
+                </span>
+
+                <button onClick={logout} className="text-red-500">
+                  <LogOut size={18} />
+                </button>
+              </div>
+            )}
+
+          </div>
         </div>
         <div className="p-4 mt-12 md:mt-0">
           <motion.div key={location.pathname} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>

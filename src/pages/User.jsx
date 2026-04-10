@@ -255,19 +255,19 @@ export default function User() {
             <Button 
               type='submit' 
               label={t['save']} 
-              handleClick={null} 
               action='submit' 
-              isDisabled={isNotReadyToSubmit}
+              onClick={null} 
+              disabled={isNotReadyToSubmit}
             />
-            <Button label={isDirty ? t['cancel'] : t['back']} handleClick={handleBack} />
+            <Button label={isDirty ? t['cancel'] : t['back']} onClick={handleBack} />
             {isEdit && isActiveUser && !isCurrentUser && (
-              <Button label={t['deactivate']} handleClick={handleDeactivate} action='deactivate' isDisabled={isCurrentUser} />
+              <Button label={t['deactivate']} onClick={handleDeactivate} action='deactivate' disabled={isCurrentUser} />
             )}
           </div>
         </form>
       </div>
         {!isActiveUser && (
-          <Button label={t['activate']} handleClick={handleActivate} action='activate' isDisabled={isActiveUser} />
+          <Button label={t['activate']} onClick={handleActivate} action='activate' disabled={isActiveUser} />
         )}
     </div>
   )

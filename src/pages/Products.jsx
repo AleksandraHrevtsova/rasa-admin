@@ -47,7 +47,7 @@ export default function Products() {
         <h1 className="text-2xl font-bold text-primary text-blue-950">{t["products.title"]}</h1>
         <Button
           label={t['users.create']} 
-          handleClick={() => navigateToUserPage()} 
+          onClick={() => navigateToUserPage()} 
           action='create' 
         />
       </div>

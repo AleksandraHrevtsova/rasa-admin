@@ -25,7 +25,7 @@
 
   "users.title": "Користувачі",
   "users.anyUsers": "Немає користувачів до відображення",
-  "users.create": "Створити нового",
+  "users.create": "Створити",
   "users.name": "Ім'я",
   "users.email": "Email",
   "users.role": "Роль",

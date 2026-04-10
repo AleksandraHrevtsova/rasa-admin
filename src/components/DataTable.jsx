@@ -157,52 +157,92 @@ export default function DataTable({
   }
 
   return (
-    <div className="w-full overflow-x-auto flex flex-col items-center">
-      <table className="min-w-full border border-gray-200 rounded-xl overflow-hidden">
-        <thead className="bg-gray-50">
-          {table.getHeaderGroups().map((hg) => (
-            <tr key={hg.id}>
-              {hg.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className="p-2 text-left cursor-pointer"
-                  onClick={header.column.getToggleSortingHandler()}
-                >
-                  {flexRender(header.column.columnDef.header, header.getContext())}
+    <div className='w-full'>
+      <div className="hidden md:block overflow-x-auto">
+        <table className="min-w-full border border-gray-200 rounded-xl overflow-hidden">
+          <thead className="bg-gray-50 sticky top-0 z-10">
+            {table.getHeaderGroups().map((hg) => (
+              <tr key={hg.id}>
+                {hg.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    className="p-3 text-left text-sm font-semibold text-gray-600 cursor-pointer select-none"
+                    onClick={header.column.getToggleSortingHandler()}
+                  >
+                    <div className="flex items-center gap-1">
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {{
+                        asc: ' 🔼',
+                        desc: ' 🔽',
+                      }[header.column.getIsSorted()] ?? null}
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
 
-                  {{
-                    asc: ' 🔼',
-                    desc: ' 🔽',
-                  }[header.column.getIsSorted()] ?? null}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr
+                key={row.id}
+                className="hover:bg-gray-50 transition cursor-pointer border-b"
+                onClick={() => onRowClick?.(row.original)}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id} className="p-3 text-sm text-gray-800">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr
+      <div className="md:hidden flex flex-col gap-3">
+        {table.getRowModel().rows.map((row) => {
+          const item = row.original;
+
+          return (
+            <div
               key={row.id}
-              className="hover:bg-gray-50 cursor-pointer"
-              onClick={() => onRowClick?.(row.original)}
+              className="border rounded-xl p-3 shadow-sm bg-white hover:bg-gray-50 transition cursor-pointer"
+              onClick={() => onRowClick?.(item)}
             >
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="p-2 border-b text-sm">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              {columns.map((col) => {
+                const value = col.render
+                  ? col.render(item)
+                  : item[col.key];
+
+                return (
+                  <div
+                    key={col.key}
+                    className="flex justify-between text-sm py-1 border-b last:border-b-0"
+                  >
+                    <span className="text-gray-500">
+                      {col.label}
+                    </span>
+                    <span className="text-gray-900 font-medium text-right">
+                      {value ?? '—'}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+
       {data?.length > 10 && (
-        <Pagination 
-          pageCount={pageCount}
-          pagination={effectivePagination}
-          setPagination={setPagination}
-          pageSizeOptions={pageSizeOptions}
-        />
+        <div className="mt-4 flex justify-center md:justify-between">
+          <Pagination 
+            pageCount={pageCount}
+            pagination={effectivePagination}
+            setPagination={setPagination}
+            pageSizeOptions={pageSizeOptions}
+          />
+        </div>
       )}
     </div>
   );

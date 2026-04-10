@@ -46,9 +46,9 @@ export default function Login() {
         <Button 
           type='submit' 
           label={t['login.submit']}
-          handleClick={null} 
+          onClick={null} 
           action='submit' 
-          isDisabled={!email && !password}
+          disabled={!email && !password}
         />
       </form>
     </div>

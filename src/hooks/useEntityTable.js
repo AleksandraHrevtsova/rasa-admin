@@ -3,6 +3,7 @@ import { useNotify } from './useNotify';
 
 export function useEntityTable(fetchFn, options = {}) {
   const notify = useNotify();
+  const [filters, setFilters] = useState();
 
   const {
     defaultPageSize = 20,
@@ -27,6 +28,7 @@ export function useEntityTable(fetchFn, options = {}) {
       const params = {
         page: pagination.pageIndex + 1,
         limit: pagination.pageSize,
+        ...filters,
       };
 
       if (withActiveToggle) {
@@ -61,6 +63,9 @@ export function useEntityTable(fetchFn, options = {}) {
     pagination,
     setPagination,
     refetch: fetchData,
+
+    filters,
+    setFilters,
 
     ...(withActiveToggle && {
       isActive,

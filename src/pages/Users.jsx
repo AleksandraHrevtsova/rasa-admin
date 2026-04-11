@@ -10,6 +10,7 @@ import { getUsers } from '../services/user.service';
 import { EntityPageLayout } from "../components/EntityPageLayout";
 import { Button } from "../components/Button";
 import DataTable from "../components/DataTable";
+import { RolesList } from '../components/Roles';
 
 import { NAV } from "../constants/navigation";
 import { navigateToEntity } from '../utils/navigation';
@@ -74,14 +75,22 @@ export default function Users() {
       }}
       loading={loading}
       table={
-        <DataTable
-          data={data}
-          columns={columns}
-          loading={loading}
-          pagination={pagination}
-          setPagination={setPagination}
-          onRowClick={(row) => goToUser(row.id)}
-        />
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-4">
+          <DataTable
+            data={data}
+            columns={columns}
+            loading={loading}
+            pagination={pagination}
+            setPagination={setPagination}
+            onRowClick={(row) => goToUser(row.id)}
+          />
+          <div className="hidden lg:block">
+            <RolesList />
+          </div>
+          <div className="mt-4 lg:hidden">
+            <RolesList />
+          </div>
+        </div>
       }
       fab={{
         label: t['create'],

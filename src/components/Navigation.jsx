@@ -81,9 +81,9 @@ export const Layout = () => {
 
   const navItems = [
     { label: formatLabel('users'), path: NAV.users, icon: Users },
-    { label: formatLabel('roles'), path: NAV.roles, icon: Shield },
     { label: formatLabel('counterparties'), path: NAV.counterparties, icon: Building2 },
     { label: formatLabel('products'), path: NAV.products, icon: Package },
+    { label: formatLabel('roles'), path: NAV.roles, icon: Shield },
     { label: formatLabel('orders'), path: NAV.orders, icon: FileText },
     { label: formatLabel('payments'), path: NAV.payments, icon: CreditCard },
     { label: formatLabel('certificates'), path: NAV.certificates, icon: Award },

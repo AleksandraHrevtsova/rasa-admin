@@ -53,9 +53,9 @@ export default function User() {
   const showClientFields = selectedRole?.label?.includes('client-');
 
   const fetchData = async () => {
-    const [roles, counterParties] = await Promise.all([getRoles(), getCounterparties()]);
-    setRoles(roles);
-    setCounterparties(counterParties);
+    const [r, c] = await Promise.all([getRoles(), getCounterparties()]);
+    setRoles(r.data.items);
+    setCounterparties(c.data.items);
   };
 
   const fetchUser = async () => {
@@ -107,7 +107,7 @@ export default function User() {
   const fieldsData = {
     role: { name: 'role', type: 'select', placeholder: t['user.role'], isMulti: false },
     counterparty: { name: 'counterparty', type: 'select', placeholder: t['user.counterparty'], isMulti: false },
-    hubs: { name: 'hubs', type: 'select', placeholder: t['user.hubs'], isMulti: true },
+    hubs: { name: 'hubs', type: 'select', placeholder: t['hubs'], isMulti: true },
     name: { name: 'name', type: 'text', placeholder: t['user.name'] },
     phone: { name: 'phone', type: 'tel', placeholder: t['user.phone'] },
     email: { name: 'email', type: 'email', placeholder: t['user.email'] },
@@ -116,7 +116,7 @@ export default function User() {
 
   const rules = {
     counterparty: { validate: (v) => (showClientFields && !v) && t['rules.counterparty'] },
-    hubs: { validate: (v) => (showClientFields && (!v || v.length === 0)) && t['rules.hubs'] },
+    hubs: { validate: (v) => (showClientFields && (!v || v.length === 0)) && t['hubs'] },
     name: { required: t['rules.name'] },
     phone: {
       required: t['rules.phone'],

@@ -2,11 +2,15 @@
   "edit": "Редагувати",
   "activate": "Активувати",
   "deactivate": "Деактивувати",
+  "create": "Створити",
   "save": "Зберегти",
   "cancel": "Скасувати",
   "back": "Назад",
   "select": "Виберіть",
   "loading": "Завантаження",
+
+  "hubs": "Склади",
+  "products": "Продукти",
 
   "login.title": "Увійдіть в адмінку",
   "login.email": "Email",
@@ -25,19 +29,16 @@
 
   "users.title": "Користувачі",
   "users.anyUsers": "Немає користувачів до відображення",
-  "users.create": "Створити",
   "users.name": "Ім'я",
   "users.email": "Email",
   "users.role": "Роль",
   "users.phone": "Телефон",
   "users.userCounterparty": "Контрагент",
-  "users.userHubs": "Склади",
   "users.actions": "Дії",
   "users.confirmDeactivate": "Ви дійсно хочете деактивувати цього користувача?",
   
   "user.role": "Роль",
   "user.counterparty": "Контрагент",
-  "user.hubs": "Склади",
   "user.name": "Ім'я",
   "user.phone": "Телефон",
   "user.email": "Email",
@@ -62,7 +63,10 @@
   "rules.passwordMinLength": "Щонайменше 6 символів",
 
   "products.title": "Продукти",
+
   "counterparties.title": "Контрагенти",
+  "counterparties.name": "Назва",
+
   "orders.title": "Замовлення",
   "payments.title": "Оплати",
   "certificates.title": "Сертифікати",

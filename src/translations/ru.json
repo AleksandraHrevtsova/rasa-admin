@@ -2,11 +2,15 @@
   "edit": "Редактировать",
   "activate": "Активировать",
   "deactivate": "Деактивировать",
+  "create": "Создать",
   "save": "Сохранить",
   "cancel": "Отмена",
   "back": "Назад",
   "select": "Выбрать",
   "loading": "Загрузить",
+
+  "hubs": "Склады",
+  "products": "Продукты",
 
   "login.title": "Войти",
   "login.email": "Email",
@@ -25,19 +29,16 @@
 
   "users.title": "Пользователи",
   "users.anyUsers": "Нет пользователей для отображения",
-  "users.create": "Создать",
   "users.name": "Имя",
   "users.email": "Email",
   "users.phone": "Телефон",
   "users.role": "Роль",
   "users.userCounterparty": "Контрагент",
-  "users.userHubs": "Склады",
   "users.actions": "Действия",
   "users.confirmDeactivate": "Подтвердите деактивацию.",
 
   "user.role": "Роль",
   "user.counterparty": "Контрагент",
-  "user.hubs": "Склады",
   "user.name": "Имя",
   "user.phone": "Телефон",
   "user.email": "Email",
@@ -62,7 +63,10 @@
   "rules.passwordMinLength": "Не менее 6 символов",
 
   "products.title": "Продукты",
+
   "counterparties.title": "Контрагенты",
+  "counterparties.name": "Название",
+
   "orders.title": "Заказы",
   "payments.title": "Оплаты",
   "certificates.title": "Сертификаты",

@@ -1,14 +1,17 @@
-import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router';
+import { Plus, ShieldCheck, ShieldClose } from 'lucide-react';
 
 import { useLocale } from "../contexts/LocaleContext";
 
-import { getUsers } from "../services/user.service";
+import { useEntityTable } from "../hooks/useEntityTable";
 
 import { NAV } from "../constants/navigation";
-import DataTable from "../components/DataTable";
-import { Loading } from "../components/Loading";
+import { getProducts} from "../services/product.service";
+import { navigateToEntity } from '../utils/navigation';
+
+import { EntityPageLayout } from "../components/EntityPageLayout";
 import { Button } from "../components/Button";
+import DataTable from "../components/DataTable";
 
 export default function Products() {
   const { t } = useLocale();
@@ -16,53 +19,75 @@ export default function Products() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    data,
+    loading,
+    isActive,
+    setIsActive,
+    pagination,
+    setPagination,
+  } = useEntityTable(getProducts);
 
-  const fetchUsers = async () => {
-    setLoading(true);
-    try {
-      // const { data } = await getProducts();
-      // setProducts(data);
-    } catch (err) {
-      console.error("Fetch products error:", err);
-    } finally {
-      setLoading(false);
-    }
+  const goToProduct = (id) => {
+    navigateToEntity({
+      navigate,
+      location,
+      listPath: NAV.products,
+      createPath: NAV.newProduct,
+      editPath: NAV.editProduct,
+      id,
+    });
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const navigateToUserPage = (userId) => {
-    let path = userId ? NAV.users + '/' + userId : NAV.newUser;
-    navigate(path, { state: { from: location.pathname } });
+  function formatLabel(key) {
+    return t[`products.${key}`] || key;
   };
+
+  const columns = [
+    { key: 'namePublic', label: formatLabel('name'), sortable: true },
+    { key: 'sku', label: formatLabel('sku'), render: (row) => row.sku || '-' },
+    { key: 'netto', label: formatLabel('netto'), render: (row) => row.netto || '—' },
+    { key: 'brutto', label: formatLabel('brutto'), render: (row) => row.brutto || '—' },
+    // { key: 'email', label: formatLabel('email') },
+  ];
 
   return (
-    <div className="p-4">
-      <h1>{t["products.title"]}</h1>
-      {/* <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold text-primary text-blue-950">{t["products.title"]}</h1>
-        <Button
-          label={t['users.create']} 
-          onClick={() => navigateToUserPage()} 
-          action='create' 
-        />
-      </div>
-
-      {loading ? (
-        <Loading />
-      ) : (
+    <EntityPageLayout
+      title={formatLabel('title')}
+      actions={{
+        left: (
+          <Button
+            label={isActive ? t['table.showInactive'] : t['table.showActive']}
+            onClick={() => setIsActive((p) => !p)} 
+            action='show' 
+            icon={isActive ? ShieldCheck : ShieldClose}
+            hideLabelOnMobile
+          />
+        ),
+        right: (
+          <Button
+            label={t['create']} 
+            onClick={() => goToProduct()} 
+            action='create' 
+            icon={Plus}
+          />
+        )
+      }}
+      loading={loading}
+      table={
         <DataTable
-          data={users}
+          data={data}
           columns={columns}
-          onRowClick={(row) => console.log(row)}
-          showActiveToggle
-          entityLabel="users"
+          loading={loading}
+          pagination={pagination}
+          setPagination={setPagination}
+          onRowClick={(row) => goToProduct(row.id)}
         />
-      )} */}
-    </div>
+      }
+      fab={{
+        label: t['create'],
+        onClick: () => goToProduct()
+      }}
+    />
   );
 }

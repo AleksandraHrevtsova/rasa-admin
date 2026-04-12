@@ -3,8 +3,9 @@ import Select from 'react-select';
 import withFormItemWrapper from '../hocs/withFormItemWrapper';
 
 const MySelect = (props) => {
-  const { control, data, options, isDisabled, rules, errors } = props;
+  const { control, data, options, isDisabled, rules, errors = {} } = props;
 
+  if (!data?.name) return null;
   return (
     <Controller
       name={data.name}
@@ -23,24 +24,27 @@ const MySelect = (props) => {
         />
       )}
     />
-  )
+  );
 };
+
 export const WrappedSelect = withFormItemWrapper(MySelect);
 
 const Input = (props) => {
-  const { register, data, errors, rules } = props;
-  const autoComplete = ['email', 'tel'].includes(data.type) && data.type;
-
+  const { register, data, errors = {}, rules } = props;
+  const autoComplete =['email', 'tel'].includes(data.type) ? data.type : 'off';
+  
+  if (!data?.name) return null;
   return (
     <input
-      type={data.type}
+      type={data.type || 'text'}
       {...register(data.name, rules)}
       placeholder={data.placeholder}
-      autoComplete={autoComplete.toString()}
+      autoComplete={autoComplete}
       className={`w-full p-2 border rounded ${
         errors[data.name] ? 'border-red-500' : ''
       }`}
     />
   );
 };
+
 export const WrappedInput = withFormItemWrapper(Input);

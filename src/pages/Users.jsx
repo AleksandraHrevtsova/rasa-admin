@@ -27,6 +27,8 @@ export default function Users() {
     setIsActive,
     pagination,
     setPagination,
+    filters,
+    setFilters,
   } = useEntityTable(getUsers);
 
   const goToUser = (id) => {
@@ -84,12 +86,16 @@ export default function Users() {
             setPagination={setPagination}
             onRowClick={(row) => goToUser(row.id)}
           />
-          <div className="hidden lg:block">
-            <RolesList />
-          </div>
-          <div className="mt-4 lg:hidden">
-            <RolesList />
-          </div>
+          {isActive && (
+            <>
+              <div className="hidden lg:block">
+                <RolesList />
+              </div>
+              <div className="mt-4 lg:hidden">
+                <RolesList />
+              </div>
+            </>
+          )}
         </div>
       }
       fab={{

@@ -4,6 +4,7 @@ const receiptsPath = 'receipts';
 const usersPath = 'users';
 const rolesPath = 'roles';
 const counterpartiesPath = 'counterparties';
+const productsPath = 'products';
 
 export const ENDPOINTS = {
   API: {
@@ -38,6 +39,13 @@ export const ENDPOINTS = {
       UPDATE: apiPath + counterpartiesPath + '/:id',
       DEACTIVATE: apiPath + counterpartiesPath + '/:id/deactivate',
       ACTIVATE: apiPath + counterpartiesPath + '/:id/activate',
+    },
+    PRODUCTS: {
+      LIST: apiPath + productsPath,
+      CREATE: apiPath + productsPath,
+      UPDATE: apiPath + productsPath + '/:id',
+      DEACTIVATE: apiPath + productsPath + '/:id/deactivate',
+      ACTIVATE: apiPath + productsPath + '/:id/activate',
     },
   },
   ADMIN: {

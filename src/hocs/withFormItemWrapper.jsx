@@ -1,6 +1,9 @@
 const withFormItemWrapper = (Component) => {
   const WrappedComponent = (props) => {
-    const { data, errors } = props;
+    const { data, errors = {} } = props;
+    const error = errors[data.name];
+    
+    if (!data) return null;
     return (
       <div>
         <label className="block text-sm mb-1">
@@ -8,9 +11,9 @@ const withFormItemWrapper = (Component) => {
           {data.validation?.required && (<span className="text-red-500 ml-1">*</span>)}
         </label>
         <Component {...props} />
-        {errors[data.name] && (
+        {error && (
           <p className="text-red-500 text-sm">
-            {errors[data.name]?.message}
+            {error.message}
           </p>
         )}
       </div>

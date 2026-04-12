@@ -10,8 +10,11 @@ export const NAV = {
   editCounterparty: '/counterparties/:id',
   newCounterparty: '/counterparties/new',
 
-  roles: '/roles',
   products: '/products',
+  editProduct: '/products/:id',
+  newProduct: '/products/new',
+
+  roles: '/roles',
   orders: '/orders',
   payments: '/payments',
   certificates: '/certificates',

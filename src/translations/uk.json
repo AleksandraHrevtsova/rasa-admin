@@ -63,6 +63,11 @@
   "rules.passwordMinLength": "Щонайменше 6 символів",
 
   "products.title": "Продукти",
+  "products.name": "Назва",
+  "products.sku": "Артикул",
+  "products.netto": "Вага нетто, кг",
+  "products.brutto": "Вага брутто, кг", 
+
 
   "counterparties.title": "Контрагенти",
   "counterparties.name": "Назва",

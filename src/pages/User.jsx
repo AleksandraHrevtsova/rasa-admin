@@ -7,268 +7,199 @@ import { useLocale } from '../contexts/LocaleContext';
 
 import { getRoles } from '../services/role.service';
 import { getCounterparties } from '../services/counterparty.service';
-import { 
-  getUserById, 
-  createUser, 
-  updateUser, 
-  activateUser, 
-  deactivateUser 
+import {
+  getUserById,
+  createUser,
+  updateUser,
+  activateUser,
+  deactivateUser,
 } from '../services/user.service';
 
-import { useForm, useWatch } from 'react-hook-form';
-import { useNotify } from '../hooks/useNotify';
-import { Loading } from '../components/Loading';
-import { WrappedSelect, WrappedInput } from '../components/FormComponents';
+import { useWatch } from 'react-hook-form';
+
 import { Button } from '../components/Button';
+import { Loading } from '../components/Loading';
+
+import { useEntityForm } from '../hooks/useEntityForm';
+import { useEntityFormConfig } from '../hooks/useEntityFormConfig';
+
+import { EntityFormLayout } from '../components/EntityFormLayout';
+import { EntityFormFieldsRenderer } from '../components/EntityFormFieldsRenderer';
+
 export default function User() {
   const { t } = useLocale();
-  const notify = useNotify();
   const { appUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const isEdit = Boolean(id);
-  const isCurrentUser = id === appUser.id;
-  
   const [roles, setRoles] = useState([]);
   const [counterparties, setCounterparties] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [isActiveUser, setIsActiveUser] = useState(true);
 
-  const isDisabled = isEdit && !isActiveUser;
+  const isCurrentUser = id === appUser.id;
+
+  const notifications = {
+    confirmDeactivate: t['user.confirmDeactivate'] || 'Confirm?',
+    successUpdate: t['user.updated'] || 'Updated!',
+    successCreate: t['user.created'] || 'Created!',
+  };
+
+  const formConfig = {
+    id,
+    getById: getUserById,
+    create: createUser,
+    update: updateUser,
+    activate: activateUser,
+    deactivate: deactivateUser,
+    notifications,
+    mapFromApi: (u) => ({
+      name: u.name,
+      email: u.email,
+      phone: u.phone,
+      role: { value: u.role?.id, label: u.role?.name },
+      counterparty: u.counterpartyId
+        ? { value: u.counterpartyId, label: u.counterpartyName }
+        : null,
+      hubs: u.userHubs?.map((h) => ({ value: h.hubId, label: h.name })),
+    }),
+    mapToApi: (f) => ({
+      name: f.name,
+      email: f.email,
+      phone: f.phone,
+      roleId: f.role.value,
+      counterpartyId: f.counterparty?.value || null,
+      hubIds: f.hubs?.map((h) => h.value) || [],
+      password: f.password,
+    }),
+    onSuccess: handleBack,
+  };
+
+  const { 
+    form,
+    handleSubmit,
+    onSubmit,
+    onError,
+    loading,
+    isEdit,
+    isActive,
+    isDirty,
+    isValid,
+    handleActivate,
+    handleDeactivate 
+  } = useEntityForm(formConfig);
 
   const {
     register,
-    handleSubmit,
-    control,
     reset,
+    control,
     setValue,
-    setError,
-    formState: { errors, isDirty, isValid }
-  } = useForm({ mode: 'onChange' });
+    formState: { errors },
+  } = form;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [r, c] = await Promise.all([getRoles(), getCounterparties()]);
+        setRoles(r.data.items);
+        setCounterparties(c.data.items);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchData();
+  }, []);
 
   const selectedRole = useWatch({ control, name: 'role' });
   const selectedCounterparty = useWatch({ control, name: 'counterparty' });
+
   const showClientFields = selectedRole?.label?.includes('client-');
 
-  const fetchData = async () => {
-    const [r, c] = await Promise.all([getRoles(), getCounterparties()]);
-    setRoles(r.data.items);
-    setCounterparties(c.data.items);
-  };
+  const isDisabled = isEdit && !isActive;
+  const pageTitle = useMemo(() => isEdit ? t['user.editCurrent'] : t['user.createNew'], [isEdit]);
 
-  const fetchUser = async () => {
-    const { data } = await getUserById(id);
-    setIsActiveUser(data.isActive);
-    reset({
-      name: data.name,
-      email: data.email,
-      phone: data.phone,
-      role: { value: data.role?.id, label: data.role?.name },
-      counterparty: data.counterpartyId ? { value: data.counterpartyId, label: data.counterpartyName } : null,
-      hubs: data.userHubs?.map(h => ({ value: h.hubId, label: h.name }))
-    });
-  };
-
-  const showErrorNotify = (err) => {
-    const resData = err.response?.data;
-    notify.error(resData.message);
-  };
-
-  useEffect(() => {
-    const fetchAll = async() => {
-      setLoading(true);
-      try {
-        await fetchData();
-
-        if (isEdit) {
-          await fetchUser();
-        }
-      } catch (err) {
-        showErrorNotify(err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchAll();
-  }, [id]);
+  const isNotReadyToSubmit = !isValid || isDisabled || (isEdit && !isDirty);
 
   useEffect(() => {
     if (!showClientFields) {
-      setValue('counterparty', null);
-      setValue('hubs', []);
+      setValue('counterparty', null, { shouldValidate: true });
+      setValue('hubs', [], { shouldValidate: true });
+      return;
     }
-    if (!selectedCounterparty?.value) {
-      setValue('hubs', []);
-    }
-  }, [selectedRole?.value, selectedCounterparty?.value]);
+  
+    setValue('hubs', [], { shouldValidate: true });
+  }, [selectedCounterparty?.value, showClientFields]);
 
-  const fieldsData = {
-    role: { name: 'role', type: 'select', placeholder: t['user.role'], isMulti: false },
-    counterparty: { name: 'counterparty', type: 'select', placeholder: t['user.counterparty'], isMulti: false },
-    hubs: { name: 'hubs', type: 'select', placeholder: t['hubs'], isMulti: true },
-    name: { name: 'name', type: 'text', placeholder: t['user.name'] },
-    phone: { name: 'phone', type: 'tel', placeholder: t['user.phone'] },
-    email: { name: 'email', type: 'email', placeholder: t['user.email'] },
-    password: { name: 'password', type: 'password', placeholder: t['user.password'] }
-  };
-
-  const rules = {
-    counterparty: { validate: (v) => (showClientFields && !v) && t['rules.counterparty'] },
-    hubs: { validate: (v) => (showClientFields && (!v || v.length === 0)) && t['hubs'] },
-    name: { required: t['rules.name'] },
-    phone: {
-      required: t['rules.phone'],
-      pattern: { value: /^[\d+()\-\s]{7,20}$/, message: t['rules.incorrectPhone'] }
-    },
-    email: {
-      required: t['rules.email'],
-      pattern: { value: /^\S+@\S+\.\S+$/, message: t['rules.incorrectEmail'] }
-    },
-    password: { 
-      required: !isEdit ? t['rules.password'] : false, 
-      minLength: { value: 6, message: t['rules.passwordMinLength'] } 
-    },
-  };
-
-  const pageTitle = useMemo(() => isEdit ? t['user.editCurrent'] : t['user.createNew'], [isEdit]);
+  const { fields, rules } = useEntityFormConfig({ t, isEdit, showClientFields }).user;
 
   const mapOption = (item, labelKey = 'name') => ({ value: item.id, label: item[labelKey] }); 
-  const rolesOptions = useMemo(() => roles?.map(el => mapOption(el)), [roles]);
-  const counterpartiesOptions = useMemo(() => counterparties?.map(el => mapOption(el, 'nameInternal')), [counterparties]);
   const filteredHubOptions = useMemo(() => {
     const counterpartyHubs = counterparties?.find(cp => cp?.id === selectedCounterparty?.value)?.hubs;
     return counterpartyHubs ? counterpartyHubs.map(el => mapOption(el, 'nameInternal')) : [];
   }, [counterparties, selectedCounterparty]);
 
-  const isNotReadyToSubmit = !isValid || isDisabled || (isEdit && !isDirty);
+  const options = {
+    roles: roles.map(el => mapOption(el)),
+    counterparties: counterparties.map(el => mapOption(el, 'nameInternal')),
+    hubs: filteredHubOptions,
+    showClientFields,
+    isEdit,
+  };
 
-  const handleBack = () => {
+  function handleBack() {
     const from = location.state?.from || NAV.home;
     if (isDirty) reset();
     else navigate(from, { replace: true });
   };
 
-  const onSubmit = async (formData) => {
-    if (isDisabled) return;
-
-    const payload = {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      roleId: formData.role.value,
-      counterpartyId: formData.counterparty?.value || null,
-      hubIds: formData.hubs?.map((h) => h.value) || [],
-    }
-    
-    try {
-      if (isEdit) {
-        await updateUser(id, payload);
-        notify.success(t['user.updated'] );
-      } else {
-        payload.password = formData.password
-        await createUser(payload);
-        notify.success(t['user.created'] );
-      }
-      handleBack();
-    } catch (err) {
-      showErrorNotify(err);
-
-      if (err.message.includes('Email')) {
-        setError('email', { type: 'server', message: resData.message })
-      }
-
-      if (err.message.includes('Phone')) {
-        setError('phone', { type: 'server', message: resData.message })
-      }
-    }
-  };
-
-  const onError = (errs) => {
-    const firstErrorField = Object.keys(errs)[0];
-    const el = document.querySelector(`[name='${firstErrorField}']`) || document.querySelector(`#${firstErrorField}`);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      el.focus();
-    }
-  };
-
-  const handleDeactivate = async () => {
-    if (isCurrentUser) {
-      alert(t['user.cannotDeactivateSelf']);
-      return;
-    }
-
-    const confirmed = window.confirm(t['user.confirmDeactivate']);
-    if (!confirmed) return;
-
-    await deactivateUser(id);
-    setIsActiveUser(false);
-  };
-  
-  const handleActivate = async () => {
-    await activateUser(id);
-    setIsActiveUser(true);
-  };
-
-  if (loading) return <Loading />
+  if (loading) return <Loading />;
 
   return (
-    <div className='p-4 max-w-xl'>
-      <h1 className='text-xl font-semibold mb-4'>{pageTitle}</h1>
+    <EntityFormLayout
+      title={pageTitle}
+      isDisabled={isDisabled}
+      onSubmit={handleSubmit(onSubmit, onError)}
+      actions={
+        <div className='flex gap-2'>
+          <Button
+            type='submit'
+            label={isEdit ? t['save'] : t['create']}
+            action='submit'
+            disabled={isNotReadyToSubmit}
+          />
 
-      {!isActiveUser && (
-        <div className='bg-red-100 text-red-700 p-2 rounded mb-4'>
-          {t['user.deactivated']}
-        </div>
-      )}
-      <div className={isDisabled ? 'opacity-50' : ''}>
-        <form onSubmit={handleSubmit(onSubmit, onError)} className='flex flex-col gap-4'>
-          <WrappedSelect control={control} data={fieldsData.role} options={rolesOptions} errors={errors}/>
-          {showClientFields && (
-            <>
-              <WrappedSelect 
-                control={control} 
-                data={fieldsData.counterparty} 
-                options={counterpartiesOptions} 
-                isDisabled={!showClientFields}
-                rules={rules.counterparty}
-                errors={errors}
-              />
-              <WrappedSelect 
-                control={control} 
-                data={fieldsData.hubs} 
-                options={filteredHubOptions} 
-                isDisabled={!selectedCounterparty}
-                rules={rules.hubs}
-                errors={errors}
-              />
-            </>
-          )}
-          <WrappedInput register={register} data={fieldsData.name} errors={errors} rules={rules.name} />
-          <WrappedInput register={register} data={fieldsData.phone} errors={errors} rules={rules.phone} />
-          <WrappedInput register={register} data={fieldsData.email} errors={errors} rules={rules.email} />
-          {!isEdit && <WrappedInput register={register} data={fieldsData.password} errors={errors} rules={rules.password} /> }
+          <Button
+            label={isDirty ? t['cancel'] : t['back']}
+            onClick={handleBack}
+          />
 
-          <div className='flex gap-2'>
-            <Button 
-              type='submit' 
-              label={t['save']} 
-              action='submit' 
-              onClick={null} 
-              disabled={isNotReadyToSubmit}
+          {isEdit && isActive && !isCurrentUser && (
+            <Button
+              label={t['deactivate']}
+              action='deactivate'
+              onClick={handleDeactivate}
+              disabled={isCurrentUser}
             />
-            <Button label={isDirty ? t['cancel'] : t['back']} onClick={handleBack} />
-            {isEdit && isActiveUser && !isCurrentUser && (
-              <Button label={t['deactivate']} onClick={handleDeactivate} action='deactivate' disabled={isCurrentUser} />
-            )}
-          </div>
-        </form>
-      </div>
-        {!isActiveUser && (
-          <Button label={t['activate']} onClick={handleActivate} action='activate' disabled={isActiveUser} />
-        )}
-    </div>
-  )
+          )}
+
+          {isEdit && !isActive && (
+            <Button
+              label={t['activate']}
+              action='activate'
+              onClick={handleActivate}
+              disabled={isActive}
+            />
+          )}
+        </div>
+      }
+    >
+      <EntityFormFieldsRenderer
+        control={control}
+        register={register}
+        errors={errors}
+        fields={fields}
+        rules={rules}
+        options={options}
+      />
+    </EntityFormLayout>
+  );
 }

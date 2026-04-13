@@ -38,7 +38,8 @@
   "users.confirmDeactivate": "Ви дійсно хочете деактивувати цього користувача?",
   
   "user.role": "Роль",
-  "user.counterparty": "Контрагент",
+  "user.counterparty": "Оберіть контрагента",
+  "user.hubs": "Оберіть склади",
   "user.name": "Ім'я",
   "user.phone": "Телефон",
   "user.email": "Email",

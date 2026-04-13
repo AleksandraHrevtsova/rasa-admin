@@ -1,5 +1,5 @@
-import api from "./index";
-import { clearToken, getToken, setToken } from "../auth/tokenManager";
+import api from './index';
+import { clearToken, getToken, setToken } from '../auth/tokenManager';
 import { auth } from '../firebase';
 
 const addAuthorizationHeaders = async (config) => {

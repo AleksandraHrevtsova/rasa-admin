@@ -6,16 +6,16 @@ export function EntityPageLayout(props) {
   
   return (
     <>
-      <div className="p-4">
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-blue-950">
+      <div className='p-4'>
+        <div className='flex justify-between items-center mb-4'>
+          <div className='flex items-center gap-3'>
+            <h1 className='text-2xl font-bold text-blue-950'>
               {title}
             </h1>
 
             {actions?.left}
           </div>
-          <div className="hidden md:flex items-center gap-2">
+          <div className='hidden md:flex items-center gap-2'>
             {actions?.right}
           </div>
         </div>

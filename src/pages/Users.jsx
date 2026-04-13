@@ -7,12 +7,12 @@ import { useEntityTable } from '../hooks/useEntityTable';
 
 import { getUsers } from '../services/user.service';
 
-import { EntityPageLayout } from "../components/EntityPageLayout";
-import { Button } from "../components/Button";
-import DataTable from "../components/DataTable";
+import { EntityPageLayout } from '../components/EntityPageLayout';
+import { Button } from '../components/Button';
+import DataTable from '../components/DataTable';
 import { RolesList } from '../components/Roles';
 
-import { NAV } from "../constants/navigation";
+import { NAV } from '../constants/navigation';
 import { navigateToEntity } from '../utils/navigation';
 
 export default function Users() {
@@ -55,7 +55,7 @@ export default function Users() {
 
   return (
     <EntityPageLayout
-      title={t["users.title"]}
+      title={t['users.title']}
       actions={{
         left: (
           <Button
@@ -77,7 +77,7 @@ export default function Users() {
       }}
       loading={loading}
       table={
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-4">
+        <div className='grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-4'>
           <DataTable
             data={data}
             columns={columns}
@@ -88,10 +88,10 @@ export default function Users() {
           />
           {isActive && (
             <>
-              <div className="hidden lg:block">
+              <div className='hidden lg:block'>
                 <RolesList />
               </div>
-              <div className="mt-4 lg:hidden">
+              <div className='mt-4 lg:hidden'>
                 <RolesList />
               </div>
             </>

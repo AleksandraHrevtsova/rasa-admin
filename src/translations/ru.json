@@ -38,7 +38,8 @@
   "users.confirmDeactivate": "Подтвердите деактивацию.",
 
   "user.role": "Роль",
-  "user.counterparty": "Контрагент",
+  "user.counterparty": "Виберите контрагента",
+  "user.hubs": "Виберите склады",
   "user.name": "Имя",
   "user.phone": "Телефон",
   "user.email": "Email",

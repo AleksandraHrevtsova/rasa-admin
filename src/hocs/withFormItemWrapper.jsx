@@ -1,3 +1,5 @@
+import { ErrorMessage } from '../components/FormComponents';
+
 const withFormItemWrapper = (Component) => {
   const WrappedComponent = (props) => {
     const { data, errors = {} } = props;
@@ -5,17 +7,13 @@ const withFormItemWrapper = (Component) => {
     
     if (!data) return null;
     return (
-      <div>
-        <label className="block text-sm mb-1">
+      <div className='mt-2'>
+        <label className='block text-sm mb-1'>
           {data.label || data.placeholder}
-          {data.validation?.required && (<span className="text-red-500 ml-1">*</span>)}
+          {data?.validation || data?.required && (<span className='text-red-500 ml-1'>*</span>)}
         </label>
         <Component {...props} />
-        {error && (
-          <p className="text-red-500 text-sm">
-            {error.message}
-          </p>
-        )}
+        {data.type !== 'select' && <ErrorMessage error={error} />}
       </div>
     );
   };

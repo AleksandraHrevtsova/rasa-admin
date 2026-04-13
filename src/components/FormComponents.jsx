@@ -2,6 +2,18 @@ import { Controller } from 'react-hook-form';
 import Select from 'react-select';
 import withFormItemWrapper from '../hocs/withFormItemWrapper';
 
+export const ErrorMessage = ({ error }) => {
+  return (
+    <>
+      {error && (
+        <p className='text-red-500 text-sm mt-1'>
+          {error.message}
+        </p>
+      )}
+    </>
+  )
+}
+
 const MySelect = (props) => {
   const { control, data, options, isDisabled, rules, errors = {} } = props;
 
@@ -11,18 +23,27 @@ const MySelect = (props) => {
       name={data.name}
       control={control}
       rules={rules}
-      render={({ field }) => (
-        <Select
-          {...field}
-          options={options}
-          isClearable
-          isMulti={data.isMulti}
-          placeholder={data.placeholder}
-          isDisabled={isDisabled}
-          inputId={data.name}
-          classNamePrefix={errors[data.name] ? 'react-select-error' : 'react-select'}
-        />
-      )}
+      render={({ field, fieldState }) => (
+          <>
+            <Select
+              {...field}
+              options={options}
+              isClearable
+              isMulti={data.isMulti}
+              placeholder={data.placeholder}
+              isDisabled={isDisabled}
+              inputId={data.name}
+              onChange={(val) => {
+                field.onChange(val);
+              }}
+          
+              onBlur={field.onBlur}
+              classNamePrefix={!!fieldState.error ? 'react-select-error' : 'react-select'}
+            />
+            <ErrorMessage error={fieldState.error}/>
+          </>
+        )
+      }
     />
   );
 };
@@ -40,7 +61,7 @@ const Input = (props) => {
       {...register(data.name, rules)}
       placeholder={data.placeholder}
       autoComplete={autoComplete}
-      className={`w-full p-2 border rounded ${
+      className={`w-full p-2 border border-[#cccccc] rounded ${
         errors[data.name] ? 'border-red-500' : ''
       }`}
     />

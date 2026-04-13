@@ -15,7 +15,7 @@ export const ErrorMessage = ({ error }) => {
 }
 
 const MySelect = (props) => {
-  const { control, data, options, isDisabled, rules, errors = {} } = props;
+  const { control, data, options, isDisabled, rules, onAfterChange } = props;
 
   if (!data?.name) return null;
   return (
@@ -24,26 +24,27 @@ const MySelect = (props) => {
       control={control}
       rules={rules}
       render={({ field, fieldState }) => (
-          <>
-            <Select
-              {...field}
-              options={options}
-              isClearable
-              isMulti={data.isMulti}
-              placeholder={data.placeholder}
-              isDisabled={isDisabled}
-              inputId={data.name}
-              onChange={(val) => {
-                field.onChange(val);
-              }}
-          
-              onBlur={field.onBlur}
-              classNamePrefix={!!fieldState.error ? 'react-select-error' : 'react-select'}
-            />
-            <ErrorMessage error={fieldState.error}/>
-          </>
-        )
-      }
+        <>
+          <Select
+            {...field}
+            value={field.value ?? (data.isMulti ? [] : null)}
+            options={options}
+            isClearable
+            isMulti={data.isMulti}
+            placeholder={data.placeholder}
+            isDisabled={isDisabled}
+            inputId={data.name}
+            onChange={(val) => {
+              field.onChange(val);
+              onAfterChange?.(val);
+            }}
+        
+            onBlur={field.onBlur}
+            classNamePrefix={!!fieldState.error ? 'react-select-error' : 'react-select'}
+          />
+          <ErrorMessage error={fieldState.error}/>
+        </>
+      )}
     />
   );
 };

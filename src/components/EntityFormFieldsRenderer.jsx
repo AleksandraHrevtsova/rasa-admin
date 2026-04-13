@@ -7,6 +7,7 @@ export function EntityFormFieldsRenderer({
   fields,
   rules,
   options,
+  onAfterChange,
   watch,
 }) {
   return (
@@ -26,6 +27,7 @@ export function EntityFormFieldsRenderer({
             options={options.counterparties}
             rules={rules.counterparty}
             errors={errors}
+            onAfterChange={onAfterChange}
           />
 
           <WrappedSelect

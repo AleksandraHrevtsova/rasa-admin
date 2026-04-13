@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 
 import { NAV } from '../constants/navigation';
@@ -42,6 +42,8 @@ export default function User() {
     confirmDeactivate: t['user.confirmDeactivate'] || 'Confirm?',
     successUpdate: t['user.updated'] || 'Updated!',
     successCreate: t['user.created'] || 'Created!',
+    successActivate: t['user.activated'] || 'Activated!',
+    successDeactivate: t['user.deactivated'] || 'Deactivated!',
   };
 
   const formConfig = {
@@ -52,25 +54,29 @@ export default function User() {
     activate: activateUser,
     deactivate: deactivateUser,
     notifications,
-    mapFromApi: (u) => ({
-      name: u.name,
-      email: u.email,
-      phone: u.phone,
-      role: { value: u.role?.id, label: u.role?.name },
-      counterparty: u.counterpartyId
-        ? { value: u.counterpartyId, label: u.counterpartyName }
-        : null,
-      hubs: u.userHubs?.map((h) => ({ value: h.hubId, label: h.name })),
-    }),
-    mapToApi: (f) => ({
-      name: f.name,
-      email: f.email,
-      phone: f.phone,
-      roleId: f.role.value,
-      counterpartyId: f.counterparty?.value || null,
-      hubIds: f.hubs?.map((h) => h.value) || [],
-      password: f.password,
-    }),
+    mapFromApi: (u) => {
+      return {
+        name: u.name,
+        email: u.email,
+        phone: u.phone,
+        role: { value: u.role?.id, label: u.role?.name },
+        counterparty: u?.counterparty?.id
+          ? { value: u.counterparty?.id, label: u.counterparty?.nameInternal }
+          : null,
+        hubs: u.userHubs?.map(({ hub }) => ({ value: hub.id, label: hub.nameInternal })),
+      }
+    },
+    mapToApi: (f) => {
+      return {
+        name: f.name,
+        email: f.email,
+        phone: f.phone,
+        roleId: f.role.value,
+        counterpartyId: f.counterparty?.value || null,
+        hubIds: f.hubs?.map((h) => h.value) || [],
+        password: f.password,
+      }
+    },
     onSuccess: handleBack,
   };
 
@@ -119,14 +125,31 @@ export default function User() {
 
   const isNotReadyToSubmit = !isValid || isDisabled || (isEdit && !isDirty);
 
+  const initialized = useRef(false);
+
+  const handleCounterpartyChange = () => {
+    setValue('hubs', [], { 
+      shouldDirty: true,
+      shouldValidate: true 
+    });
+  }
+
   useEffect(() => {
+    if (!initialized.current) {
+      initialized.current = true;
+      return;
+    }
+
     if (!showClientFields) {
       setValue('counterparty', null, { shouldValidate: true });
       setValue('hubs', [], { shouldValidate: true });
       return;
     }
+
+    if (!selectedCounterparty?.value) {
+      setValue('hubs', [], { shouldValidate: true });
+    }
   
-    setValue('hubs', [], { shouldValidate: true });
   }, [selectedCounterparty?.value, showClientFields]);
 
   const { fields, rules } = useEntityFormConfig({ t, isEdit, showClientFields }).user;
@@ -199,6 +222,7 @@ export default function User() {
         fields={fields}
         rules={rules}
         options={options}
+        onAfterChange={handleCounterpartyChange}
       />
     </EntityFormLayout>
   );

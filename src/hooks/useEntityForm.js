@@ -58,14 +58,19 @@ export function useEntityForm({
     };
   }, [id]);
 
+  const refresh = async () => {
+    const fresh = await getById(id);
+    reset(mapFromApi(fresh.data));
+  }
+
   const onSubmit = async (values) => {
     try {
       const payload = mapToApi(values);
       if (isEdit) {
         await update(id, payload);
+        refresh();
         notify.success(notifications.successUpdate);
       } else {
-        console.log('CREATE payload:', payload);
         await create(payload);
         notify.success(notifications.successCreate);
       }
@@ -94,16 +99,30 @@ export function useEntityForm({
   };
 
   const handleActivate = async () => {
-    await activate(id);
+    const prev = isActive;
     setIsActive(true);
+    try {
+      await activate(id);
+      notify.success(notifications.successActivate);
+    } catch (err) {
+      setIsActive(prev);
+      notify.error(err.response?.data?.message);
+    }
   };
 
   const handleDeactivate = async () => {
+    const prev = isActive;
     const confirmed = window.confirm(notifications.confirmDeactivate);
     if (!confirmed) return;
-
-    await deactivate(id);
     setIsActive(false);
+    try {
+      await deactivate(id);
+      notify.success(notifications.successDeactivate);
+    } catch (err) {
+      setIsActive(prev);
+      notify.error(err.response?.data?.message);
+    }
+
   };
 
   return {

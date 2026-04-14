@@ -1,9 +1,9 @@
-import { createContext, useContext, useState, useEffect, useRef } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { onIdTokenChanged } from 'firebase/auth';
 import { auth } from '../firebase';
-import { setToken, clearToken } from '../auth/tokenManager';
+import { setToken, clearToken } from '../core/auth/tokenManager';
 
-import { getMe } from '../services/auth.service';
+import { getMe } from '../core/auth/auth.service';
 
 const AuthContext = createContext();
 

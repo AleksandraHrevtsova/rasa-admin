@@ -1,9 +1,9 @@
-import { Navigate, useLocation } from "react-router";
+import { Navigate, useLocation } from 'react-router';
 
-import { useAuth } from "../contexts/AuthContext";
-import { NAV } from '../constants/navigation';
+import { useAuth } from '../contexts/AuthContext';
+import { NAV } from '../config/constants';
 
-import { Loading } from "../components/Loading";
+import { Loading } from '../ui/components/Loading';
 
 export const ProtectedRoute = ({ children }) => {
   const { appUser, loading } = useAuth();

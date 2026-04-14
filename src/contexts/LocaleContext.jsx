@@ -1,13 +1,13 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import uk from "../translations/uk.json";
-import ru from "../translations/ru.json";
+import { createContext, useContext, useState, useEffect } from 'react';
+import uk from '../core/i18n/translations/uk.json';
+import ru from '../core/i18n/translations/ru.json';
 
 const locales = { uk, ru };
 
 const LocaleContext = createContext();
 
 export const LocaleProvider = ({ children }) => {
-  const [locale, setLocale] = useState("uk");
+  const [locale, setLocale] = useState('uk');
   const [t, setT] = useState(locales[locale]);
 
   useEffect(() => {

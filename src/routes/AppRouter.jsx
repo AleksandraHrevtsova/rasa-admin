@@ -1,21 +1,23 @@
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route } from 'react-router';
 import { Toaster } from 'sonner';
 
-import { NAV } from '../constants/navigation';
-import { ProtectedRoute } from "./ProtectedRoute";
-import { Layout } from "../components/Navigation";
-import { ErrorBoundary } from "../components/ErrorBoundary";
+import { NAV } from '../config/constants';
+import { ProtectedRoute } from './ProtectedRoute';
+import { Layout } from '../ui/components/Navigation';
+import { ErrorBoundary } from '../ui/components/ErrorBoundary';
 
-import Login from "../pages/Login";
-import Users from "../pages/Users";
-import User from "../pages/User";
-import Counterparties from "../pages/Counterparties";
-import Products from "../pages/Products";
+import Login from '../ui/pages/Login';
+import Users from '../ui/pages/Users';
+import User from '../ui/pages/User';
+import Counterparties from '../ui/pages/Counterparties';
+
+import Products from '../ui/pages/Products';
+import Product from '../ui/pages/Product';
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
-      <Toaster position="top-right" />
+      <Toaster position='top-right' />
       <ErrorBoundary>
         <Routes>
           <Route path={NAV.login} element={<Login />} />
@@ -38,8 +40,11 @@ export default function AppRouter() {
             <Route path={NAV.newCounterparty} element={<ProtectedRoute><Counterparties /></ProtectedRoute>} />
             <Route path={NAV.editCounterparty} element={<ProtectedRoute><Counterparties /></ProtectedRoute>} />
 
+            <Route path={NAV.products} element={<ProtectedRoute><Products /></ProtectedRoute>} />
+            <Route path={NAV.newProduct} element={<ProtectedRoute><Product /></ProtectedRoute>} />
+            <Route path={NAV.editProduct} element={<ProtectedRoute><Product /></ProtectedRoute>} />
+
             <Route path={NAV.roles} element={<Products />} />
-            <Route path={NAV.products} element={<Products />} />
             <Route path={NAV.orders} element={<Products />} />
             <Route path={NAV.payments} element={<Products />} />
             <Route path={NAV.certificates} element={<Products />} />

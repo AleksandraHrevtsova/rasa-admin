@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useRef, useMemo, useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
 import { useNotify } from './useNotify';
 
 export function useEntityForm({
@@ -13,6 +13,7 @@ export function useEntityForm({
   mapFromApi,
   mapToApi,
   onSuccess,
+  compareValues,
 }) {
   const notify = useNotify();
 
@@ -24,11 +25,29 @@ export function useEntityForm({
     reset,
     handleSubmit,
     setError,
-    formState: { isDirty, isValid },
+    formState: { isValid },
   } = form;
 
   const [loading, setLoading] = useState(false);
   const [isActive, setIsActive] = useState(true);
+
+  const initialValuesRef = useRef(null);
+  const values = useWatch({ control: form.control });
+
+  const isFormChanged = useMemo(() => {
+    if (!initialValuesRef.current) return false;
+    if (compareValues) {
+      return !compareValues(values, initialValuesRef.current);
+    }
+    return JSON.stringify(values) !== JSON.stringify(initialValuesRef.current);
+  }, [values, compareValues]);
+
+  const refresh = async () => {
+    const fresh = await getById(id);
+    const mapped = mapFromApi(fresh.data);
+    initialValuesRef.current = compareValues(mapped);
+    reset(mapped);
+  }
 
   useEffect(() => {
     if (!isEdit) return;
@@ -40,11 +59,12 @@ export function useEntityForm({
       try {
         const { data } = await getById(id);
         if (ignore) return;
-
         setIsActive(data.isActive);
-
-        reset(mapFromApi(data));
+        const mapped = mapFromApi(data);
+        initialValuesRef.current = mapped;
+        reset(mapped);
       } catch (err) {
+        console.error(err);
         notify.error(err?.response?.data?.message || 'Error');
       } finally {
         setLoading(false);
@@ -58,17 +78,12 @@ export function useEntityForm({
     };
   }, [id]);
 
-  const refresh = async () => {
-    const fresh = await getById(id);
-    reset(mapFromApi(fresh.data));
-  }
-
   const onSubmit = async (values) => {
     try {
       const payload = mapToApi(values);
       if (isEdit) {
         await update(id, payload);
-        refresh();
+        await refresh();
         notify.success(notifications.successUpdate);
       } else {
         await create(payload);
@@ -122,7 +137,6 @@ export function useEntityForm({
       setIsActive(prev);
       notify.error(err.response?.data?.message);
     }
-
   };
 
   return {
@@ -133,8 +147,8 @@ export function useEntityForm({
     loading,
     isEdit,
     isActive,
-    isDirty,
     isValid,
+    isFormChanged,
     handleActivate,
     handleDeactivate,
   };

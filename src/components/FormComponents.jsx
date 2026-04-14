@@ -17,6 +17,26 @@ export const ErrorMessage = ({ error }) => {
 const MySelect = (props) => {
   const { control, data, options, isDisabled, rules, onAfterChange } = props;
 
+  function getValue(field) {
+    const value = data.isMulti
+    ? options.filter((o) => field.value?.includes(o.value))
+    : options.find((o) => o.value === field.value) || null;
+    return value;
+  }
+
+  const handleChange = (selected) => {
+    let newValue;
+
+    if (data.isMulti) {
+      newValue = selected?.map((s) => s.value) || [];
+    } else {
+      newValue = selected ? selected.value : null;
+    }
+
+    field.onChange(newValue);
+    onAfterChange?.(data.name, newValue);
+  }
+
   if (!data?.name) return null;
   return (
     <Controller
@@ -27,18 +47,15 @@ const MySelect = (props) => {
         <>
           <Select
             {...field}
-            value={field.value ?? (data.isMulti ? [] : null)}
+            value={getValue(field)}
+            required={data.required}
             options={options}
             isClearable
             isMulti={data.isMulti}
             placeholder={data.placeholder}
             isDisabled={isDisabled}
             inputId={data.name}
-            onChange={(val) => {
-              field.onChange(val);
-              onAfterChange?.(val);
-            }}
-        
+            onChange={handleChange}
             onBlur={field.onBlur}
             classNamePrefix={!!fieldState.error ? 'react-select-error' : 'react-select'}
           />
@@ -53,7 +70,7 @@ export const WrappedSelect = withFormItemWrapper(MySelect);
 
 const Input = (props) => {
   const { register, data, errors = {}, rules } = props;
-  const autoComplete =['email', 'tel'].includes(data.type) ? data.type : 'off';
+  const autoComplete = ['email', 'tel'].includes(data.type) ? data.type : 'off';
   
   if (!data?.name) return null;
   return (

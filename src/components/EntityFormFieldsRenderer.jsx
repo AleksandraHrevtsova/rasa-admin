@@ -8,45 +8,38 @@ export function EntityFormFieldsRenderer({
   rules,
   options,
   onAfterChange,
-  watch,
 }) {
+  const inputTypes = ['text', 'email', 'tel', 'password'];
   return (
     <>
-      <WrappedSelect
-        control={control}
-        data={fields.role}
-        options={options.roles}
-        errors={errors}
-      />
-
-      {options.showClientFields && (
-        <>
-          <WrappedSelect
-            control={control}
-            data={fields.counterparty}
-            options={options.counterparties}
-            rules={rules.counterparty}
-            errors={errors}
-            onAfterChange={onAfterChange}
-          />
-
-          <WrappedSelect
-            control={control}
-            data={fields.hubs}
-            options={options.hubs}
-            rules={rules.hubs}
-            errors={errors}
-          />
-        </>
-      )}
-
-      <WrappedInput register={register} data={fields.name} errors={errors} rules={rules.name} />
-      <WrappedInput register={register} data={fields.phone} errors={errors} rules={rules.phone} />
-      <WrappedInput register={register} data={fields.email} errors={errors} rules={rules.email} />
-
-      {!options.isEdit && (
-        <WrappedInput register={register} data={fields.password} errors={errors} rules={rules.password} />
-      )}
+      {fields?.map(el => {
+        if (!el.isShowField) return null;
+        if (el.type === 'select') {
+          return (
+            <WrappedSelect
+              key={el.name}
+              control={control}
+              data={el}
+              options={options[el.name]}
+              isDisabled={el.isDisabled}
+              rules={rules[el.name]}
+              errors={errors[el.name]}
+              onAfterChange={onAfterChange}
+            />
+          );
+        }
+        if (inputTypes?.includes(el.type)) {
+          return (
+            <WrappedInput 
+              key={el.name}
+              register={register} 
+              data={el} 
+              rules={rules[el.name]}
+              errors={errors[el.name]}
+            />
+          );
+        }
+      })}
     </>
   );
 }

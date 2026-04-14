@@ -5,8 +5,8 @@ import { NAV } from '../constants/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import { useLocale } from '../contexts/LocaleContext';
 
-import { getRoles } from '../services/role.service';
-import { getCounterparties } from '../services/counterparty.service';
+import { getRolesCached, getCounterpartiesCached } from '../services/dictionaries.cache';
+
 import {
   getUserById,
   createUser,
@@ -46,6 +46,19 @@ export default function User() {
     successDeactivate: t['user.deactivated'] || 'Deactivated!',
   };
 
+  const compareUsers = (a, b) => {
+    const normalize = (u) => ({
+      name: u.name || '',
+      email: u.email || '',
+      phone: u.phone || '',
+      roleId: u.role?.value ?? u.roleId,
+      counterpartyId: u.counterpartyId || null,
+      hubIds: (u.hubIds || []).slice().sort(),
+    });
+  
+    return JSON.stringify(normalize(a)) === JSON.stringify(normalize(b));
+  };
+
   const formConfig = {
     id,
     getById: getUserById,
@@ -59,11 +72,9 @@ export default function User() {
         name: u.name,
         email: u.email,
         phone: u.phone,
-        role: { value: u.role?.id, label: u.role?.name },
-        counterparty: u?.counterparty?.id
-          ? { value: u.counterparty?.id, label: u.counterparty?.nameInternal }
-          : null,
-        hubs: u.userHubs?.map(({ hub }) => ({ value: hub.id, label: hub.nameInternal })),
+        roleId: u.roleId || null,
+        counterpartyId: u.counterpartyId || null,
+        hubIds: u.userHubs?.map(({ hub }) => hub.id) || [],
       }
     },
     mapToApi: (f) => {
@@ -71,13 +82,14 @@ export default function User() {
         name: f.name,
         email: f.email,
         phone: f.phone,
-        roleId: f.role.value,
-        counterpartyId: f.counterparty?.value || null,
-        hubIds: f.hubs?.map((h) => h.value) || [],
+        roleId: f.roleId,
+        counterpartyId: f.counterpartyId || null,
+        hubIds: f.hubIds || [],
         password: f.password,
       }
     },
     onSuccess: handleBack,
+    compareValues: compareUsers,
   };
 
   const { 
@@ -88,8 +100,8 @@ export default function User() {
     loading,
     isEdit,
     isActive,
-    isDirty,
     isValid,
+    isFormChanged,
     handleActivate,
     handleDeactivate 
   } = useEntityForm(formConfig);
@@ -105,9 +117,9 @@ export default function User() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [r, c] = await Promise.all([getRoles(), getCounterparties()]);
-        setRoles(r.data.items);
-        setCounterparties(c.data.items);
+        const [roles, counterparties] = await Promise.all([getRolesCached(), getCounterpartiesCached()]);
+        setRoles(roles);
+        setCounterparties(counterparties);
       } catch (err) {
         console.error(err);
       }
@@ -115,15 +127,15 @@ export default function User() {
     fetchData();
   }, []);
 
-  const selectedRole = useWatch({ control, name: 'role' });
-  const selectedCounterparty = useWatch({ control, name: 'counterparty' });
+  const selectedRoleId = useWatch({ control, name: 'roleId' });
+  const selectedCounterpartyId = useWatch({ control, name: 'counterpartyId' });
 
-  const showClientFields = selectedRole?.label?.includes('client-');
+  const showClientFields = roles.find(r => r.id === selectedRoleId)?.name?.includes('client-');
 
   const isDisabled = isEdit && !isActive;
   const pageTitle = useMemo(() => isEdit ? t['user.editCurrent'] : t['user.createNew'], [isEdit]);
 
-  const isNotReadyToSubmit = !isValid || isDisabled || (isEdit && !isDirty);
+  const isNotReadyToSubmit = !isValid || isDisabled || (isEdit && !isFormChanged);
 
   const initialized = useRef(false);
 
@@ -146,31 +158,30 @@ export default function User() {
       return;
     }
 
-    if (!selectedCounterparty?.value) {
+    if (!selectedCounterpartyId) {
       setValue('hubs', [], { shouldValidate: true });
     }
   
-  }, [selectedCounterparty?.value, showClientFields]);
+  }, [selectedCounterpartyId, showClientFields]);
 
-  const { fields, rules } = useEntityFormConfig({ t, isEdit, showClientFields }).user;
+  const { fields, rules } = useEntityFormConfig({ t, isEdit, showClientFields, isActive }).user;
 
   const mapOption = (item, labelKey = 'name') => ({ value: item.id, label: item[labelKey] }); 
+
   const filteredHubOptions = useMemo(() => {
-    const counterpartyHubs = counterparties?.find(cp => cp?.id === selectedCounterparty?.value)?.hubs;
-    return counterpartyHubs ? counterpartyHubs.map(el => mapOption(el, 'nameInternal')) : [];
-  }, [counterparties, selectedCounterparty]);
+    const counterpartyHubs = counterparties?.find(cp => cp?.id === selectedCounterpartyId)?.hubs;
+    return counterpartyHubs?.map(el => mapOption(el, 'nameInternal'));
+  }, [counterparties, selectedCounterpartyId]);
 
   const options = {
-    roles: roles.map(el => mapOption(el)),
-    counterparties: counterparties.map(el => mapOption(el, 'nameInternal')),
-    hubs: filteredHubOptions,
-    showClientFields,
-    isEdit,
+    roleId: roles.map((el) => mapOption(el)) || [],
+    counterpartyId: counterparties.map((el) => mapOption(el, 'nameInternal')) || [],
+    hubIds: filteredHubOptions || [],
   };
 
   function handleBack() {
     const from = location.state?.from || NAV.home;
-    if (isDirty) reset();
+    if (isFormChanged) reset();
     else navigate(from, { replace: true });
   };
 
@@ -191,7 +202,8 @@ export default function User() {
           />
 
           <Button
-            label={isDirty ? t['cancel'] : t['back']}
+            label={isFormChanged ? t['cancel'] : t['back']}
+            action='show'
             onClick={handleBack}
           />
 

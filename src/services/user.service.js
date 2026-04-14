@@ -13,12 +13,12 @@ export const getUserById = (id) => {
   return api.get(withId(GET, id));
 };
 
-export const createUser = (newUserData) => {
-  return api.post(CREATE, newUserData);
+export const createUser = (payload) => {
+  return api.post(CREATE, payload);
 };
 
-export const updateUser = (id, updatedUserData) => {
-  return api.put(withId(UPDATE, id), updatedUserData);
+export const updateUser = (id, payload) => {
+  return api.put(withId(UPDATE, id), payload);
 };
 
 export const deactivateUser = (id) => {

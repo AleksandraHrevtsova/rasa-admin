@@ -42,6 +42,7 @@ export const ENDPOINTS = {
     },
     PRODUCTS: {
       LIST: apiPath + productsPath,
+      GET: apiPath + productsPath + '/:id',
       CREATE: apiPath + productsPath,
       UPDATE: apiPath + productsPath + '/:id',
       DEACTIVATE: apiPath + productsPath + '/:id/deactivate',

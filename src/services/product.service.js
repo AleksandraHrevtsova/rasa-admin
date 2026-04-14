@@ -13,15 +13,15 @@ export const getProductById = (id) => {
   return api.get(withId(GET, id));
 };
 
-export const createProduct = (newUserData) => {
-  return api.post(CREATE, newUserData);
+export const createProduct = (payload) => {
+  return api.post(CREATE, payload);
 };
 
-export const updateProduct = (id, updatedUserData) => {
-  return api.put(withId(UPDATE, id), updatedUserData);
+export const updateProduct = (id, payload) => {
+  return api.put(withId(UPDATE, id), payload);
 };
 
-export const deactivateProduc = (id) => {
+export const deactivateProduct = (id) => {
   return api.post(withId(DEACTIVATE, id));
 };
 

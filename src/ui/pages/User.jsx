@@ -25,6 +25,7 @@ import { useEntityFormConfig } from '../hooks/useEntityFormConfig';
 
 import { EntityFormLayout } from '../components/form/EntityFormLayout';
 import { EntityFormFieldsRenderer } from '../components/form/EntityFormFieldsRenderer';
+import { mapFromApi, mapToApi } from '../../domain/user/user.mapper';
 
 export default function User() {
   const { t } = useLocale();
@@ -67,27 +68,8 @@ export default function User() {
     activate: activateUser,
     deactivate: deactivateUser,
     notifications,
-    mapFromApi: (u) => {
-      return {
-        name: u.name,
-        email: u.email,
-        phone: u.phone,
-        roleId: u.roleId || null,
-        counterpartyId: u.counterpartyId || null,
-        hubIds: u.userHubs?.map(({ hub }) => hub.id) || [],
-      }
-    },
-    mapToApi: (f) => {
-      return {
-        name: f.name,
-        email: f.email,
-        phone: f.phone,
-        roleId: f.roleId,
-        counterpartyId: f.counterpartyId || null,
-        hubIds: f.hubIds || [],
-        password: f.password,
-      }
-    },
+    mapFromApi: mapFromApi,
+    mapToApi: mapToApi,
     onSuccess: handleBack,
     compareValues: compareUsers,
   };

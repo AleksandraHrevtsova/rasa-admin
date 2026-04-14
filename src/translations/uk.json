@@ -8,7 +8,8 @@
   "back": "Назад",
   "select": "Виберіть",
   "loading": "Завантаження",
-
+  "requiredValue": "Обовʼязкове поле!",
+  
   "hubs": "Склади",
   "products": "Продукти",
 
@@ -38,12 +39,19 @@
   "users.confirmDeactivate": "Ви дійсно хочете деактивувати цього користувача?",
   
   "user.role": "Роль",
-  "user.counterparty": "Оберіть контрагента",
-  "user.hubs": "Оберіть склади",
+  "user.selectRole": "Оберіть роль",
+  "user.counterparty": "Контрагент",
+  "user.selectCounterparty": "Оберіть контрагента",
+  "user.hubs": "Склади",
+  "user.selectHubs": "Оберіть склади",
   "user.name": "Ім'я",
+  "user.enterName": "Введіть ім'я",
   "user.phone": "Телефон",
+  "user.enterPhone": "Введіть телефон",
   "user.email": "Email",
+  "user.enterEmail": "Введіть email",
   "user.password": "Пароль",
+  "user.enterPassword": "Введіть пароль",
   "user.createNew": "Створення користувача",
   "user.editCurrent": "Редагування користувача",
   "user.deactivated": "Користувача деактивовано",

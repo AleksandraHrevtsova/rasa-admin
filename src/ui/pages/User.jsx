@@ -47,6 +47,15 @@ export default function User() {
     successDeactivate: t['user.deactivated'] || 'Deactivated!',
   };
 
+  const fieldNames = {
+    name: 'name',
+    email: 'email',
+    phone: 'phone',
+    role: 'roleId',
+    counterparty: 'counterpartyId',
+    hubs: 'hubIds'
+  }
+
   const compareUsers = (a, b) => {
     const normalize = (u) => ({
       name: u.name || '',
@@ -109,8 +118,8 @@ export default function User() {
     fetchData();
   }, []);
 
-  const selectedRoleId = useWatch({ control, name: 'roleId' });
-  const selectedCounterpartyId = useWatch({ control, name: 'counterpartyId' });
+  const selectedRoleId = useWatch({ control, name: fieldNames.role });
+  const selectedCounterpartyId = useWatch({ control, name: fieldNames.counterparty });
 
   const showClientFields = roles.find(r => r.id === selectedRoleId)?.name?.includes('client-');
 
@@ -122,7 +131,7 @@ export default function User() {
   const initialized = useRef(false);
 
   const handleCounterpartyChange = () => {
-    setValue('hubs', [], { 
+    setValue(fieldNames.hubs, [], { 
       shouldDirty: true,
       shouldValidate: true 
     });
@@ -135,13 +144,13 @@ export default function User() {
     }
 
     if (!showClientFields) {
-      setValue('counterparty', null, { shouldValidate: true });
-      setValue('hubs', [], { shouldValidate: true });
+      setValue(fieldNames.counterparty, null, { shouldValidate: true });
+      setValue(fieldNames.hubs, [], { shouldValidate: true });
       return;
     }
 
     if (!selectedCounterpartyId) {
-      setValue('hubs', [], { shouldValidate: true });
+      setValue(fieldNames.hubs, [], { shouldValidate: true });
     }
   
   }, [selectedCounterpartyId, showClientFields]);

@@ -78,5 +78,23 @@ export const NAV = {
   orders: '/orders',
   payments: '/payments',
   certificates: '/certificates',
-}
+};
 
+export const buttonActionTypes = {
+  submit: 'submit',
+  create: 'create',
+  activate: 'activate',
+  deactivate: 'deactivate',
+  show: 'show',
+  ghost: 'ghost',
+};
+
+export const formItemTypes = {
+  select: 'select',
+  input: {
+    text: 'text',
+    tel: 'tel',
+    email: 'email',
+    password: 'password',
+  }
+};

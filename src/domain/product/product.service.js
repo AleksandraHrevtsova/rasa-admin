@@ -1,5 +1,5 @@
-import api from '../../core/api/apiClient';
-import { ENDPOINTS } from '../../config/constants';
+import api from '@/core/api/apiClient';
+import { ENDPOINTS } from '@/config/constants';
 
 const { LIST, GET, CREATE, UPDATE, DEACTIVATE, ACTIVATE } = ENDPOINTS.API.PRODUCTS;
 

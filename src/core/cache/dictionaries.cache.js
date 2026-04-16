@@ -1,5 +1,5 @@
-import { getRoles } from '../../domain/role/role.service';
-import { getCounterparties } from '../../domain/counterparty/counterparty.service';
+import { getRoles } from '@/domain/role/role.service';
+import { getCounterparties } from '@/domain/counterparty/counterparty.service';
 
 let rolesCache = null;
 let counterpartiesCache = null;

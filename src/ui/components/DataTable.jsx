@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect} from 'react';
+import { useMemo, useState } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -7,7 +7,7 @@ import {
   flexRender,
 } from '@tanstack/react-table';
 
-import { useLocale } from '../../contexts/LocaleContext';
+import { useI18n } from '@/ui/hooks/useI18n';
 
 const Pagination = ({
   pageCount,
@@ -97,7 +97,7 @@ export default function DataTable({
   setPagination,
   pageSizeOptions = [5, 10, 20, 50],
 }) {
-  const { t } = useLocale();
+  const { t, k } = useI18n();
 
   const [sorting, setSorting] = useState([]);
 
@@ -153,7 +153,7 @@ export default function DataTable({
   });
 
   if (!data.length) {
-    return (<div className='p-4 text-gray-500'>{t['table.noData']}</div>);
+    return (<div className='p-4 text-gray-500'>{t(k.table.noData)}</div>);
   }
 
   return (

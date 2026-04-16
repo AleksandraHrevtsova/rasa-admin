@@ -1,32 +1,39 @@
-export function useEntityFormConfig({ t, isEdit, showClientFields, isActive }) {
+import { formItemTypes } from "@/config/constants";
+
+const validationPatterns = {
+  phone: /^[\d+()\-\s]{7,20}$/,
+  email: /^\S+@\S+\.\S+$/,
+};
+
+export function useEntityFormConfig({ t, k, fieldNames, isEdit, showClientFields, isActive }) {
   return {
     user: {
       fields: [
         { 
-          type: 'select', 
-          name: 'roleId', 
-          label: t['user.role'], 
-          placeholder: t['user.selectRole'], 
+          type: formItemTypes.select, 
+          name: fieldNames.role, 
+          label: t(k.common.role), 
+          placeholder: t(k.user.selectRole), 
           isMulti: false,
           required: true, 
           isShowField: true,
           isDisabled: !isActive,
         },
         { 
-          type: 'select', 
-          name: 'counterpartyId', 
-          label: t['user.counterparty'], 
-          placeholder: t['user.selectCounterparty'], 
+          type: formItemTypes.select, 
+          name: fieldNames.counterparty, 
+          label: t(k.common.counterparty), 
+          placeholder: t(k.user.selectCounterparty), 
           isMulti: false,
           required: showClientFields,
           isShowField: showClientFields, 
           isDisabled: !isActive,
         },
         { 
-          type: 'select', 
-          name: 'hubIds', 
-          label: t['user.hub'], 
-          placeholder: t['user.selectHubs'], 
+          type: formItemTypes.select, 
+          name: fieldNames.hubs, 
+          label: t(k.common.hubs), 
+          placeholder: t(k.user.selectHubs), 
           isMulti: false,
           isMulti: true, 
           required: showClientFields,
@@ -34,37 +41,37 @@ export function useEntityFormConfig({ t, isEdit, showClientFields, isActive }) {
           isDisabled: !isActive,
         },
         { 
-          type: 'text', 
-          name: 'name',  
-          label: t['user.name'], 
-          placeholder: t['user.enterName'], 
+          type: formItemTypes.input.text, 
+          name: fieldNames.name,  
+          label: t(k.common.name), 
+          placeholder: t(k.user.enterName), 
           required: true,
           isShowField: true,
           isDisabled: !isActive,
         },
         { 
-          type: 'tel', 
-          name: 'phone',  
-          label: t['user.phone'], 
-          placeholder: t['user.enterPhone'], 
+          type: formItemTypes.input.tel, 
+          name: fieldNames.phone,  
+          label: t(k.common.phone), 
+          placeholder: t(k.user.enterPhone), 
           required: true,
           isShowField: true,
           isDisabled: !isActive,
         },
         { 
-          type: 'email', 
-          name: 'email',  
-          label: t['user.email'], 
-          placeholder: t['user.enterEmail'], 
+          type: formItemTypes.input.email, 
+          name: fieldNames.email,  
+          label: t(k.common.email), 
+          placeholder: t(k.user.enterEmail), 
           required: true, 
           isShowField: true,
           isDisabled: !isActive,
         },
         { 
-          type: 'password', 
-          name: 'password', 
-          label: t['user.password'], 
-          placeholder: t['user.enterPassword'], 
+          type: formItemTypes.input.password, 
+          name: fieldNames.password, 
+          label: t(k.common.password), 
+          placeholder: t(k.user.enterPassword), 
           required: !isEdit,
           isShowField: true,
           isDisabled: !isActive,
@@ -73,30 +80,30 @@ export function useEntityFormConfig({ t, isEdit, showClientFields, isActive }) {
       rules: {
         roleId: { 
           required: true,
-          validate: (v) => (showClientFields && !v) ? t['requiredValue'] : true,
+          validate: (v) => (showClientFields && !v) ? t(k.user.roleRequired) : true,
         },
         counterpartyId: { 
           required: showClientFields,
-          validate: (v) => (showClientFields && !v) ? t['requiredValue'] : true,
+          validate: (v) => (showClientFields && !v) ? t(k.user.counterpartyRequired) : true,
         },
         hubIds: { 
           required: showClientFields,
-          validate: (v) => (showClientFields && (!v || v.length === 0)) ? t['requiredValue'] : true 
+          validate: (v) => (showClientFields && (!v || v.length === 0)) ? t(k.user.hubsRequired) : true 
         },
         name: { 
-          required: t['rules.name'] 
+          required: t(k.user.nameRequired) 
         },
         phone: {
-          required: t['rules.phone'],
-          pattern: { value: /^[\d+()\-\s]{7,20}$/, message: t['rules.incorrectPhone'] }
+          required: t(k.user.phoneRequired),
+          pattern: { value: validationPatterns.phone, message: t(k.user.incorrectPhone) }
         },
         email: {
-          required: t['rules.email'],
-          pattern: { value: /^\S+@\S+\.\S+$/, message: t['rules.incorrectEmail'] }
+          required: t(k.user.emailRequired),
+          pattern: { value: validationPatterns.email, message: t(k.user.incorrectEmail) }
         },
         password: { 
-          required: !isEdit ? t['rules.password'] : false, 
-          minLength: { value: 6, message: t['rules.passwordMinLength'] } 
+          required: !isEdit ? t(k.common.passwordRequired) : false, 
+          minLength: { value: 6, message: t(k.user.passwordMinLength) } 
         },
       },
     },

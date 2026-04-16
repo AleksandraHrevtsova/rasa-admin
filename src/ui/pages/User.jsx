@@ -1,11 +1,12 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
+import { useWatch } from 'react-hook-form';
 
-import { NAV } from '../../config/constants';
+import { NAV } from '@/config/constants';
 import { useAuth } from '../../contexts/AuthContext';
-import { useLocale } from '../../contexts/LocaleContext';
 
-import { getRolesCached, getCounterpartiesCached } from '../../core/cache/dictionaries.cache';
+import { getRolesCached, getCounterpartiesCached } from '@/core/cache/dictionaries.cache';
+import { getCRUDnotification } from '@/core/utils/notifications';
 
 import {
   getUserById,
@@ -13,25 +14,29 @@ import {
   updateUser,
   activateUser,
   deactivateUser,
-} from '../../domain/user/user.service';
+} from '@/domain/user/user.service';
+import { mapFromApi, mapToApi } from '@/domain/user/user.mapper';
+import { normalizeUser } from '@/domain/user/user.compare';
 
-import { useWatch } from 'react-hook-form';
+import { useI18n } from '@/ui/hooks/useI18n';
+import { useEntityForm } from '@/ui/hooks/useEntityForm';
+import { useEntityFormConfig } from '@/ui/hooks/useEntityFormConfig';
 
-import { Button } from '../components/Button';
-import { Loading } from '../components/Loading';
+import { Loading } from '@/ui/components/Loading';
+import { Buttons } from '@/ui/components/form/FormButtonsBlock';
+import { EntityFormLayout } from '@/ui/components/form/EntityFormLayout';
+import { EntityFormFieldsRenderer } from '@/ui/components/form/EntityFormFieldsRenderer';
 
-import { useEntityForm } from '../hooks/useEntityForm';
-import { useEntityFormConfig } from '../hooks/useEntityFormConfig';
-
-import { EntityFormLayout } from '../components/form/EntityFormLayout';
-import { EntityFormFieldsRenderer } from '../components/form/EntityFormFieldsRenderer';
-import { mapFromApi, mapToApi } from '../../domain/user/user.mapper';
+const findItemById = (arr, id) => arr.find(el => el.id === id);
+const mapOption = (item) => ({ value: item.id, label: item.name }); 
 
 export default function User() {
-  const { t } = useLocale();
-  const { appUser } = useAuth();
+  const { t, k } = useI18n();
+
   const location = useLocation();
   const navigate = useNavigate();
+  
+  const { appUser } = useAuth();
   const { id } = useParams();
 
   const [roles, setRoles] = useState([]);
@@ -39,34 +44,19 @@ export default function User() {
 
   const isCurrentUser = id === appUser.id;
 
-  const notifications = {
-    confirmDeactivate: t['user.confirmDeactivate'] || 'Confirm?',
-    successUpdate: t['user.updated'] || 'Updated!',
-    successCreate: t['user.created'] || 'Created!',
-    successActivate: t['user.activated'] || 'Activated!',
-    successDeactivate: t['user.deactivated'] || 'Deactivated!',
-  };
-
+  const pageTag = 'user';
   const fieldNames = {
     name: 'name',
     email: 'email',
     phone: 'phone',
     role: 'roleId',
     counterparty: 'counterpartyId',
-    hubs: 'hubIds'
+    hubs: 'hubIds',
+    password: 'password'
   }
 
-  const compareUsers = (a, b) => {
-    const normalize = (u) => ({
-      name: u.name || '',
-      email: u.email || '',
-      phone: u.phone || '',
-      roleId: u.role?.value ?? u.roleId,
-      counterpartyId: u.counterpartyId || null,
-      hubIds: (u.hubIds || []).slice().sort(),
-    });
-  
-    return JSON.stringify(normalize(a)) === JSON.stringify(normalize(b));
+  const compareUsers = (a, b) => {  
+    return JSON.stringify(normalizeUser(a)) === JSON.stringify(normalizeUser(b));
   };
 
   const formConfig = {
@@ -76,7 +66,7 @@ export default function User() {
     update: updateUser,
     activate: activateUser,
     deactivate: deactivateUser,
-    notifications,
+    notifications: getCRUDnotification(pageTag),
     mapFromApi: mapFromApi,
     mapToApi: mapToApi,
     onSuccess: handleBack,
@@ -121,18 +111,22 @@ export default function User() {
   const selectedRoleId = useWatch({ control, name: fieldNames.role });
   const selectedCounterpartyId = useWatch({ control, name: fieldNames.counterparty });
 
-  const showClientFields = roles.find(r => r.id === selectedRoleId)?.name?.includes('client-');
+  const selectedRole = useMemo(() => findItemById(roles, selectedRoleId), [roles, selectedRoleId]);
+
+  const showClientFields = selectedRole?.name?.includes('client-');
 
   const isDisabled = isEdit && !isActive;
-  const pageTitle = useMemo(() => isEdit ? t['user.editCurrent'] : t['user.createNew'], [isEdit]);
+  const pageTitle = useMemo(() => isEdit ? t(k[pageTag]?.editCurrent) : t(k[pageTag]?.createNew), [isEdit]);
 
-  const isNotReadyToSubmit = !isValid || isDisabled || (isEdit && !isFormChanged);
+  const isEmptySelect = (v) => v == null;
+  const isNotReadyToSubmit = !isValid || isDisabled || (isEdit && !isFormChanged) || !selectedRoleId;
 
   const initialized = useRef(false);
 
   const handleCounterpartyChange = () => {
     setValue(fieldNames.hubs, [], { 
       shouldDirty: true,
+      shouldTouch: true,
       shouldValidate: true 
     });
   }
@@ -155,25 +149,26 @@ export default function User() {
   
   }, [selectedCounterpartyId, showClientFields]);
 
-  const { fields, rules } = useEntityFormConfig({ t, isEdit, showClientFields, isActive }).user;
-
-  const mapOption = (item, labelKey = 'name') => ({ value: item.id, label: item[labelKey] }); 
+  const { fields, rules } = useEntityFormConfig({ t, k, fieldNames, isEdit, showClientFields, isActive }).user;
 
   const filteredHubOptions = useMemo(() => {
-    const counterpartyHubs = counterparties?.find(cp => cp?.id === selectedCounterpartyId)?.hubs;
-    return counterpartyHubs?.map(el => mapOption(el, 'nameInternal'));
+    const counterpartyHubs = findItemById(counterparties, selectedCounterpartyId)?.hubs;
+    return counterpartyHubs?.map(mapOption);
   }, [counterparties, selectedCounterpartyId]);
 
   const options = {
-    roleId: roles.map((el) => mapOption(el)) || [],
-    counterpartyId: counterparties.map((el) => mapOption(el, 'nameInternal')) || [],
+    roleId: roles.map(mapOption) || [],
+    counterpartyId: counterparties.map(mapOption) || [],
     hubIds: filteredHubOptions || [],
   };
 
   function handleBack() {
     const from = location.state?.from || NAV.home;
-    if (isFormChanged) reset();
-    else navigate(from, { replace: true });
+    if (isFormChanged) {
+      reset(formConfig.initialValuesRef?.current);
+    } else {
+      navigate(from, { replace: true });
+    }
   };
 
   if (loading) return <Loading />;
@@ -185,36 +180,14 @@ export default function User() {
       onSubmit={handleSubmit(onSubmit, onError)}
       actions={
         <div className='flex gap-2'>
-          <Button
-            type='submit'
-            label={isEdit ? t['save'] : t['create']}
-            action='submit'
-            disabled={isNotReadyToSubmit}
+          <Buttons 
+            isEdit={isEdit}
+            isChanged={isFormChanged}
+            isSubmitDisabled={isNotReadyToSubmit}
+            onBack={handleBack}
+            onActivate={(isEdit && !isActive) ? handleActivate : null}
+            onDeactivate={(isEdit && isActive && !isCurrentUser) ? handleDeactivate : null}
           />
-
-          <Button
-            label={isFormChanged ? t['cancel'] : t['back']}
-            action='show'
-            onClick={handleBack}
-          />
-
-          {isEdit && isActive && !isCurrentUser && (
-            <Button
-              label={t['deactivate']}
-              action='deactivate'
-              onClick={handleDeactivate}
-              disabled={isCurrentUser}
-            />
-          )}
-
-          {isEdit && !isActive && (
-            <Button
-              label={t['activate']}
-              action='activate'
-              onClick={handleActivate}
-              disabled={isActive}
-            />
-          )}
         </div>
       }
     >
@@ -229,4 +202,5 @@ export default function User() {
       />
     </EntityFormLayout>
   );
-}
+};
+

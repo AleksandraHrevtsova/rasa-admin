@@ -1,22 +1,21 @@
+import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { Plus, ShieldCheck, ShieldClose } from 'lucide-react';
 
-import { useLocale } from '../../contexts/LocaleContext';
+import { NAV } from '@/config/constants';
+import { navigateToEntity } from '@/core/utils/navigation';
 
-import { useEntityTable } from '../hooks/useEntityTable';
+import { getUsers } from '@/domain/user/user.service';
 
-import { getUsers } from '../../domain/user/user.service';
+import { EntityPageLayout } from '@/ui/components/EntityPageLayout';
+import DataTable from '@/ui/components/DataTable';
+import { RolesList } from '@/ui/components/Roles';
 
-import { EntityPageLayout } from '../components/EntityPageLayout';
-import { Button } from '../components/Button';
-import DataTable from '../components/DataTable';
-import { RolesList } from '../components/Roles';
-
-import { NAV } from '../../config/constants';
-import { navigateToEntity } from '../../core/utils/navigation';
+import { useI18n } from '@/ui/hooks/useI18n';
+import { useEntityTable } from '@/ui/hooks/useEntityTable';
 
 export default function Users() {
-  const { t } = useLocale();
+  const { t, k } = useI18n();
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -41,40 +40,30 @@ export default function Users() {
       id,
     });
   };
-
-  function formatLabel(key) {
-    return t[`users.${key}`] || key;
-  };
   
   const columns = [
-    { key: 'name', label: formatLabel('name'), sortable: true },
-    { key: 'email', label: formatLabel('email') },
-    { key: 'role', label: formatLabel('role'), render: (row) => row.role?.name || '—' },
-    { key: 'userHubs', label: t['hubs'], render: (row) => row.hubs?.length || '-' }
+    { key: 'name', label: t(k.common.name), sortable: true },
+    { key: 'email', label: t(k.common.email) },
+    { key: 'role', label: t(k.common.role), render: (row) => row.role?.name || '—' },
+    { key: 'userHubs', label: t(k.common.hubs), render: (row) => row.hubs?.length || '-' }
   ];
+
+  const actions = useMemo(() => {
+    return {
+      left: {
+        isActive,
+        onClick: () => setIsActive((p) => !p),
+      },
+      right: {
+        onClick: () => goToUser(),
+      }
+    };
+  }, [isActive]);
 
   return (
     <EntityPageLayout
-      title={t['users.title']}
-      actions={{
-        left: (
-          <Button
-            label={isActive ? t['table.showInactive'] : t['table.showActive']}
-            onClick={() => setIsActive((p) => !p)} 
-            action='show' 
-            icon={isActive ? ShieldCheck : ShieldClose}
-            hideLabelOnMobile
-          />
-        ),
-        right: (
-          <Button
-            label={t['create']} 
-            onClick={() => goToUser()} 
-            action='create' 
-            icon={Plus}
-          />
-        )
-      }}
+      title={t(k.users.title)}
+      actions={actions}
       loading={loading}
       table={
         <div className='grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-4'>
@@ -98,11 +87,7 @@ export default function Users() {
           )}
         </div>
       }
-      fab={{
-        label: t['create'],
-        onClick: () => goToUser()
-      }}
+      fab={{ onClick: () => goToUser() }}
     />
-
   );
-}
+};

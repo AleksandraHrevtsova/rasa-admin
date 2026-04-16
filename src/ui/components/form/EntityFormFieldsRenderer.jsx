@@ -1,3 +1,4 @@
+import { formItemTypes } from "@/config/constants";
 import { WrappedInput } from './fields/Input';
 import { WrappedSelect } from './fields/Select';
 
@@ -10,15 +11,14 @@ export function EntityFormFieldsRenderer({
   options,
   onAfterChange,
 }) {
-  const inputTypes = ['text', 'email', 'tel', 'password'];
   return (
     <>
-      {fields?.map(el => {
+      {fields?.map((el, idx) => {
         if (!el.isShowField) return null;
-        if (el.type === 'select') {
+        if (el.type === formItemTypes.select) {
           return (
             <WrappedSelect
-              key={el.name}
+              key={idx}
               control={control}
               data={el}
               options={options[el.name]}
@@ -29,10 +29,10 @@ export function EntityFormFieldsRenderer({
             />
           );
         }
-        if (inputTypes?.includes(el.type)) {
+        if (Object.values(formItemTypes.input)?.includes(el.type)) {
           return (
             <WrappedInput 
-              key={el.name}
+              key={idx}
               register={register} 
               data={el} 
               rules={rules[el.name]}

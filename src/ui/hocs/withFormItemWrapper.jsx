@@ -1,4 +1,4 @@
-import { ErrorMessage } from '../components/form/fields/ErrorMessage';
+import { ErrorMessage } from '@/ui/components/form/fields/ErrorMessage';
 
 const withFormItemWrapper = (Component) => {
   const WrappedComponent = (props) => {

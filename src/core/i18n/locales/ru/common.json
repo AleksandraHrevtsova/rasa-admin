@@ -1,0 +1,29 @@
+{
+  "create": "Создать",
+  "edit": "Редактировать",
+  "activate": "Активировать",
+  "deactivate": "Деактивировать",
+
+  "save": "Сохранить",
+  "cancel": "Отмена",
+  "back": "Назад",
+
+  "select": "Выбрать",
+  "loading": "Загрузка",
+  "requiredValue": "Обязательное поле!",
+
+  "showInactive": "Активные",
+  "showActive": "Не активные",
+  
+  "title": "Название",
+  "name": "Имя",
+  "phone": "Телефон",
+  "email": "Email",
+  "password": "Пароль",
+  "passwordRequired": "Введите пароль, минимум 6 символов",
+  "role": "Роль",
+  "counterparty": "Контрагент",
+  "hubs": "Склады",
+  "products": "Продукты",
+  "counterparties": "Контрагенты"
+}

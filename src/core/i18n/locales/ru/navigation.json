@@ -1,0 +1,11 @@
+{
+  "users": "Пользователи",
+  "roles": "Роли",
+  "counterparties": "Контрагенты",
+  "hubs": "Склады",
+  "products": "Продукты",
+  "orders": "Заказы",
+  "payments": "Оплаты",
+  "certificates": "Сертификаты",
+  "logout": "Выйти"
+}

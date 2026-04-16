@@ -1,0 +1,29 @@
+{
+  "create": "Створити",
+  "edit": "Редагувати",
+  "activate": "Активувати",
+  "deactivate": "Деактивувати",
+
+  "save": "Зберегти",
+  "cancel": "Скасувати",
+  "back": "Назад",
+
+  "select": "Обрати",
+  "loading": "Завантаження",
+  "requiredValue": "Обовʼязкове поле!",
+
+  "showInactive": "Активні",
+  "showActive": "Не активні",
+  
+  "title": "Назва",
+  "name": "Ім'я",
+  "phone": "Телефон",
+  "email": "Email",
+  "password": "Пароль",
+  "passwordRequired": "Введіть пароль обовʼязково",
+  "role": "Роль",
+  "counterparty": "Контрагент",
+  "hubs": "Склади",
+  "products": "Продукти",
+  "counterparties": "Контрагенти"
+}

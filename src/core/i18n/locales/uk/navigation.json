@@ -1,0 +1,11 @@
+{
+  "users": "Користувачі",
+  "roles": "Ролі",
+  "counterparties": "Контрагенти",
+  "hubs": "Склади",
+  "products": "Продукти",
+  "orders": "Замовлення",
+  "payments": "Оплати",
+  "certificates": "Сертифікати",
+  "logout": "Вийти"
+}

@@ -3,7 +3,7 @@ import { NavLink, Outlet, useLocation } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users,
-  Shield,
+  // Shield,
   Building2,
   Package,
   FileText,
@@ -14,11 +14,11 @@ import {
   LogOut
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useLocale } from '../../contexts/LocaleContext';
-import { clearToken } from '../../core/auth/tokenManager';
+import { useI18n } from '@/ui/hooks/useI18n';
+import { clearToken } from '@/core/auth/tokenManager';
 
-import { NAV } from '../../config/constants';
-import { LanguageSwitcher } from './LanguageSwitcher';
+import { NAV } from '@/config/constants';
+import { LanguageSwitcher } from '@ui/components/LanguageSwitcher';
 
 function SidebarItem({ item, collapsed }) {
 
@@ -51,7 +51,7 @@ function SidebarItem({ item, collapsed }) {
 export const Layout = () => {
   const { appUser } = useAuth();
   const location = useLocation();
-  const { t } = useLocale();
+  const { t, k } = useI18n();
 
   const [collapsed, setCollapsed] = useState(localStorage.getItem('sidebar') === 'collapsed');
 
@@ -69,10 +69,6 @@ export const Layout = () => {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
-  function formatLabel(key) {
-    return t[`${key}.title`] || key;
-  };
-
   function logout() {
     localStorage.clear();
     clearToken();
@@ -80,13 +76,13 @@ export const Layout = () => {
   };
 
   const navItems = [
-    { label: formatLabel('users'), path: NAV.users, icon: Users },
-    // { label: formatLabel('roles'), path: NAV.roles, icon: Shield },
-    { label: formatLabel('counterparties'), path: NAV.counterparties, icon: Building2 },
-    { label: formatLabel('products'), path: NAV.products, icon: Package },
-    { label: formatLabel('orders'), path: NAV.orders, icon: FileText },
-    { label: formatLabel('payments'), path: NAV.payments, icon: CreditCard },
-    { label: formatLabel('certificates'), path: NAV.certificates, icon: Award },
+    { label: t(k.navigation.users), path: NAV.users, icon: Users },
+    // { label: t(k.navigation.roles), path: NAV.roles, icon: Shield },
+    { label: t(k.navigation.counterparties), path: NAV.counterparties, icon: Building2 },
+    { label: t(k.navigation.products), path: NAV.products, icon: Package },
+    { label: t(k.navigation.orders), path: NAV.orders, icon: FileText },
+    { label: t(k.navigation.payments), path: NAV.payments, icon: CreditCard },
+    { label: t(k.navigation.certificates), path: NAV.certificates, icon: Award },
   ];
 
   return (
@@ -108,7 +104,7 @@ export const Layout = () => {
           {appUser && (
              <SidebarItem 
               key={NAV.login} 
-              item={{ label: t['logout.title'], path: NAV.login, icon: LogOut }} 
+              item={{ label: t(k.auth.logout), path: NAV.login, icon: LogOut }} 
               collapsed={collapsed}
             />
           )}
@@ -117,7 +113,6 @@ export const Layout = () => {
 
       <div className='flex-1 flex flex-col'>
         <div className='md:hidden fixed top-0 left-0 right-0 bg-white border-b flex items-center justify-between px-3 py-2 z-50'>
-          {/* NAV ICONS */}
           <div className='flex gap-4'>
             {navItems.map((item) => (
               <NavLink 
@@ -135,13 +130,9 @@ export const Layout = () => {
             ))}
           </div>
 
-          {/* RIGHT SIDE CONTROLS */}
           <div className='flex items-center gap-3'>
-            
-            {/* LANGUAGE SWITCHER */}
             <LanguageSwitcher compact />
 
-            {/* USER + LOGOUT */}
             {appUser && (
               <div className='flex items-center gap-2'>
                 <span className='text-xs font-medium text-gray-700 max-w-20 truncate'>

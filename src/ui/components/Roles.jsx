@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { getRolesCached } from '../../core/cache/dictionaries.cache';
-import { useNotify } from '../hooks/useNotify';
-import { useLocale } from '../../contexts/LocaleContext';
+import { getRolesCached } from '@/core/cache/dictionaries.cache';
+import { useNotify } from '@/ui/hooks/useNotify';
+import { useI18n } from '@/ui/hooks/useI18n';
 
 export function RolesList() {
-  const { t } = useLocale();
+  const { t, k } = useI18n();
   const notify = useNotify();
 
   const [roles, setRoles] = useState([]);
@@ -25,7 +25,7 @@ export function RolesList() {
   return (
     <div className='bg-white border rounded-xl p-3'>
       <h2 className='text-sm font-semibold mb-2'>
-        {t['roles.title']}
+        {t(k.users.roles)}
       </h2>
 
       <div className='flex flex-col gap-2'>

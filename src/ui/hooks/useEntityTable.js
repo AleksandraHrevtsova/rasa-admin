@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useNotify } from './useNotify';
+import { useNotify } from '@/ui/hooks/useNotify';
 
 export function useEntityTable(fetchFn, options = {}) {
   const notify = useNotify();

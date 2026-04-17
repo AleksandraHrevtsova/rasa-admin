@@ -1,6 +1,6 @@
-import api from './apiClient';
-import { clearToken, getToken, setToken } from '../auth/tokenManager';
-import { auth } from '../../firebase';
+import api from '@/core/api/apiClient';
+import { clearToken, getToken, setToken } from '@/core/auth/tokenManager';
+import { auth } from '@/firebase';
 
 const addAuthorizationHeaders = async (config) => {
   let token = getToken();

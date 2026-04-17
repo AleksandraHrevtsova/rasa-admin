@@ -1,8 +1,8 @@
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { auth } from '../../firebase';
-import { setToken, clearToken } from './tokenManager';
-import api from '../api/apiClient';
-import { ENDPOINTS, NAV } from '../../config/constants';
+import { auth } from '@/firebase';
+import { setToken, clearToken } from '@/core/auth/tokenManager';
+import api from '@/core//api/apiClient';
+import { ENDPOINTS, NAV } from '@/config/constants';
 
 const { LOGIN, LOGOUT, ME } = ENDPOINTS.API.AUTH;
 

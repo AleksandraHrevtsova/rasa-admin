@@ -13,12 +13,12 @@ import {
   ChevronLeft,
   LogOut
 } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useI18n } from '@/ui/hooks/useI18n';
 import { clearToken } from '@/core/auth/tokenManager';
 
 import { NAV } from '@/config/constants';
-import { LanguageSwitcher } from '@ui/components/LanguageSwitcher';
+import { LanguageSwitcher } from '@/ui/components/LanguageSwitcher';
 
 function SidebarItem({ item, collapsed }) {
 

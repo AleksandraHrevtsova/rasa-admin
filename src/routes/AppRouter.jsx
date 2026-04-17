@@ -1,18 +1,18 @@
 import { BrowserRouter, Routes, Route } from 'react-router';
 import { Toaster } from 'sonner';
 
-import { NAV } from '../config/constants';
-import { ProtectedRoute } from './ProtectedRoute';
-import { Layout } from '../ui/components/Navigation';
-import { ErrorBoundary } from '../ui/components/ErrorBoundary';
+import { NAV } from '@/config/constants';
+import { ProtectedRoute } from '@/routes/ProtectedRoute';
+import { Layout } from '@/ui/components/Navigation';
+import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
 
-import Login from '../ui/pages/Login';
-import Users from '../ui/pages/Users';
-import User from '../ui/pages/User';
-import Counterparties from '../ui/pages/Counterparties';
+import Login from '@/ui/pages/Login';
+import Users from '@/ui/pages/Users';
+import User from '@/ui/pages/User';
+import Counterparties from '@/ui/pages/Counterparties';
 
-import Products from '../ui/pages/Products';
-import Product from '../ui/pages/Product';
+import Products from '@/ui/pages/Products';
+import Product from '@/ui/pages/Product';
 
 export default function AppRouter() {
   return (

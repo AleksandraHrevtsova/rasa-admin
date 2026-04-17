@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router';
 import { useWatch } from 'react-hook-form';
 
 import { NAV } from '@/config/constants';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 import { getRolesCached, getCounterpartiesCached } from '@/core/cache/dictionaries.cache';
 import { getCRUDnotification } from '@/core/utils/notifications';
@@ -35,7 +35,7 @@ export default function User() {
 
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   const { appUser } = useAuth();
   const { id } = useParams();
 

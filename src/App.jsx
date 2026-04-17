@@ -1,7 +1,6 @@
-// import { useState } from 'react'
-import { AuthProvider } from './contexts/AuthContext';
-import AppRouter from './routes/AppRouter';
-import './core/api/interceptors';
+import { AuthProvider } from '@/contexts/AuthContext';
+import AppRouter from '@/routes/AppRouter';
+import '@/core/api/interceptors';
 
 function App() {
 

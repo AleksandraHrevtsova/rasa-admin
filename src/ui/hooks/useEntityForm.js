@@ -1,6 +1,6 @@
 import { useEffect, useRef, useMemo, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { useNotify } from './useNotify';
+import { useNotify } from '@/ui/hooks/useNotify';
 
 export function useEntityForm({
   id,

@@ -1,6 +1,6 @@
 import { formItemTypes } from "@/config/constants";
-import { WrappedInput } from './fields/Input';
-import { WrappedSelect } from './fields/Select';
+import { WrappedInput } from '@/ui/components/form/fields/Input';
+import { WrappedSelect } from '@/ui/components/form/fields/Select';
 
 export function EntityFormFieldsRenderer({
   control,

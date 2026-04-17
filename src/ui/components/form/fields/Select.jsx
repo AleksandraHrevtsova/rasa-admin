@@ -1,7 +1,7 @@
 import Select from 'react-select';
 import { Controller } from 'react-hook-form';
-import withFormItemWrapper from '../../../hocs/withFormItemWrapper';
-import { ErrorMessage } from './ErrorMessage';
+import withFormItemWrapper from '@/ui/hocs/withFormItemWrapper';
+import { ErrorMessage } from '@/ui/components/form/fields/ErrorMessage';
 
 const MySelect = (props) => {
   const { control, data, options, isDisabled, rules, onAfterChange } = props;

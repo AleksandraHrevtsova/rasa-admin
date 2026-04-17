@@ -1,4 +1,4 @@
-import withFormItemWrapper from '../../../hocs/withFormItemWrapper';
+import withFormItemWrapper from '@/ui/hocs/withFormItemWrapper';
 
 const Input = (props) => {
   const { register, data, errors = {}, rules } = props;

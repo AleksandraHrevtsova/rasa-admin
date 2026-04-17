@@ -1,3 +1,13 @@
+export const LOCALES = {
+  UK: 'uk', 
+  RU: 'ru',
+};
+
+export const SUPPORTED_LOCALES = Object.values(LOCALES);
+export const defaultLocale = LOCALES.UK;
+
+export const localStorageKey = 'locale';
+
 export const keys = {
   auth: {
     title: 'auth.title',
@@ -68,8 +78,14 @@ export const keys = {
     activated: 'user.activated',
     deactivated: 'user.deactivated'
   },
+  products: {
+    title: 'products.title',
+  },
   product: {
     name: 'product.name',
+    sku: 'product.sku',
+    netto: 'product.netto',
+    brutto: 'product.brutto',
 
     editCurrent: 'product.editCurrent',
     createNew: 'product.createNew',

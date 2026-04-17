@@ -1,10 +1,10 @@
-import { useLocale } from '../../contexts/LocaleContext';
+import { useI18n } from '@/ui/hooks/useI18n';
 
 export const LanguageSwitcher = ({ compact = false }) => {
-  const { locale, setLocale } = useLocale();
-
+  const { locale, locales: { UK, RU}, setLocale } = useI18n();
+  
   const toggle = () => {
-    setLocale(locale === 'uk' ? 'ru' : 'uk');
+    setLocale(locale === UK ? RU : UK);
   };
 
   return (
@@ -16,7 +16,7 @@ export const LanguageSwitcher = ({ compact = false }) => {
         ${compact ? 'text-[10px]' : ''}
       `}
     >
-      {locale.toUpperCase()}
+      {locale?.toUpperCase()}
     </button>
   );
 };

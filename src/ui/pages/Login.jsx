@@ -1,17 +1,22 @@
 import { useState } from 'react';
-import { useLocale } from '../../contexts/LocaleContext';
-import { login } from '../../core/auth/auth.service';
+import { useI18n } from '@/ui/hooks/useI18n';
+import { formItemTypes } from "@/config/constants";
+import { login } from '@/core/auth/auth.service';
 import { useLocation, useNavigate } from 'react-router';
-import { NAV } from '../../config/constants';
-import { Button } from '../components/Button';
+import { NAV } from '@/config/constants';
+import { buttonActionTypes } from "@/config/constants";
+
+import { Button } from '@/ui/components/Button';
 
 export default function Login() {
-  const { t } = useLocale();
+  const { t, k } = useI18n();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const location = useLocation();
-  const navigate = useNavigate();
 
   const from = location.state?.from || NAV.home;
 
@@ -28,26 +33,27 @@ export default function Login() {
   return (
     <div className='min-h-screen flex items-center justify-center bg-gray-50'>
       <form onSubmit={handleSubmit} className='bg-white p-8 rounded-lg shadow-md w-full max-w-sm'>
-        <h2 className='text-2xl font-bold text-primary mb-6'>{t['login.title']}</h2>
+        <h2 className='text-2xl font-bold text-primary mb-6'>{t(k.auth.title)}</h2>
         {error && <p className='text-red-500 mb-4'>{error}</p>}
         <input
+          type={formItemTypes.input.email}
           className='w-full p-2 mb-4 border rounded'
-          placeholder={t['login.email']}
+          placeholder={t(k.auth.email)}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
-          type='password'
+          type={formItemTypes.input.password}
           className='w-full p-2 mb-4 border rounded'
-          placeholder={t['login.password']}
+          placeholder={t(k.auth.password)}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button 
           type='submit' 
-          label={t['login.submit']}
+          label={t(k.auth.submit)}
           onClick={null} 
-          action='submit' 
+          action={buttonActionTypes.submit} 
           disabled={!email && !password}
         />
       </form>

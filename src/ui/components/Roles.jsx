@@ -1,48 +1,45 @@
-import { useEffect, useState } from 'react';
-import { getRolesCached } from '@/core/cache/dictionaries.cache';
-import { useNotify } from '@/ui/hooks/useNotify';
 import { useI18n } from '@/ui/hooks/useI18n';
 
-export function RolesList() {
-  const { t, k } = useI18n();
-  const notify = useNotify();
-
-  const [roles, setRoles] = useState([]);
-
-  useEffect(() => {
-    const fetchRoles = async () => {
-      try {
-        const roles = await getRolesCached();
-        setRoles(roles);
-      } catch (err) {
-        notify.error(err.response?.data?.message || 'Error loading roles');
-      }
-    };
-
-    fetchRoles();
-  }, []);
+const List = (props) => {
+  const { data, title } = props; 
 
   return (
     <div className='bg-white border rounded-xl p-3'>
-      <h2 className='text-sm font-semibold mb-2'>
-        {t(k.users.roles)}
-      </h2>
-
+      {title && (
+        <h2 className='text-sm font-semibold mb-2'>
+          {title}
+        </h2>
+      )}
       <div className='flex flex-col gap-2'>
-        {roles?.map((role) => (
+        {data?.map((el) => (
           <div
-            key={role.id}
+            key={el.id}
             className='p-2 border rounded-lg text-sm'
           >
             <div className='font-medium text-blue-950'>
-              {role.name}
+              {el.name}
             </div>
             <div className='text-gray-500 text-xs'>
-              {role.description || '—'}
+              {el.description || '—'}
             </div>
           </div>
         ))}
       </div>
     </div>
+  );
+};
+
+export function RolesList({ roles = [] }) {
+  const { t, k } = useI18n();
+
+  return (
+    <>
+      <div className='hidden lg:block'>
+        <List data={roles} title={t(k.users.roles)} />
+      </div>
+      <div className='mt-4 lg:hidden'>
+        <List data={roles} title={t(k.users.roles)} />
+      </div>
+    </>
   );
 }

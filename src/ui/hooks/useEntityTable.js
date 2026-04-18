@@ -1,72 +1,67 @@
-import { useEffect, useState, useCallback } from 'react';
-import { useNotify } from '@/ui/hooks/useNotify';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+
+const SORTING = {
+  desc: 'DESC',
+  asc: 'ASC',
+};
 
 export function useEntityTable(fetchFn, options = {}) {
-  const notify = useNotify();
-  const [filters, setFilters] = useState();
-
   const {
-    defaultPageSize = 20,
-    withActiveToggle = true,
+    defaultPageSize = 10,
+    withActiveToggle = false,
   } = options;
-
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const [isActive, setIsActive] = useState(true);
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: defaultPageSize,
-    total: 0,
+  });
+  const [filters, setFilters] = useState({
+    search: ''
+  });
+  const [sorting, setSorting] = useState([]);
+  const [isActive, setIsActive] = useState(true);
+
+  const queryKey = [
+    'entities',
+    {
+      page: pagination.pageIndex,
+      size: pagination.pageSize,
+      filters,
+      sorting,
+      isActive,
+    },
+  ];
+
+  const query = useQuery({
+    queryKey,
+    queryFn: async () => {
+      const params = {
+        page: pagination.pageIndex,
+        size: pagination.pageSize,
+        search: filters.search,
+        isActive,
+        sortBy: sorting[0]?.id,
+        sortOrder: sorting[0]?.desc ? SORTING.desc : SORTING.asc,
+      };
+      const { data } = await fetchFn(params);
+      return data;
+    },
+    keepPreviousData: true,
   });
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-
-    try {
-      const params = {
-        page: pagination.pageIndex + 1,
-        limit: pagination.pageSize,
-        ...filters,
-      };
-
-      if (withActiveToggle) {
-        params.isActive = isActive;
-      }
-
-      const { data } = await fetchFn(params);
-
-      setData(data.items || []);
-
-      setPagination((prev) => ({
-        ...prev,
-        total: data.total,
-        pageIndex: data.page - 1,
-      }));
-
-    } catch (err) {
-      const message = err.response?.data?.message || 'Error';
-      notify.error(message);
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchFn, pagination.pageIndex, pagination.pageSize, isActive]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
   return {
-    data,
-    loading,
+    data: query.data?.items || [],
+    total: query.data?.total || 0,
+    loading: query.isLoading,
+    isFetching: query.isFetching,
+    refetch: query.refetch,
     pagination,
     setPagination,
-    refetch: fetchData,
-
     filters,
     setFilters,
-
+    sorting,
+    setSorting,
     ...(withActiveToggle && {
       isActive,
       setIsActive,

@@ -5,7 +5,9 @@ import { useWatch } from 'react-hook-form';
 import { NAV } from '@/config/constants';
 import { useAuth } from '@/contexts/AuthContext';
 
-import { getRolesCached, getCounterpartiesCached } from '@/core/cache/dictionaries.cache';
+import { getRolesCached } from '@/core/cache/roles.cache';
+import { getCounterpartiesCached } from '@/core/cache/counterparties.cache';
+
 import { getCRUDnotification } from '@/core/utils/notifications';
 
 import {
@@ -157,8 +159,8 @@ export default function User() {
   }, [counterparties, selectedCounterpartyId]);
 
   const options = {
-    roleId: roles.map(mapOption) || [],
-    counterpartyId: counterparties.map(mapOption) || [],
+    roleId: roles?.map(mapOption) || [],
+    counterpartyId: counterparties?.map(mapOption) || [],
     hubIds: filteredHubOptions || [],
   };
 

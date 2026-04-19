@@ -1,5 +1,11 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useDebounce } from '../hooks/useDebounce';
+
+const initialFilters = {
+  search: '',
+  isActive: true,
+};
 
 const SORTING = {
   desc: 'DESC',
@@ -9,27 +15,25 @@ const SORTING = {
 export function useEntityTable(fetchFn, options = {}) {
   const {
     defaultPageSize = 10,
-    withActiveToggle = false,
   } = options;
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: defaultPageSize,
   });
-  const [filters, setFilters] = useState({
-    search: ''
-  });
+
+  const [filters, setFilters] = useState(initialFilters);
+  const debouncedFilters = useDebounce(filters, 400);
+
   const [sorting, setSorting] = useState([]);
-  const [isActive, setIsActive] = useState(true);
 
   const queryKey = [
     'entities',
     {
       page: pagination.pageIndex,
       size: pagination.pageSize,
-      filters,
-      sorting,
-      isActive,
+      filters: debouncedFilters,
+      sorting
     },
   ];
 
@@ -39,8 +43,8 @@ export function useEntityTable(fetchFn, options = {}) {
       const params = {
         page: pagination.pageIndex,
         size: pagination.pageSize,
-        search: filters.search,
-        isActive,
+        search: debouncedFilters.search,
+        isActive: debouncedFilters.isActive,
         sortBy: sorting[0]?.id,
         sortOrder: sorting[0]?.desc ? SORTING.desc : SORTING.asc,
       };
@@ -62,9 +66,5 @@ export function useEntityTable(fetchFn, options = {}) {
     setFilters,
     sorting,
     setSorting,
-    ...(withActiveToggle && {
-      isActive,
-      setIsActive,
-    }),
   };
 }

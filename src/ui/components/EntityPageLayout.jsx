@@ -2,16 +2,13 @@ import { Plus, ShieldCheck, ShieldClose } from 'lucide-react';
 import { buttonActionTypes } from "@/config/constants";
 
 import { FAB } from '@/ui/components/Fab';
-import { Loading } from '@/ui/components/Loading';
 import { Button } from '@/ui/components/Button';
 
 import { useI18n } from '@/ui/hooks/useI18n';
 
 export function EntityPageLayout(props) {
-  const { title, actions, table, loading, fab } = props;
+  const { title, actions, table, fab } = props;
   const { t, k } = useI18n();
-
-  if (loading) return <Loading />;
 
   return (
     <>

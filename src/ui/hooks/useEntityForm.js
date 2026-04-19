@@ -1,6 +1,7 @@
 import { useEffect, useRef, useMemo, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useNotify } from '@/ui/hooks/useNotify';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function useEntityForm({
   id,
@@ -15,6 +16,7 @@ export function useEntityForm({
   onSuccess,
   compareValues,
 }) {
+  const queryClient = useQueryClient();
   const notify = useNotify();
 
   const isEdit = Boolean(id);
@@ -83,10 +85,12 @@ export function useEntityForm({
       const payload = mapToApi(values);
       if (isEdit) {
         await update(id, payload);
+        queryClient.invalidateQueries({ queryKey: ['entities', 'user'], exact: false });
         await refresh();
         notify.success(notifications.successUpdate);
       } else {
         await create(payload);
+        queryClient.invalidateQueries({ queryKey: ['entities', 'user'], exact: false });
         notify.success(notifications.successCreate);
       }
       onSuccess?.();
@@ -118,6 +122,7 @@ export function useEntityForm({
     setIsActive(true);
     try {
       await activate(id);
+      queryClient.invalidateQueries({ queryKey: ['entities', 'user'], exact: false });
       notify.success(notifications.successActivate);
     } catch (err) {
       setIsActive(prev);
@@ -132,6 +137,7 @@ export function useEntityForm({
     setIsActive(false);
     try {
       await deactivate(id);
+      queryClient.invalidateQueries({ queryKey: ['entities', 'user'], exact: false });
       notify.success(notifications.successDeactivate);
     } catch (err) {
       setIsActive(prev);

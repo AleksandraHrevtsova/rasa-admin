@@ -26,6 +26,8 @@ export const keys = {
     cancel: 'common.cancel',
     back: 'common.back',
     
+    actions: 'common.actions',
+    search: 'common.search',
     select: 'common.select',
     loading: 'common.loading',
     requiredValue: 'common.requiredValue',

@@ -1,34 +1,69 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 import { NAV } from '@/config/constants';
+import { useAuth } from '@/contexts/AuthContext';
 import { navigateToEntity } from '@/core/utils/navigation';
 
 import { getUsers } from '@/domain/user/user.service';
+import { getRoles } from '@/domain/role/role.service';
 
 import { EntityPageLayout } from '@/ui/components/EntityPageLayout';
 import DataTable from '@/ui/components/DataTable';
 import { RolesList } from '@/ui/components/Roles';
+import { UsersFilters } from '@/ui/components/UsersFilters';
 
 import { useI18n } from '@/ui/hooks/useI18n';
+import { useNotify } from '@/ui/hooks/useNotify';
 import { useEntityTable } from '@/ui/hooks/useEntityTable';
+import { useToggleUserActive } from '../hooks/useToggleUserActive';
+
+import { ShieldCheck, ShieldClose } from 'lucide-react';
 
 export default function Users() {
   const { t, k } = useI18n();
-
+  
   const location = useLocation();
   const navigate = useNavigate();
+  
+  const { appUser } = useAuth();
+  const notify = useNotify();
+  const toggleActiveMutation = useToggleUserActive();
+
+  const [roles, setRoles] = useState([]);
 
   const {
     data,
+    total,
     loading,
-    isActive,
-    setIsActive,
+    isFetching,
+    refetch,
     pagination,
     setPagination,
     filters,
     setFilters,
-  } = useEntityTable(getUsers);
+    sorting,
+    setSorting
+  } = useEntityTable(getUsers, {
+    defaultPageSize: 20,
+  });
+
+  const isActive = filters.isActive;
+
+  useEffect(() => {
+    if (roles.length) return;
+
+    const fetchRoles = async () => {
+      try {
+        const r = await getRoles();
+        setRoles(r.data.items);
+      } catch (err) {
+        notify.error(err.response?.data?.message || 'Error loading roles');
+      }
+    };
+
+    fetchRoles();
+  }, [roles.length]);
 
   const goToUser = (id) => {
     navigateToEntity({
@@ -40,52 +75,69 @@ export default function Users() {
       id,
     });
   };
+
+  const handleToggle = (row) => (e) => {
+    e.stopPropagation();
+    const isCurrentUser = row.id === appUser.id;
+    if (isCurrentUser) return;
+    toggleActiveMutation.mutate({ id: row.id, isActive: row.isActive });
+  } 
   
   const columns = [
-    { key: 'name', label: t(k.common.name), sortable: true },
-    { key: 'email', label: t(k.common.email) },
-    { key: 'role', label: t(k.common.role), render: (row) => row.role?.name || '—' },
-    { key: 'userHubs', label: t(k.common.hubs), render: (row) => row.hubs?.length || '-' }
+    { key: 'name', label: t(k.common.name), sortable: true, width: '25%', },
+    { key: 'email', label: t(k.common.email), width: '25%', },
+    { key: 'role', label: t(k.common.role), render: (row) => row.role?.name || '—', width: '25%', },
+    { key: 'userHubs', label: t(k.common.hubs), render: (row) => row.userHubs?.length || '-', width: '25%', },
+    { key: 'actions', label: t(k.common.actions), render: (row) => {
+      const isCurrentUser = row.id === appUser.id;
+      if (isCurrentUser) return '-';
+      return (        
+        <button
+          onClick={handleToggle(row)}
+          className='text-xs px-2 py-1 rounded border hover:bg-gray-100'
+        >{row.isActive ? <ShieldClose size={20} /> : <ShieldCheck size={20} /> }</button>)
+    } }
   ];
 
   const actions = useMemo(() => {
     return {
       left: {
         isActive,
-        onClick: () => setIsActive((p) => !p),
+        onClick: () => setFilters((p) => ({ ...p, isActive: !p.isActive })),
       },
       right: {
         onClick: () => goToUser(),
       }
     };
-  }, [isActive]);
+  }, [isActive, navigate, location]);
 
   return (
     <EntityPageLayout
       title={t(k.users.title)}
       actions={actions}
-      loading={loading}
       table={
-        <div className='grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-4'>
-          <DataTable
-            data={data}
-            columns={columns}
-            loading={loading}
-            pagination={pagination}
+        <>
+          <UsersFilters 
+            filters={filters} 
+            setFilters={setFilters} 
             setPagination={setPagination}
-            onRowClick={(row) => goToUser(row.id)}
           />
-          {isActive && (
-            <>
-              <div className='hidden lg:block'>
-                <RolesList />
-              </div>
-              <div className='mt-4 lg:hidden'>
-                <RolesList />
-              </div>
-            </>
-          )}
-        </div>
+          <div className='grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-4'>
+            <DataTable
+              data={data}
+              columns={columns}
+              loading={loading}
+              isFetching={isFetching}
+              pagination={{ ...pagination, total }}
+              setPagination={setPagination}
+              pageSizeOptions={[5, 10, 20, 50]}
+              sorting={sorting}
+              setSorting={setSorting}
+              onRowClick={(row) => goToUser(row.id)}
+            />
+            {isActive && (<RolesList roles={roles} /> )}
+          </div>
+        </>
       }
       fab={{ onClick: () => goToUser() }}
     />

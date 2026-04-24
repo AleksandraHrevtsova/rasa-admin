@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { ShieldCheck, ShieldClose } from 'lucide-react';
 
@@ -9,7 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { navigateToEntity } from '@/core/utils/navigation';
 
 import { getUsers } from '@/domain/user/user.service';
-import { getRoles } from '@/domain/role/role.service';
+import { useRoles } from '@/domain/role/hooks/useRoles';
 
 import { EntityPageLayout } from '@/ui/components/EntityPageLayout';
 import DataTable from '@/ui/components/DataTable';
@@ -29,7 +29,7 @@ export default function Users() {
   const { appUser } = useAuth();
   const notify = useNotify();
   
-  const [roles, setRoles] = useState([]);
+  const { data: roles = [] } = useRoles();
   
   const entityKey = pageTags.users;
   const toggleActiveMutation = useToggleUserActive(entityKey);
@@ -51,21 +51,6 @@ export default function Users() {
   });
 
   const isActive = filters.isActive;
-
-  useEffect(() => {
-    if (roles.length) return;
-
-    const fetchRoles = async () => {
-      try {
-        const r = await getRoles();
-        setRoles(r.data.items);
-      } catch (err) {
-        notify.error(err.response?.data?.message || 'Error loading roles');
-      }
-    };
-
-    fetchRoles();
-  }, [roles.length]);
 
   const goToUser = (id) => {
     navigateToEntity({

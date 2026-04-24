@@ -1,12 +1,12 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { useWatch } from 'react-hook-form';
 
 import { NAV } from '@/config/constants';
 import { useAuth } from '@/contexts/AuthContext';
 
-import { getRolesCached } from '@/core/cache/roles.cache';
-import { getCounterpartiesCached } from '@/core/cache/counterparties.cache';
+import { useRoles } from '@/domain/role/hooks/useRoles';
+import { useCounterparties } from '@/domain/counterparty/hooks/useCounterparties';
 
 import { getCRUDnotification } from '@/core/utils/notifications';
 
@@ -43,8 +43,8 @@ export default function User() {
   const { appUser } = useAuth();
   const { id } = useParams();
 
-  const [roles, setRoles] = useState([]);
-  const [counterparties, setCounterparties] = useState([]);
+  const { data: roles = [] } = useRoles();
+  const { data: counterparties = [] } = useCounterparties();
 
   const isCurrentUser = id === appUser.id;
 
@@ -100,19 +100,6 @@ export default function User() {
     setValue,
     formState: { errors },
   } = form;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [roles, counterparties] = await Promise.all([getRolesCached(), getCounterpartiesCached()]);
-        setRoles(roles);
-        setCounterparties(counterparties);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchData();
-  }, []);
 
   const selectedRoleId = useWatch({ control, name: fieldNames.role });
   const selectedCounterpartyId = useWatch({ control, name: fieldNames.counterparty });

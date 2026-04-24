@@ -113,4 +113,8 @@ export const pageTags = {
   product: 'product',
   counterparties: 'counterparties',
   counterparty: 'counterparty',
+  roles: 'roles',
+  role: 'role',
+  orders: 'orders',
+  order: 'order',
 };

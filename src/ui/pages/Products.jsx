@@ -1,23 +1,27 @@
+import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { Plus, ShieldCheck, ShieldClose } from 'lucide-react';
 
-import { useLocale } from '../../contexts/LocaleContext';
+import { NAV } from '@/config/constants';
 
-import { useEntityTable } from '../hooks/useEntityTable';
+import { navigateToEntity } from '@/core/utils/navigation';
 
-import { NAV } from '../../config/constants';
-import { getProducts} from '../../domain/product/product.service';
-import { navigateToEntity } from '../../core/utils/navigation';
+import { getProducts} from '@/domain/product/product.service';
 
-import { EntityPageLayout } from '../components/EntityPageLayout';
-import { Button } from '../components/Button';
-import DataTable from '../components/DataTable';
+import DataTable from '@/ui/components/DataTable';
+import { EntityPageLayout } from '@/ui/components/EntityPageLayout';
+
+import { useI18n } from '@/ui/hooks/useI18n';
+import { useEntityTable } from '@/ui/hooks/useEntityTable';
+
+import { pageTags } from '@/config/constants';
 
 export default function Products() {
-  const { t } = useLocale();
+  const { t, k } = useI18n();
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  const entityKey = pageTags.products;
 
   const {
     data,
@@ -26,7 +30,7 @@ export default function Products() {
     setIsActive,
     pagination,
     setPagination,
-  } = useEntityTable(getProducts);
+  } = useEntityTable(entityKey, getProducts);
 
   const goToProduct = (id) => {
     navigateToEntity({
@@ -39,40 +43,30 @@ export default function Products() {
     });
   };
 
-  function formatLabel(key) {
-    return t[`products.${key}`] || key;
-  };
-
   const columns = [
-    { key: 'namePublic', label: formatLabel('name'), sortable: true },
-    { key: 'sku', label: formatLabel('sku'), render: (row) => row.sku || '-' },
-    { key: 'netto', label: formatLabel('netto'), render: (row) => row.netto || '—' },
-    { key: 'brutto', label: formatLabel('brutto'), render: (row) => row.brutto || '—' },
-    // { key: 'email', label: formatLabel('email') },
+    { key: 'name', label: t(k.common.title), sortable: true },
+    { key: 'sku', label: t(k.product.sku), render: (row) => row.sku || '-' },
+    { key: 'netto', label: t(k.product.netto), render: (row) => row.netto || '—' },
+    { key: 'brutto', label: t(k.product.brutto), render: (row) => row.brutto || '—' },
+    // { key: 'email', label: t(k.common.email) },
   ];
+
+  const actions = useMemo(() => {
+    return {
+      left: {
+        isActive,
+        onClick: () => setIsActive((p) => !p),
+      },
+      right: {
+        onClick: () => goToProduct(),
+      }
+    };
+  }, [isActive, navigate, location]);
 
   return (
     <EntityPageLayout
-      title={formatLabel('title')}
-      actions={{
-        left: (
-          <Button
-            label={isActive ? t['table.showInactive'] : t['table.showActive']}
-            onClick={() => setIsActive((p) => !p)} 
-            action='show' 
-            icon={isActive ? ShieldCheck : ShieldClose}
-            hideLabelOnMobile
-          />
-        ),
-        right: (
-          <Button
-            label={t['create']} 
-            onClick={() => goToProduct()} 
-            action='create' 
-            icon={Plus}
-          />
-        )
-      }}
+      title={t(k.products.title)}
+      actions={actions}
       loading={loading}
       table={
         <DataTable
@@ -84,10 +78,7 @@ export default function Products() {
           onRowClick={(row) => goToProduct(row.id)}
         />
       }
-      fab={{
-        label: t['create'],
-        onClick: () => goToProduct()
-      }}
+      fab={{ onClick: () => goToProduct() }}
     />
   );
 }

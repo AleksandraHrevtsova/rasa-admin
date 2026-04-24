@@ -1,35 +1,52 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
-import { NAV } from '../../config/constants';
-import { useLocale } from '../../contexts/LocaleContext';
-import { Button } from '../components/Button';
-import { Loading } from '../components/Loading';
-import { useEntityForm } from '../hooks/useEntityForm'
-import { useEntityFormConfig } from '../hooks/useEntityFormConfig';
+import { NAV } from '@/config/constants';
+import { useI18n } from '@/ui/hooks/useI18n';
+import { Buttons } from '@/ui/components/form/FormButtonsBlock';
+
+import { Loading } from '@/ui/components/Loading';
+import { useEntityForm } from '@/ui/hooks/useEntityForm'
+import { useEntityFormConfig } from '@/ui/hooks/useEntityFormConfig';
 import { 
   getProductById,
   createProduct,
   updateProduct,
   activateProduct,
   deactivateProduct
-} from '../../domain/product/product.service';
+} from '@/domain/product/product.service';
+import { getCRUDnotification } from '@/core/utils/notifications';
 
-import { EntityFormLayout } from '../components/form/EntityFormLayout';
-import { EntityFormFieldsRenderer } from '../components/form/EntityFormFieldsRenderer';
+import { EntityFormLayout } from '@/ui/components/form/EntityFormLayout';
+import { EntityFormFieldsRenderer } from '@/ui/components/form/EntityFormFieldsRenderer';
+
+import { pageTags } from '@/config/constants';
 
 export default function Product() {
-  const { t } = useLocale();
+  const { t, k } = useI18n();
+
   const location = useLocation();
   const navigate = useNavigate();
-  const { id } = useParams();
 
-  const notifications = {
-    confirmDeactivate: t['user.confirmDeactivate'] || 'Confirm?',
-    successUpdate: t['user.updated'] || 'Updated!',
-    successCreate: t['user.created'] || 'Created!',
-    successActivate: t['user.activated'] || 'Activated!',
-    successDeactivate: t['user.deactivated'] || 'Deactivated!',
-  };
+  const { id } = useParams();
+  const pageTag = pageTags.product;
+
+  const fieldNames = {
+    name: 'name',
+    namePublic: 'email',
+    sku: 'sku',
+    netto: 'netto',
+    brutto: 'brutto',
+
+    unitsInOneBox: 'unitsInOneBox',
+    unitsInOnePalletRegular: 'unitsInOnePalletRegular',
+    unitsInOnePalletMin: 'unitsInOnePalletMin',
+    
+    boxesInOnePalletRegular: 'boxesInOnePalletRegular',
+    boxesInOnePalletMin: 'boxesInOnePalletMin',
+    
+    unitsOverOnePallet: 'unitsOverOnePallet',
+    boxesOverOnePallet: 'boxesOverOnePallet',
+  }
 
   const formConfig = {
     id,
@@ -38,18 +55,17 @@ export default function Product() {
     update: updateProduct,
     activate: activateProduct,
     deactivate: deactivateProduct,
-    notifications,
+    notifications: getCRUDnotification(pageTag),
     mapFromApi: (p) => {
       return {
-        nameInternal: p.nameInternal,
+        name: p.name,
         namePublic: p.namePublic,
         sku: p.sku
       }
     },
     mapToApi: (f) => {
-      console.log(f);
       return {
-        nameInternal: f.nameInternal,
+        name: f.name,
         namePublic: f.namePublic,
         sku: f.sku
       }
@@ -88,8 +104,9 @@ export default function Product() {
   const isDisabled = isEdit && !isActive;
   const isNotReadyToSubmit = !isValid || isDisabled || (isEdit && !isDirty);
 
-  const { fields, rules } = useEntityFormConfig({ t, isEdit }).product;
-  const pageTitle = useMemo(() => isEdit ? t['product.editCurrent'] : t['product.createNew'], [isEdit]);
+  const configData = { t, k, fieldNames, isEdit, isActive };
+  const { fields, rules } = useEntityFormConfig(configData).product;
+  const pageTitle = useMemo(() => isEdit ? t(k[pageTag]?.editCurrent) : t(k[pageTag]?.createNew), [isEdit]);
 
   const options = {
     isEdit,
@@ -104,34 +121,14 @@ export default function Product() {
       onSubmit={handleSubmit(onSubmit, onError)}
       actions={
         <div className='flex gap-2'>
-          <Button
-            type='submit'
-            label={isEdit ? t['save'] : t['create']}
-            action='submit'
-            disabled={isNotReadyToSubmit}
+          <Buttons 
+            isEdit={isEdit}
+            // isChanged={isFormChanged}
+            isSubmitDisabled={isNotReadyToSubmit}
+            onBack={handleBack}
+            onActivate={(isEdit && !isActive) ? handleActivate : null}
+            onDeactivate={(isEdit && isActive && !isCurrentUser) ? handleDeactivate : null}
           />
-
-          <Button
-            label={isDirty ? t['cancel'] : t['back']}
-            onClick={handleBack}
-          />
-
-          {isEdit && isActive && (
-            <Button
-              label={t['deactivate']}
-              action='deactivate'
-              onClick={handleDeactivate}
-            />
-          )}
-
-          {isEdit && !isActive && (
-            <Button
-              label={t['activate']}
-              action='activate'
-              onClick={handleActivate}
-              disabled={isActive}
-            />
-          )}
         </div>
       }
     >

@@ -19,6 +19,8 @@
   
   "title": "Название",
   "name": "Имя",
+  "baseName": "Полное название",
+  "publicName": "Сокращенное название",
   "phone": "Телефон",
   "email": "Email",
   "password": "Пароль",
@@ -27,5 +29,8 @@
   "counterparty": "Контрагент",
   "hubs": "Склады",
   "products": "Продукты",
-  "counterparties": "Контрагенты"
+  "counterparties": "Контрагенты",
+
+  "count": "количесво",
+  "enterCount": "Введите количество"
 }

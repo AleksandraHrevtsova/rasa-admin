@@ -37,6 +37,8 @@ export const keys = {
 
     title: 'common.title',
     name: 'common.name',
+    baseName: 'common.baseName',
+    publicName: 'common.publicName',
     phone: 'common.phone',
     email: 'common.email',
     password: 'common.password',
@@ -47,6 +49,9 @@ export const keys = {
 
     products: 'common.products',
     counterparties: 'common.counterparties',
+
+    count: 'common.count',
+    enterCount: 'common.enterCount',
   },
   users: {
     title: 'users.title',
@@ -83,11 +88,30 @@ export const keys = {
   products: {
     title: 'products.title',
   },
+  counterparties: {
+    title: 'counterparties.title',
+  },
   product: {
     name: 'product.name',
+
     sku: 'product.sku',
     netto: 'product.netto',
     brutto: 'product.brutto',
+
+    unitsInOneBox: 'product.unitsInOneBox',
+    unitsInOnePalletRegular: 'product.unitsInOnePalletRegular',
+    unitsInOnePalletMin: 'product.unitsInOnePalletMin',
+
+    boxesInOnePalletRegular: 'product.boxesInOnePalletRegular',
+    boxesInOnePalletMin: 'product.boxesInOnePalletMin',
+
+    unitsOverOnePallet: 'product.unitsOverOnePallet',
+    boxesOverOnePallet: 'product.boxesOverOnePallet',
+
+    enterSku: 'product.enterSku',
+    enterNetto: 'product.enterNetto',
+    enterBrutto: 'product.enterBrutto',
+
 
     editCurrent: 'product.editCurrent',
     createNew: 'product.createNew',

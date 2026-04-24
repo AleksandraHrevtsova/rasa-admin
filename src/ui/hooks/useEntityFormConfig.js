@@ -5,7 +5,7 @@ const validationPatterns = {
   email: /^\S+@\S+\.\S+$/,
 };
 
-export function useEntityFormConfig({ t, k, fieldNames, isEdit, showClientFields, isActive }) {
+export function useEntityFormConfig({ t, k, fieldNames, isEdit, showClientFields = null, isActive }) {
   return {
     user: {
       fields: [
@@ -106,6 +106,123 @@ export function useEntityFormConfig({ t, k, fieldNames, isEdit, showClientFields
           minLength: { value: 6, message: t(k.user.passwordMinLength) } 
         },
       },
+    },
+    product: {
+      fields: [
+        { 
+          type: formItemTypes.input.text, 
+          name: fieldNames.name,  
+          label: t(k.common.baseName), 
+          placeholder: t(k.user.enterName), 
+          required: true,
+          isShowField: true,
+          isDisabled: !isActive,
+        },
+        { 
+          type: formItemTypes.input.text, 
+          name: fieldNames.namePublic,  
+          label: t(k.common.publicName), 
+          placeholder: t(k.user.enterName), 
+          required: true,
+          isShowField: true,
+          isDisabled: !isActive,
+        },
+        { 
+          type: formItemTypes.input.text, 
+          name: fieldNames.sku,  
+          label: t(k.product.sku), 
+          placeholder: t(k.product.enterSku), 
+          required: false,
+          isShowField: true,
+          isDisabled: !isActive,
+        },
+        { 
+          type: formItemTypes.input.number, 
+          name: fieldNames.netto,  
+          label: t(k.product.netto), 
+          placeholder: t(k.product.enterSku), 
+          required: false,
+          isShowField: true,
+          isDisabled: !isActive,
+        },
+        { 
+          type: formItemTypes.input.number, 
+          name: fieldNames.brutto,  
+          label: t(k.product.brutto), 
+          placeholder: t(k.product.enterSku), 
+          required: false,
+          isShowField: true,
+          isDisabled: !isActive,
+        },
+        { 
+          type: formItemTypes.input.number, 
+          name: fieldNames.unitsInOneBox,  
+          label: t(k.product.unitsInOneBox), 
+          placeholder: t(k.common.enterCount), 
+          required: false,
+          isShowField: true,
+          isDisabled: !isActive,
+        },
+        { 
+          type: formItemTypes.input.number, 
+          name: fieldNames.unitsInOnePalletRegular,  
+          label: t(k.product.unitsInOnePalletRegular), 
+          placeholder: t(k.common.enterCount), 
+          required: false,
+          isShowField: true,
+          isDisabled: !isActive,
+        },
+        { 
+          type: formItemTypes.input.number, 
+          name: fieldNames.unitsInOnePalletMin,  
+          label: t(k.product.unitsInOnePalletMin), 
+          placeholder: t(k.common.enterCount), 
+          required: false,
+          isShowField: true,
+          isDisabled: !isActive,
+        },
+        { 
+          type: formItemTypes.input.number, 
+          name: fieldNames.boxesInOnePalletRegular,  
+          label: t(k.product.boxesInOnePalletRegular), 
+          placeholder: t(k.common.enterCount), 
+          required: false,
+          isShowField: true,
+          isDisabled: !isActive,
+        },
+        { 
+          type: formItemTypes.input.number, 
+          name: fieldNames.boxesInOnePalletMin,  
+          label: t(k.product.boxesInOnePalletMin), 
+          placeholder: t(k.common.enterCount), 
+          required: false,
+          isShowField: true,
+          isDisabled: !isActive,
+        },
+        { 
+          type: formItemTypes.input.number, 
+          name: fieldNames.unitsOverOnePallet,  
+          label: t(k.product.unitsOverOnePallet), 
+          placeholder: t(k.common.enterCount), 
+          required: false,
+          isShowField: true,
+          isDisabled: !isActive,
+        },
+        { 
+          type: formItemTypes.input.number, 
+          name: fieldNames.boxesOverOnePallet,  
+          label: t(k.product.boxesOverOnePallet), 
+          placeholder: t(k.common.enterCount), 
+          required: false,
+          isShowField: true,
+          isDisabled: !isActive,
+        },
+      ],
+      rules: {},
+    },
+    counterparty: {
+      fields: [],
+      rules: {},
     },
   };
 }

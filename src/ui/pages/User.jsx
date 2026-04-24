@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router';
 import { useWatch } from 'react-hook-form';
 
 import { NAV } from '@/config/constants';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/core/auth/hooks/useAuth';
 
 import { useRoles } from '@/domain/role/hooks/useRoles';
 import { useCounterparties } from '@/domain/counterparty/hooks/useCounterparties';

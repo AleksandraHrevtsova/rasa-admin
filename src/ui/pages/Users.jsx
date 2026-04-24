@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router';
 
 import { NAV, pageTags } from '@/config/constants';
 
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/core/auth/hooks/useAuth';
 
 import { navigateToEntity } from '@/core/utils/navigation';
 

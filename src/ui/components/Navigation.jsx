@@ -13,9 +13,9 @@ import {
   ChevronLeft,
   LogOut
 } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/core/auth/hooks/useAuth';
 import { useI18n } from '@/ui/hooks/useI18n';
-import { logout } from '@/core/auth/auth.service';
+import { logout } from '@/core/auth/services/auth.service';
 
 import { NAV } from '@/config/constants';
 import { LanguageSwitcher } from '@/ui/components/LanguageSwitcher';

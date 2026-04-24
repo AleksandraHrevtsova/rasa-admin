@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from 'react-router';
 
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/core/auth/hooks/useAuth';
 import { NAV } from '@/config/constants';
 
 import { Loading } from '@/ui/components/Loading';

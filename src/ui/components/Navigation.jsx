@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useI18n } from '@/ui/hooks/useI18n';
-import { clearToken } from '@/core/auth/tokenManager';
+import { logout } from '@/core/auth/auth.service';
 
 import { NAV } from '@/config/constants';
 import { LanguageSwitcher } from '@/ui/components/LanguageSwitcher';
@@ -68,12 +68,6 @@ export const Layout = () => {
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, []);
-
-  function logout() {
-    localStorage.clear();
-    clearToken();
-    navigate(NAV.login);
-  };
 
   const navItems = [
     { label: t(k.navigation.users), path: NAV.users, icon: Users },

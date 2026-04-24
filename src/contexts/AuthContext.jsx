@@ -1,44 +1,41 @@
 import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { onIdTokenChanged } from 'firebase/auth';
 import { auth } from '@/firebase';
-import { setToken, clearToken } from '@/core/auth/tokenManager';
-
 import { getMe } from '@/core/auth/auth.service';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [firebaseUser, setFirebaseUser] = useState(null);
-  const [appUser, setAppUser] = useState(null); 
+  const [appUser, setAppUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const isFetched = useRef(false);
+  const fetchRef = useRef(false);
 
   useEffect(() => {
     const unsubscribe = onIdTokenChanged(auth, async (user) => {
-      try {
-        if (user) {
-          const token = await user.getIdToken();
-          setToken(token);
-          setFirebaseUser(user);
+      setFirebaseUser(user);
 
-          if (!isFetched.current) {
-            const data = await getMe();
-            setAppUser(data.user);
-            isFetched.current = true;
-          }
-        } else {
-          setFirebaseUser(null);
+      try {
+        if (!user) {
           setAppUser(null);
-          clearToken();
-          isFetched.current = false;
+          fetchRef.current = false;
+          setLoading(false);
+          return;
         }
+
+        if (fetchRef.current) return;
+        fetchRef.current = true;
+
+        const data = await getMe();
+        setAppUser(data.user);
+
       } catch (err) {
         console.error('Auth sync error:', err);
         setAppUser(null);
-        clearToken();
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return unsubscribe;

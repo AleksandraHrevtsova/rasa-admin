@@ -86,8 +86,11 @@ export const Layout = () => {
   ];
 
   return (
-    <div className='flex h-screen'>
-      <motion.div animate={{ width: collapsed ? 70 : 220 }} className='hidden md:flex flex-col border-r p-2 bg-white'>
+    <div className='flex h-screen overflow-hidden'>
+      <motion.div 
+        animate={{ width: collapsed ? 70 : 220 }} 
+        className='hidden md:flex flex-col border-r p-2 bg-white h-screen'
+      >
         <div className={`flex justify-${collapsed ? 'start' : 'end'} mb-2 p-2`}>
           <button onClick={() => setCollapsed(!collapsed)}>
             {collapsed ? <Menu /> : <ChevronLeft />}
@@ -111,7 +114,7 @@ export const Layout = () => {
         </div>
       </motion.div>
 
-      <div className='flex-1 flex flex-col'>
+      <div className='flex-1 flex flex-col h-screen overflow-hidden'>
         <div className='md:hidden fixed top-0 left-0 right-0 bg-white border-b flex items-center justify-between px-3 py-2 z-50'>
           <div className='flex gap-4'>
             {navItems.map((item) => (
@@ -147,7 +150,7 @@ export const Layout = () => {
 
           </div>
         </div>
-        <div className='p-4 mt-12 md:mt-0'>
+        <div className="flex-1 overflow-y-auto scrollbar p-4 mt-12 md:mt-0">
           <motion.div key={location.pathname} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <Outlet/>
           </motion.div>

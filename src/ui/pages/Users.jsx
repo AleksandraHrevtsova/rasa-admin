@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { ShieldCheck, ShieldClose } from 'lucide-react';
 
 import { NAV, pageTags } from '@/config/constants';
 
@@ -8,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 import { navigateToEntity } from '@/core/utils/navigation';
 
+import { getUserColumns } from '@/domain/user/user.table';
 import { getUsers } from '@/domain/user/user.service';
 import { useRoles } from '@/domain/role/hooks/useRoles';
 
@@ -69,34 +69,28 @@ export default function Users() {
     if (isCurrentUser) return;
     toggleActiveMutation.mutate({ id: row.id, isActive: row.isActive });
   };
-  
-  const columns = [
-    { key: 'role', label: t(k.common.role), render: (row) => row.role?.name || '—', width: '25%', },
-    { key: 'name', label: t(k.common.name), sortable: true, width: '25%', },
-    { key: 'counterparty', label: t(k.common.counterparty), render: (row) => row.counterparty?.name || '—', width: '25%', },
-    { key: 'userHubs', label: t(k.common.hubs), render: (row) => row.userHubs?.length || '-', width: '25%', },
-    { key: 'actions', label: t(k.common.actions), render: (row) => {
-      const isCurrentUser = row.id === appUser.id;
-      if (isCurrentUser) return '-';
-      return (        
-        <button
-          onClick={handleToggle(row)}
-          className='text-xs px-2 py-1 rounded border hover:bg-gray-100'
-        >{row.isActive ? <ShieldClose size={20} /> : <ShieldCheck size={20} /> }</button>)
-    } }
-  ];
 
-  const actions = useMemo(() => {
-    return {
-      left: {
-        isActive,
-        onClick: () => setFilters((p) => ({ ...p, isActive: !p.isActive })),
-      },
-      right: {
-        onClick: () => goToUser(),
-      }
-    };
-  }, [isActive, navigate, location]);
+  const columns = useMemo(() =>
+    getUserColumns({
+      t,
+      k,
+      appUser,
+      onToggleUser: handleToggle,
+    }),
+    [t, k, appUser]
+  );
+
+  const openCreateUser = () => goToUser();
+
+  const actions = useMemo(() => ({
+    left: {
+      isActive,
+      onClick: () => setFilters((p) => ({ ...p, isActive: !p.isActive })),
+    },
+    right: {
+      onClick: openCreateUser,
+    }
+  }), [isActive]);
 
   return (
     <EntityPageLayout
@@ -105,7 +99,7 @@ export default function Users() {
       filters={filters} 
       setFilters={setFilters} 
       setPagination={setPagination}
-      onFabClick={() => goToUser()}
+      onFabClick={openCreateUser}
       table={
         <div className='grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-4'>
           <DataTable
@@ -120,7 +114,7 @@ export default function Users() {
             setSorting={setSorting}
             onRowClick={(row) => goToUser(row.id)}
           />
-          <RolesList roles={roles} />
+          {roles?.length > 0 && <RolesList roles={roles} />}
         </div>
       }
     />

@@ -12,7 +12,7 @@ const SORTING = {
   asc: 'ASC',
 };
 
-export function useEntityTable(fetchFn, options = {}) {
+export function useEntityTable(entityKEy, fetchFn, options = {}) {
   const {
     defaultPageSize = 10,
   } = options;
@@ -28,7 +28,7 @@ export function useEntityTable(fetchFn, options = {}) {
   const [sorting, setSorting] = useState([]);
 
   const queryKey = [
-    'entities',
+    entityKEy,
     {
       page: pagination.pageIndex,
       size: pagination.pageSize,

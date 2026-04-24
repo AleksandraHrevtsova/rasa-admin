@@ -96,5 +96,21 @@ export const formItemTypes = {
     tel: 'tel',
     email: 'email',
     password: 'password',
-  }
+    number: 'number'
+  },
+  checkbox: 'checkbox',
+  radio: 'radio',
+  file: 'file',
+  range: 'range',
+  date: 'date',
+  color: 'color',
+};
+
+export const pageTags = {
+  users: 'users',
+  user: 'user',
+  products: 'products',
+  product: 'product',
+  counterparties: 'counterparties',
+  counterparty: 'counterparty',
 };

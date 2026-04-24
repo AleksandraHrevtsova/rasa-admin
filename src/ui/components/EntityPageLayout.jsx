@@ -3,11 +3,21 @@ import { buttonActionTypes } from "@/config/constants";
 
 import { FAB } from '@/ui/components/Fab';
 import { Button } from '@/ui/components/Button';
+import { Filters } from '@/ui/components/Filters';
 
 import { useI18n } from '@/ui/hooks/useI18n';
 
 export function EntityPageLayout(props) {
-  const { title, actions, table, fab } = props;
+  const { 
+    title, 
+    actions, 
+    filters, 
+    setFilters,
+    setPagination,
+    table, 
+    onFabClick 
+  } = props;
+
   const { t, k } = useI18n();
 
   return (
@@ -15,10 +25,7 @@ export function EntityPageLayout(props) {
       <div className='p-4'>
         <div className='flex justify-between items-center mb-4'>
           <div className='flex items-center gap-3'>
-            <h1 className='text-2xl font-bold text-blue-950'>
-              {title}
-            </h1>
-
+            <h1 className='text-2xl font-bold text-blue-950'>{title}</h1>
             {actions?.left && (
               <Button
                 label={actions.left.isActive ? t(k.common.showInactive) : t(k.common.showActive)}
@@ -40,9 +47,18 @@ export function EntityPageLayout(props) {
             )}
           </div>
         </div>
-        {table}
+          <>
+            {filters && (
+              <Filters 
+                filters={filters} 
+                setFilters={setFilters} 
+                setPagination={setPagination}
+              />
+            )}
+            {table}
+          </>
       </div>
-      {fab && (<FAB label={t(k.common.create)} onClick={fab.onClick} />)}
+      {onFabClick && (<FAB label={t(k.common.create)} onClick={onFabClick} />)}
     </>
   );
 };

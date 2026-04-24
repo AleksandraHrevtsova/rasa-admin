@@ -1,8 +1,11 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import { ShieldCheck, ShieldClose } from 'lucide-react';
 
-import { NAV } from '@/config/constants';
+import { NAV, pageTags } from '@/config/constants';
+
 import { useAuth } from '@/contexts/AuthContext';
+
 import { navigateToEntity } from '@/core/utils/navigation';
 
 import { getUsers } from '@/domain/user/user.service';
@@ -11,14 +14,11 @@ import { getRoles } from '@/domain/role/role.service';
 import { EntityPageLayout } from '@/ui/components/EntityPageLayout';
 import DataTable from '@/ui/components/DataTable';
 import { RolesList } from '@/ui/components/Roles';
-import { UsersFilters } from '@/ui/components/UsersFilters';
 
 import { useI18n } from '@/ui/hooks/useI18n';
 import { useNotify } from '@/ui/hooks/useNotify';
 import { useEntityTable } from '@/ui/hooks/useEntityTable';
-import { useToggleUserActive } from '../hooks/useToggleUserActive';
-
-import { ShieldCheck, ShieldClose } from 'lucide-react';
+import { useToggleUserActive } from '@/ui/hooks/useToggleUserActive';
 
 export default function Users() {
   const { t, k } = useI18n();
@@ -28,9 +28,11 @@ export default function Users() {
   
   const { appUser } = useAuth();
   const notify = useNotify();
-  const toggleActiveMutation = useToggleUserActive();
-
+  
   const [roles, setRoles] = useState([]);
+  
+  const entityKey = pageTags.users;
+  const toggleActiveMutation = useToggleUserActive(entityKey);
 
   const {
     data,
@@ -44,7 +46,7 @@ export default function Users() {
     setFilters,
     sorting,
     setSorting
-  } = useEntityTable(getUsers, {
+  } = useEntityTable(entityKey, getUsers, {
     defaultPageSize: 20,
   });
 
@@ -81,12 +83,12 @@ export default function Users() {
     const isCurrentUser = row.id === appUser.id;
     if (isCurrentUser) return;
     toggleActiveMutation.mutate({ id: row.id, isActive: row.isActive });
-  } 
+  };
   
   const columns = [
-    { key: 'name', label: t(k.common.name), sortable: true, width: '25%', },
-    { key: 'email', label: t(k.common.email), width: '25%', },
     { key: 'role', label: t(k.common.role), render: (row) => row.role?.name || '—', width: '25%', },
+    { key: 'name', label: t(k.common.name), sortable: true, width: '25%', },
+    { key: 'counterparty', label: t(k.common.counterparty), render: (row) => row.counterparty?.name || '—', width: '25%', },
     { key: 'userHubs', label: t(k.common.hubs), render: (row) => row.userHubs?.length || '-', width: '25%', },
     { key: 'actions', label: t(k.common.actions), render: (row) => {
       const isCurrentUser = row.id === appUser.id;
@@ -115,31 +117,27 @@ export default function Users() {
     <EntityPageLayout
       title={t(k.users.title)}
       actions={actions}
+      filters={filters} 
+      setFilters={setFilters} 
+      setPagination={setPagination}
+      onFabClick={() => goToUser()}
       table={
-        <>
-          <UsersFilters 
-            filters={filters} 
-            setFilters={setFilters} 
+        <div className='grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-4'>
+          <DataTable
+            data={data}
+            columns={columns}
+            loading={loading}
+            isFetching={isFetching}
+            pagination={{ ...pagination, total }}
             setPagination={setPagination}
+            pageSizeOptions={[5, 10, 20, 50]}
+            sorting={sorting}
+            setSorting={setSorting}
+            onRowClick={(row) => goToUser(row.id)}
           />
-          <div className='grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-4'>
-            <DataTable
-              data={data}
-              columns={columns}
-              loading={loading}
-              isFetching={isFetching}
-              pagination={{ ...pagination, total }}
-              setPagination={setPagination}
-              pageSizeOptions={[5, 10, 20, 50]}
-              sorting={sorting}
-              setSorting={setSorting}
-              onRowClick={(row) => goToUser(row.id)}
-            />
-            {isActive && (<RolesList roles={roles} /> )}
-          </div>
-        </>
+          <RolesList roles={roles} />
+        </div>
       }
-      fab={{ onClick: () => goToUser() }}
     />
   );
 };

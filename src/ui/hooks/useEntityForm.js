@@ -5,6 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 export function useEntityForm({
   id,
+  queryKey,
   getById,
   create,
   update,
@@ -67,7 +68,7 @@ export function useEntityForm({
         reset(mapped);
       } catch (err) {
         console.error(err);
-        notify.error(err?.response?.data?.message || 'Error');
+        // notify.error(err?.response?.data?.message || 'Error');
       } finally {
         setLoading(false);
       }
@@ -85,18 +86,19 @@ export function useEntityForm({
       const payload = mapToApi(values);
       if (isEdit) {
         await update(id, payload);
-        queryClient.invalidateQueries({ queryKey: ['entities', 'user'], exact: false });
+        queryClient.invalidateQueries({ queryKey, exact: false });
+        notify.success(notifications.successUpdate);
         await refresh();
         notify.success(notifications.successUpdate);
       } else {
         await create(payload);
-        queryClient.invalidateQueries({ queryKey: ['entities', 'user'], exact: false });
+        queryClient.invalidateQueries({ queryKey, exact: false });
         notify.success(notifications.successCreate);
       }
       onSuccess?.();
     } catch (err) {
       const msg = err?.response?.data?.message || 'Error';
-      notify.error(msg);
+      // notify.error(msg);
 
       if (msg.includes('Email')) {
         setError('email', { message: msg });
@@ -122,11 +124,11 @@ export function useEntityForm({
     setIsActive(true);
     try {
       await activate(id);
-      queryClient.invalidateQueries({ queryKey: ['entities', 'user'], exact: false });
+      queryClient.invalidateQueries({ queryKey, exact: false });
       notify.success(notifications.successActivate);
     } catch (err) {
       setIsActive(prev);
-      notify.error(err.response?.data?.message);
+      // notify.error(err.response?.data?.message);
     }
   };
 
@@ -137,11 +139,11 @@ export function useEntityForm({
     setIsActive(false);
     try {
       await deactivate(id);
-      queryClient.invalidateQueries({ queryKey: ['entities', 'user'], exact: false });
+      queryClient.invalidateQueries({ queryKey, exact: false });
       notify.success(notifications.successDeactivate);
     } catch (err) {
       setIsActive(prev);
-      notify.error(err.response?.data?.message);
+      // notify.error(err.response?.data?.message);
     }
   };
 

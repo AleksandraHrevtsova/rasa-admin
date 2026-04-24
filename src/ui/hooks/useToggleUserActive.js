@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toggleUserActive } from '@/domain/user/user.mutations';
 import { useNotify } from '@/ui/hooks/useNotify';
 
-export function useToggleUserActive() {
+export function useToggleUserActive(queryKey) {
   const queryClient = useQueryClient();
   const notify = useNotify();
 
@@ -11,11 +11,11 @@ export function useToggleUserActive() {
 
     onMutate: async ({ id, isActive }) => {
 
-      await queryClient.cancelQueries({ queryKey: ['entities', 'users'] });
+      await queryClient.cancelQueries({ queryKey });
 
-      const previous = queryClient.getQueriesData({ queryKey: ['entities', 'users'] });
+      const previous = queryClient.getQueriesData({ queryKey });
 
-      queryClient.setQueriesData({ queryKey: ['entities', 'users'], exact: false, }, (old, context) => {
+      queryClient.setQueriesData({ queryKey, exact: false, }, (old, context) => {
         if (!old) return old;
         
         const queryKey = context?.queryKey;
@@ -57,7 +57,7 @@ export function useToggleUserActive() {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['entities'], exact: false });
+      queryClient.invalidateQueries({ queryKey, exact: false });
     },
   });
 }

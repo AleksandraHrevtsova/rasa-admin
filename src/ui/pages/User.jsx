@@ -29,6 +29,8 @@ import { Buttons } from '@/ui/components/form/FormButtonsBlock';
 import { EntityFormLayout } from '@/ui/components/form/EntityFormLayout';
 import { EntityFormFieldsRenderer } from '@/ui/components/form/EntityFormFieldsRenderer';
 
+import { pageTags } from '@/config/constants';
+
 const findItemById = (arr, id) => arr.find(el => el.id === id);
 const mapOption = (item) => ({ value: item.id, label: item.name }); 
 
@@ -46,7 +48,8 @@ export default function User() {
 
   const isCurrentUser = id === appUser.id;
 
-  const pageTag = 'user';
+  const pageTag = pageTags.user;
+
   const fieldNames = {
     name: 'name',
     email: 'email',
@@ -63,6 +66,7 @@ export default function User() {
 
   const formConfig = {
     id,
+    queryKey: pageTag,
     getById: getUserById,
     create: createUser,
     update: updateUser,
@@ -151,7 +155,8 @@ export default function User() {
   
   }, [selectedCounterpartyId, showClientFields]);
 
-  const { fields, rules } = useEntityFormConfig({ t, k, fieldNames, isEdit, showClientFields, isActive }).user;
+  const configData = { t, k, fieldNames, isEdit, showClientFields, isActive };
+  const { fields, rules } = useEntityFormConfig(configData).user;
 
   const filteredHubOptions = useMemo(() => {
     const counterpartyHubs = findItemById(counterparties, selectedCounterpartyId)?.hubs;

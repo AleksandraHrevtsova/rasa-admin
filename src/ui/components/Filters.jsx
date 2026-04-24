@@ -2,8 +2,7 @@ import { memo } from 'react';
 import { useI18n } from '@/ui/hooks/useI18n';
 import { Search } from 'lucide-react';
 
-
-function UsersFiltersComponent({ filters, setFilters, setPagination }) {
+function FiltersComponent({ filters, setFilters, setPagination }) {
   const { t, k } = useI18n();
 
   const handleChange = (e) => {
@@ -11,7 +10,6 @@ function UsersFiltersComponent({ filters, setFilters, setPagination }) {
     setPagination(p => ({ ...p, pageIndex: 0 }));
     setFilters(p => ({ ...p, search: v }));
   };
-
 
   return (
     <div className='relative w-full mb-2'>
@@ -30,4 +28,4 @@ function UsersFiltersComponent({ filters, setFilters, setPagination }) {
   );
 };
 
-export const UsersFilters = memo(UsersFiltersComponent);
+export const Filters = memo(FiltersComponent);

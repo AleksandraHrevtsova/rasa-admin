@@ -1,17 +1,24 @@
 import api from '@/core/api/apiClient';
 import { auth } from '@/firebase';
 
-const addAuthorizationHeaders = async (config) => {
+const getFirebaseToken = async () => {
   const user = auth.currentUser;
 
-  if (!user) return config;
+  if (!user) return null;
 
   try {
-    const token = await user.getIdToken();
+    return await user.getIdToken();
+  } catch (e) {
+    console.error('Token error:', e);
+    return null;
+  }
+};
 
+const addAuthorizationHeaders = async (config) => {
+  const token = await getFirebaseToken();
+
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-  } catch (err) {
-    console.error('Auth token error:', err);
   }
 
   return config;

@@ -3,14 +3,20 @@ import { getMe } from '@/core/auth/services/auth.service';
 let cachedUser = null;
 
 export const hydrateAuth = async () => {
-  // instant cache (UX boost)
   if (cachedUser) return cachedUser;
 
-  const { user } = await getMe();
+  try {
+    const { user } = await getMe();
+    cachedUser = user;
+    return user;
+  } catch (e) {
+    // retry once
+    await new Promise((r) => setTimeout(r, 300));
 
-  cachedUser = user;
-
-  return user;
+    const { user } = await getMe();
+    cachedUser = user;
+    return user;
+  }
 };
 
 export const clearAuthCache = () => {

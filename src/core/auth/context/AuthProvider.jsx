@@ -36,9 +36,9 @@ export const AuthProvider = ({ children }) => {
         setAppUser(appUser);
       } catch (e) {
         console.error(e);
-        setAppUser(null);
+        // setAppUser(null);
       } finally {
-        setReady(true); // ✅ всегда вызывается
+        setReady(true);
       }
     });
   }, []);

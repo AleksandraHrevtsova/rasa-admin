@@ -58,13 +58,8 @@ export function EntityPage({
   };
 
   const columns = useMemo(() =>
-    getColumns({
-      t,
-      k,
-      appUser,
-      onClick: handleToggle,
-    }),
-    [t, k, appUser]
+    getColumns({ appUser, onClick: handleToggle }),
+    [appUser, handleToggle]
   );
 
   const actions = {
@@ -94,6 +89,7 @@ export function EntityPage({
             isFetching={isFetching}
             pagination={{ ...pagination, total }}
             setPagination={setPagination}
+            pageSizeOptions={[5, 10, 20, 50]}
             sorting={sorting}
             setSorting={setSorting}
             onRowClick={(row) => goToEntity(row.id)}

@@ -1,7 +1,9 @@
+import { i18nStore } from '@/core/i18n/store';
 import { ToggleActiveAction } from '@/ui/components/table/actions/ToggleActiveAction';
 
 export const getUserColumns = (props) => {
-  const { t, k, appUser, onClick } = props;
+  const { appUser, onClick } = props;
+  const { t, k } = i18nStore;
 
   return [
     {

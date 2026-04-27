@@ -1,8 +1,8 @@
 import { ToggleActiveAction } from '@/ui/components/table/actions/ToggleActiveAction';
 
-export const getUserColumns = () => {
+export const getUserColumns = (props) => {
   const { t, k, appUser, onClick } = props;
-  
+
   return [
     {
       key: 'role',
@@ -31,7 +31,7 @@ export const getUserColumns = () => {
     {
       key: 'actions',
       label: t(k.common.actions),
-      render: (row) => (<ToggleActiveAction row={row} appUser={appUser} onToggle={onClick} />),
+      render: (row) => (<ToggleActiveAction row={row} isHiden={row.id === appUser?.id} onToggle={onClick} />),
     },
   ];
 };

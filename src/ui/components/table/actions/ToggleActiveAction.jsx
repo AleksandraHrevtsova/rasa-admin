@@ -1,15 +1,14 @@
 import { ShieldCheck, ShieldClose } from 'lucide-react';
 
 export function ToggleActiveAction(props) {
-  const { row, appUser, onToggle } = props;
-  const isCurrentUser = row.id === appUser?.id;
+  const { row, isHiden, onToggle } = props;
 
   const handleClick = (e) => {
     e.stopPropagation();
     onToggle(row);
   };
 
-  if (isCurrentUser) return '-';
+  if (isHiden) return '-';
 
   return (
     <button

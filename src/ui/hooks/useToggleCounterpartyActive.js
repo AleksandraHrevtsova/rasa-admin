@@ -1,10 +1,10 @@
 import { useToggleActive } from '@/ui/hooks/useToggleActive';
-import { toggleProductActive } from '@/domain/product/product.mutations';
+import { toggleCounterpartyActive } from '@/domain/counterparty/counterparty.mutations';
 
-export function useToggleProductActive(queryKey) {
+export function useToggleCounterpartyActive(queryKey) {
   return useToggleActive({
     queryKey,
-    mutationFn: toggleProductActive,
+    mutationFn: toggleCounterpartyActive,
     getErrorMessage: (err) =>
       err?.response?.data?.message || 'Error updating product status',
   });

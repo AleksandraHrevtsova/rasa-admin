@@ -1,103 +1,26 @@
-import { useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router';
-
-import { useAuth } from '@/core/auth/hooks/useAuth';
-import { navigateToEntity } from '@/core/utils/navigation';
-
-import { EntityPageLayout } from '@/ui/components/EntityPageLayout';
-import DataTable from '@/ui/components/table/DataTable';
-
+import { entities } from '@/domain/entities.registry';
 import { useI18n } from '@/ui/hooks/useI18n';
-import { useEntityTable } from '@/ui/hooks/useEntityTable';
+import { BaseEntityPage } from '@/ui/pages/BaseEntityPage';
 
-export function EntityPage({
-  entityKey,
-  title,
-  getColumns,
-  fetchFn,
-  useSideData, // roles, categories etc
-  renderSidebar,
-  onToggle,
-  getPaths,
-}) {
-  const { t, k } = useI18n();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { appUser } = useAuth();
-
-  const sideData = useSideData?.() || {};
-
-  const {
-    data,
-    total,
-    loading,
-    isFetching,
-    pagination,
-    setPagination,
-    filters,
-    setFilters,
-    sorting,
-    setSorting
-  } = useEntityTable(entityKey, fetchFn, {
-    defaultPageSize: 20,
+export function EntityPage({ entity }) {
+  const { t } = useI18n();
+  const config = entities[entity];
+  const toggle = config.toggleHook(config.key);
+  const sideData = config.useSideData?.() || {};
+  const columns = config.columns({
+    t,
+    ...sideData,
   });
 
-  const goToEntity = (id) => {
-    const paths = getPaths();
-    navigateToEntity({
-      navigate,
-      location,
-      ...paths,
-      id,
-    });
-  };
-
-  const handleToggle = (row) => (e) => {
-    e.stopPropagation();
-    onToggle?.(row, appUser);
-  };
-
-  const columns = useMemo(() =>
-    getColumns({ appUser, onClick: handleToggle }),
-    [appUser, handleToggle]
-  );
-
-  const actions = {
-    left: {
-      isActive: filters.isActive,
-      onClick: () => setFilters((p) => ({ ...p, isActive: !p.isActive })),
-    },
-    right: {
-      onClick: () => goToEntity(),
-    }
-  };
-
   return (
-    <EntityPageLayout
-      title={title}
-      actions={actions}
-      filters={filters}
-      setFilters={setFilters}
-      setPagination={setPagination}
-      onFabClick={() => goToEntity()}
-      table={
-        <div className='grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-4'>
-          <DataTable
-            data={data}
-            columns={columns}
-            loading={loading}
-            isFetching={isFetching}
-            pagination={{ ...pagination, total }}
-            setPagination={setPagination}
-            pageSizeOptions={[5, 10, 20, 50]}
-            sorting={sorting}
-            setSorting={setSorting}
-            onRowClick={(row) => goToEntity(row.id)}
-          />
-
-          {renderSidebar?.(sideData)}
-        </div>
-      }
+    <BaseEntityPage
+      entityKey={config.key} 
+      title={t(config.title)}
+      fetchFn={config.fetchFn}
+      columns={columns}
+      onToggle={toggle.mutate}
+      paths={config.paths}
+      renderSidebar={() => config.renderSidebar?.(sideData)}
     />
   );
-}
+};

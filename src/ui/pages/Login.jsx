@@ -36,6 +36,8 @@ export default function Login() {
         <h2 className='text-2xl font-bold text-primary mb-6'>{t(k.auth.title)}</h2>
         {error && <p className='text-red-500 mb-4'>{error}</p>}
         <input
+          id='login'
+          name='login'
           type={formItemTypes.input.email}
           className='w-full p-2 mb-4 border rounded'
           placeholder={t(k.auth.email)}
@@ -43,6 +45,8 @@ export default function Login() {
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
+          id='password'
+          name='password'
           type={formItemTypes.input.password}
           className='w-full p-2 mb-4 border rounded'
           placeholder={t(k.auth.password)}

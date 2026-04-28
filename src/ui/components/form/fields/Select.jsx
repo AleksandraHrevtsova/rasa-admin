@@ -36,6 +36,8 @@ const MySelect = (props) => {
         <>
           <Select
             {...field}
+            id={data.name}
+            name={data.name}
             value={getValue(field)}
             required={data.required}
             options={options}

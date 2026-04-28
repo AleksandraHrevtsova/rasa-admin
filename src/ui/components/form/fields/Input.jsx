@@ -9,6 +9,8 @@ const Input = (props) => {
     <input
       type={data.type || 'text'}
       {...register(data.name, rules)}
+      id={data.name}
+      name={data.name}
       placeholder={data.placeholder}
       autoComplete={autoComplete}
       className={`w-full p-2 border border-[#cccccc] rounded ${

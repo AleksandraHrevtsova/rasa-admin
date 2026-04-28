@@ -19,6 +19,8 @@ function FiltersComponent({ filters, setFilters, setPagination }) {
       />
       <input
         type='text'
+        id='filter'
+        name='filter'
         placeholder={t(k.common.search)}
         value={filters.search}
         onChange={handleChange}

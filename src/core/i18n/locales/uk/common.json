@@ -32,5 +32,7 @@
   "counterparties": "Контрагенти",
 
   "count": "Кількість",
-  "enterCount": "Введіть кількість"
+  "enterCount": "Введіть кількість",
+
+  "toggleActiveError": "Помилка зміни статусу активності"
 }

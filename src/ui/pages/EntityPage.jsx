@@ -1,14 +1,24 @@
 import { entities } from '@/domain/entities.registry';
 import { useI18n } from '@/ui/hooks/useI18n';
+import { useAuth } from '@/core/auth/hooks/useAuth';
 import { BaseEntityPage } from '@/ui/pages/BaseEntityPage';
+import { useToggleActive } from '@/ui/hooks/useToggleActive';
 
 export function EntityPage({ entity }) {
-  const { t } = useI18n();
+  const { appUser } = useAuth();
+  const { t, k } = useI18n();
   const config = entities[entity];
-  const toggle = config.toggleHook(config.key);
+  const toggle = useToggleActive({
+    queryKey: config.key,
+    mutationFn: config.toggle?.mutationFn,
+    errorMessage: config.toggle?.errorMessage,
+  });
   const sideData = config.useSideData?.() || {};
   const columns = config.columns({
     t,
+    k,
+    appUser,
+    onClick: toggle.mutate,
     ...sideData,
   });
 

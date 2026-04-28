@@ -9,14 +9,15 @@ import { getUserColumns } from '@/domain/user/users.table';
 import { getProductColumns } from '@/domain/product/products.table';
 import { getCounterpartyColumns } from '@/domain/counterparty/counterparties.table';
 
-import { useToggleUserActive } from '@/ui/hooks/useToggleUserActive';
-import { useToggleProductActive } from '@/ui/hooks/useToggleProductActive';
-import { useToggleCounterpartyActive } from '@/ui/hooks/useToggleCounterpartyActive';
+import { toggleUserActive } from '@/domain/user/user.mutations';
+import { toggleProductActive } from '@/domain/product/product.mutations';
+import { toggleCounterpartyActive } from '@/domain/counterparty/counterparty.mutations';
 
 import { useRoles } from '@/domain/role/hooks/useRoles';
 import { RolesList } from '@/ui/components/Roles';
 
 const { k } = i18nStore;
+const toggleError = k.common.toggleActiveError;
 
 export const entities = {
   users: {
@@ -31,7 +32,10 @@ export const entities = {
     },
     useSideData: () => ({ roles: useRoles().data} || []),
     renderSidebar: ({ roles }) => roles?.length ? <RolesList roles={roles} /> : null,
-    toggleHook: useToggleUserActive,
+    toggle: {
+      mutationFn: toggleUserActive,
+      errorMessage: toggleError,
+    },
   },
   products: {
     key: pageTags.products,
@@ -43,7 +47,10 @@ export const entities = {
       create: NAV.newProduct,
       edit: NAV.editProduct,
     },
-    toggleHook: useToggleProductActive,
+    toggle: {
+      mutationFn: toggleProductActive,
+      errorMessage: toggleError,
+    },
   },
   counterparties: {
     key: pageTags.counterparties,
@@ -55,6 +62,9 @@ export const entities = {
       create: NAV.newCounterparty,
       edit: NAV.editCounterparty,
     },
-    toggleHook: useToggleCounterpartyActive,
+    toggle: {
+      mutationFn: toggleCounterpartyActive,
+      errorMessage: toggleError,
+    },
   },
 };

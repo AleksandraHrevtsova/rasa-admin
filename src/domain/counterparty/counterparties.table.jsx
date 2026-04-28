@@ -1,9 +1,7 @@
-import { i18nStore } from '@/core/i18n/store';
 import { ToggleActiveAction } from '@/ui/components/table/actions/ToggleActiveAction';
 
 export const getCounterpartyColumns = (props) => {
-  const { onClick } = props;
-  const { t, k } = i18nStore;
+  const { t, k, appUser, onClick } = props;
 
   return [
     {
@@ -27,7 +25,7 @@ export const getCounterpartyColumns = (props) => {
     {
       key: 'actions',
       label: t(k.common.actions),
-      render: (row) => (<ToggleActiveAction row={row} isHiden={false} onToggle={onClick} />),
+      render: (row) => (<ToggleActiveAction row={row} isHidden={false} onToggle={onClick} />),
     },
   ];
 };

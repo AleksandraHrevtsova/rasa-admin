@@ -16,6 +16,16 @@ export const keys = {
     submit: 'auth.submit',
     logout: 'auth.logout',
   },
+  navigation: {
+    users: 'navigation.users',
+    roles: 'navigation.roles',
+    counterparties: 'navigation.counterparties',
+    hubs: 'navigation.hubs',
+    products: 'navigation.products',
+    orders: 'navigation.orders',
+    payments: 'navigation.payments',
+    certificates: 'navigation.certificates',
+  },
   common: {
     create: 'common.create',
     edit: 'common.edit',
@@ -52,6 +62,14 @@ export const keys = {
 
     count: 'common.count',
     enterCount: 'common.enterCount',
+    toggleActiveError: 'common.toggleActiveError',
+  },
+  table: {
+    noData: 'table.noData',
+    filter: 'table.filter',
+    page: 'table.page',
+    of: 'table.of',
+    rows: 'table.rows',
   },
   users: {
     title: 'users.title',
@@ -83,13 +101,13 @@ export const keys = {
     updated: 'user.updated',
     created: 'user.created',
     activated: 'user.activated',
-    deactivated: 'user.deactivated'
+    deactivated: 'user.deactivated',
+
+    updateError: 'user.updateError',
+    createError: 'user.createError',
   },
   products: {
     title: 'products.title',
-  },
-  counterparties: {
-    title: 'counterparties.title',
   },
   product: {
     name: 'product.name',
@@ -120,23 +138,16 @@ export const keys = {
     updated: 'product.updated',
     created: 'product.created',
     activated: 'product.activated',
-    deactivated: 'product.deactivated'
+    deactivated: 'product.deactivated',
+
+    updateError: 'product.updateError',
+    createError: 'product.createError',
   },
-  navigation: {
-    users: 'navigation.users',
-    roles: 'navigation.roles',
-    counterparties: 'navigation.counterparties',
-    hubs: 'navigation.hubs',
-    products: 'navigation.products',
-    orders: 'navigation.orders',
-    payments: 'navigation.payments',
-    certificates: 'navigation.certificates',
+  counterparties: {
+    title: 'counterparties.title',
   },
-  table: {
-    noData: 'table.noData',
-    filter: 'table.filter',
-    page: 'table.page',
-    of: 'table.of',
-    rows: 'table.rows',
-  }
+  counterparty: {
+    updateError: 'counterparty.updateError',
+    createError: 'counterparty.createError',
+  },
 }

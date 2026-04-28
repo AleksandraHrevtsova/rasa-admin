@@ -1,14 +1,14 @@
 import { ShieldCheck, ShieldClose } from 'lucide-react';
 
 export function ToggleActiveAction(props) {
-  const { row, isHiden, onToggle } = props;
+  const { row, isHidden, onToggle } = props;
 
   const handleClick = (e) => {
     e.stopPropagation();
     onToggle(row);
   };
 
-  if (isHiden) return '-';
+  if (isHidden) return '-';
 
   return (
     <button

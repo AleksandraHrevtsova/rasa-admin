@@ -1,18 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNotify } from '@/ui/hooks/useNotify';
 
-export function useToggleActive({
-  queryKey,
-  mutationFn,
-  getErrorMessage,
-}) {
+export function useToggleActive({ queryKey, mutationFn, errorMessage }) {
   const queryClient = useQueryClient();
   const notify = useNotify();
 
   return useMutation({
     mutationFn,
 
-    onMutate: async ({ id, isActive }) => {
+    onMutate: async ({ id }) => {
       await queryClient.cancelQueries({ queryKey });
 
       const previous = queryClient.getQueriesData({ queryKey });
@@ -30,7 +26,6 @@ export function useToggleActive({
             el.id === id ? { ...el, isActive: !el.isActive } : el
           );
 
-          // 🔥 фильтр сохраняем
           if (currentIsActive !== undefined) {
             updatedItems = updatedItems.filter(
               (el) => el.isActive === currentIsActive
@@ -55,7 +50,7 @@ export function useToggleActive({
       }
 
       notify.error(
-        getErrorMessage?.(err) || 'Update failed'
+        err?.response?.data?.message || errorMessage || 'Update error'
       );
     },
 

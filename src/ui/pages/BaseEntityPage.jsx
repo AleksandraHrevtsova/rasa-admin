@@ -3,10 +3,13 @@ import { useLocation, useNavigate } from 'react-router';
 
 import { navigateToEntity } from '@/core/utils/navigation';
 import { useAuth } from '@/core/auth/hooks/useAuth';
+import { useConfirm } from '@/ui/components/confirm/ConfirmProvider';
 
 import { EntityPageLayout } from '@/ui/components/EntityPageLayout';
 import DataTable from '@/ui/components/table/DataTable';
 import { useEntityTable } from '@/ui/hooks/useEntityTable';
+
+import { renderRowActions } from '@/ui/components/table/actions/renderRowActions';
 
 export function BaseEntityPage({
   title,
@@ -20,6 +23,7 @@ export function BaseEntityPage({
   const location = useLocation();
   const navigate = useNavigate();
   const { appUser } = useAuth();
+  const onConfirm = useConfirm();
 
   const {
     data,
@@ -50,13 +54,20 @@ export function BaseEntityPage({
   const enhancedColumns = useMemo(() => {
     return columns.map((col) => {
       if (col.key !== 'actions') return col;
-
+  
       return {
         ...col,
-        render: (row) => col.render(row, { onToggle, appUser }),
+        render: (row) =>
+          renderRowActions(col.actions, {
+            row,
+            appUser,
+            onConfirm,
+            onToggle,
+            onEdit: (row) => goToEntity(row.id),
+          }),
       };
     });
-  }, [columns, onToggle, appUser]);
+  }, [columns, appUser, onToggle]);
 
   const actions = useMemo(() => ({
     left: {

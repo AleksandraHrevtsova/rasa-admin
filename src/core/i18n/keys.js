@@ -35,6 +35,7 @@ export const keys = {
     save: 'common.save',
     cancel: 'common.cancel',
     back: 'common.back',
+    confirm: 'common.confirm',
     
     actions: 'common.actions',
     search: 'common.search',
@@ -103,6 +104,10 @@ export const keys = {
     activated: 'user.activated',
     deactivated: 'user.deactivated',
 
+    confirmDeactivateTitle: 'user.confirmDeactivateTitle',
+    confirmDeactivateDesc: 'user.confirmDeactivateDesc',
+    confirmActivateTitle: 'user.confirmActivateTitle',
+    confirmActivateDesc: 'user.confirmActivateDesc',
     updateError: 'user.updateError',
     createError: 'user.createError',
   },
@@ -140,6 +145,10 @@ export const keys = {
     activated: 'product.activated',
     deactivated: 'product.deactivated',
 
+    confirmDeactivateTitle: 'product.confirmDeactivateTitle',
+    confirmDeactivateDesc: 'product.confirmDeactivateDesc',
+    confirmActivateTitle: 'product.confirmActivateTitle',
+    confirmActivateDesc: 'product.confirmActivateDesc',
     updateError: 'product.updateError',
     createError: 'product.createError',
   },
@@ -147,6 +156,10 @@ export const keys = {
     title: 'counterparties.title',
   },
   counterparty: {
+    confirmDeactivateTitle: 'counterparty.confirmDeactivateTitle',
+    confirmDeactivateDesc: 'counterparty.confirmDeactivateDesc',
+    confirmActivateTitle: 'counterparty.confirmActivateTitle',
+    confirmActivateDesc: 'counterparty.confirmActivateDesc',
     updateError: 'counterparty.updateError',
     createError: 'counterparty.createError',
   },

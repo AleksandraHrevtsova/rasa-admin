@@ -1,4 +1,8 @@
 {
+  "confirmDeactivateTitle": "Деактивація контрагента.",
+  "confirmDeactivateDesc": "Контрагент {{name}} буде деактивований. Ви підтверджуєте цю дію?",
+  "confirmActivateTitle": "Активація контрагента.",
+  "confirmActivateDesc": "Контрагент {{name}} буде активований. Ви підтверджуєте цю дію?",
   "updateError": "Помилка при зміні контрагента",
   "createError": "Помилка при створенні контрагента"
 }

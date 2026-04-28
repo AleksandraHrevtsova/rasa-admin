@@ -1,7 +1,5 @@
-import { ToggleActiveAction } from '@/ui/components/table/actions/ToggleActiveAction';
-
 export const getUserColumns = (props) => {
-  const { t, k, appUser, onClick } = props;
+  const { t, k } = props;
 
   return [
     {
@@ -31,7 +29,19 @@ export const getUserColumns = (props) => {
     {
       key: 'actions',
       label: t(k.common.actions),
-      render: (row) => (<ToggleActiveAction row={row} isHidden={row.id === appUser?.id} onToggle={onClick} />),
+      actions: [
+        {
+          type: 'toggle',
+          confirm: (row) => {
+            const titleKey = row.isActive ? k.user.confirmDeactivateTitle : k.user.confirmActivateTitle;
+            const descriptionKey = row.isActive ? k.user.confirmDeactivateDesc : k.user.confirmActivateDesc;
+            return {
+              title: t(titleKey),
+              description: t(descriptionKey, { name: row.name }),
+            }
+          },
+        },
+      ],
     },
   ];
 };

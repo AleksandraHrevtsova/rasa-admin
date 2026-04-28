@@ -1,11 +1,9 @@
 import { entities } from '@/domain/entities.registry';
 import { useI18n } from '@/ui/hooks/useI18n';
-import { useAuth } from '@/core/auth/hooks/useAuth';
 import { BaseEntityPage } from '@/ui/pages/BaseEntityPage';
 import { useToggleActive } from '@/ui/hooks/useToggleActive';
 
 export function EntityPage({ entity }) {
-  const { appUser } = useAuth();
   const { t, k } = useI18n();
   const config = entities[entity];
   const toggle = useToggleActive({
@@ -17,8 +15,6 @@ export function EntityPage({ entity }) {
   const columns = config.columns({
     t,
     k,
-    appUser,
-    onClick: toggle.mutate,
     ...sideData,
   });
 

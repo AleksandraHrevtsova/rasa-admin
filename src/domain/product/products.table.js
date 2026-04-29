@@ -4,8 +4,14 @@ export const getProductColumns = (props) => {
   return [
     {
       key: 'name',
-      label: t(k.common.title),
-      render: (row) => row.role?.name || '—',
+      label: t(k.common.nameBase),
+      render: (row) => row.name || '—',
+      width: '25%',
+    },
+    {
+      key: 'namePublic',
+      label: t(k.common.namePublic),
+      render: (row) => row.namePublic || '—',
       width: '25%',
     },
     {

@@ -48,8 +48,8 @@ export const keys = {
 
     title: 'common.title',
     name: 'common.name',
-    baseName: 'common.baseName',
-    publicName: 'common.publicName',
+    nameBase: 'common.nameBase',
+    namePublic: 'common.namePublic',
     phone: 'common.phone',
     email: 'common.email',
     password: 'common.password',
@@ -115,8 +115,6 @@ export const keys = {
     title: 'products.title',
   },
   product: {
-    name: 'product.name',
-
     sku: 'product.sku',
     netto: 'product.netto',
     brutto: 'product.brutto',

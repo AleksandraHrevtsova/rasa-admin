@@ -112,7 +112,7 @@ export function useEntityFormConfig({ t, k, fieldNames, isEdit, showClientFields
         { 
           type: formItemTypes.input.text, 
           name: fieldNames.name,  
-          label: t(k.common.baseName), 
+          label: t(k.common.nameBase), 
           placeholder: t(k.user.enterName), 
           required: true,
           isShowField: true,
@@ -121,7 +121,7 @@ export function useEntityFormConfig({ t, k, fieldNames, isEdit, showClientFields
         { 
           type: formItemTypes.input.text, 
           name: fieldNames.namePublic,  
-          label: t(k.common.publicName), 
+          label: t(k.common.namePublic), 
           placeholder: t(k.user.enterName), 
           required: true,
           isShowField: true,

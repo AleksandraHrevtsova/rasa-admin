@@ -20,8 +20,8 @@
   
   "title": "Название",
   "name": "Имя",
-  "baseName": "Полное название",
-  "publicName": "Сокращенное название",
+  "nameBase": "Полное название",
+  "namePublic": "Кратко",
   "phone": "Телефон",
   "email": "Email",
   "password": "Пароль",

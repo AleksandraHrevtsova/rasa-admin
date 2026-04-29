@@ -10,7 +10,6 @@ export const mapFromApi = (u) => {
 };
 
 export const mapToApi = (f) => {
-  console.log('FFF:', f);
   return {
     name: f.name,
     email: f.email,

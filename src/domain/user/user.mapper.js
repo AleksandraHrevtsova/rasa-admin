@@ -10,12 +10,13 @@ export const mapFromApi = (u) => {
 };
 
 export const mapToApi = (f) => {
+  console.log('FFF:', f);
   return {
     name: f.name,
     email: f.email,
     phone: f.phone,
-    roleId: f.role.id,
-    counterpartyId: f.counterparty.id || null,
+    roleId: f.roleId,
+    counterpartyId: f.counterpartyId || null,
     hubIds: f.hubIds || [],
     password: f.password,
   }

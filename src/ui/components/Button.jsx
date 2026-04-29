@@ -22,7 +22,7 @@ const sizes = {
 export const Button = ({
   type = 'button',
   label,
-  onClick,
+  onClick = null,
   action = 'submit',
   size = 'md',
   icon: Icon,

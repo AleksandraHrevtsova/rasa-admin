@@ -1,7 +1,8 @@
-import { useEffect, useRef, useMemo, useState } from 'react';
+import { useEffect, useRef, useMemo, useState, useCallback } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useNotify } from '@/ui/hooks/useNotify';
 import { useQueryClient } from '@tanstack/react-query';
+import { useConfirm } from '@/ui/components/confirm/ConfirmProvider';
 
 export function useEntityForm({
   id,
@@ -19,38 +20,46 @@ export function useEntityForm({
 }) {
   const queryClient = useQueryClient();
   const notify = useNotify();
+  const confirm = useConfirm();
 
   const isEdit = Boolean(id);
 
   const form = useForm({ mode: 'onChange' });
 
   const {
-    reset,
-    handleSubmit,
-    setError,
+    control,
     formState: { isValid },
+    setError,
+    handleSubmit,
+    reset,
   } = form;
 
   const [loading, setLoading] = useState(false);
   const [isActive, setIsActive] = useState(true);
 
   const initialValuesRef = useRef(null);
-  const values = useWatch({ control: form.control });
+  const values = useWatch({ control });
 
   const isFormChanged = useMemo(() => {
     if (!initialValuesRef.current) return false;
+
     if (compareValues) {
       return !compareValues(values, initialValuesRef.current);
     }
+
     return JSON.stringify(values) !== JSON.stringify(initialValuesRef.current);
   }, [values, compareValues]);
 
-  const refresh = async () => {
-    const fresh = await getById(id);
-    const mapped = mapFromApi(fresh.data);
-    initialValuesRef.current = compareValues(mapped);
+  const refresh = useCallback(async () => {
+    if (!id) return;
+
+    const { data } = await getById(id);
+    const mapped = mapFromApi(data);
+
+    initialValuesRef.current = mapped;
+    setIsActive(data.isActive);
     reset(mapped);
-  }
+  }, [id]);
 
   useEffect(() => {
     if (!isEdit) return;
@@ -59,16 +68,19 @@ export function useEntityForm({
 
     const fetchItem = async () => {
       setLoading(true);
+
       try {
         const { data } = await getById(id);
         if (ignore) return;
-        setIsActive(data.isActive);
+
         const mapped = mapFromApi(data);
+
         initialValuesRef.current = mapped;
+        setIsActive(data.isActive);
         reset(mapped);
+
       } catch (err) {
         console.error(err);
-        // notify.error(err?.response?.data?.message || 'Error');
       } finally {
         setLoading(false);
       }
@@ -82,23 +94,32 @@ export function useEntityForm({
   }, [id]);
 
   const onSubmit = async (values) => {
+    console.log('onSubmit: isEdit & values', isEdit, values);
     try {
       const payload = mapToApi(values);
+      console.log('payload', payload);
+
       if (isEdit) {
+         console.log('update: payload', payload);
+
         await update(id, payload);
-        queryClient.invalidateQueries({ queryKey, exact: false });
-        notify.success(notifications.successUpdate);
-        await refresh();
         notify.success(notifications.successUpdate);
       } else {
+        console.log('create: payload', payload);
+
         await create(payload);
-        queryClient.invalidateQueries({ queryKey, exact: false });
         notify.success(notifications.successCreate);
       }
+
+      queryClient.invalidateQueries({ queryKey, exact: false });
+
+      await refresh();
+
       onSuccess?.();
+
     } catch (err) {
+      console.error(err);
       const msg = err?.response?.data?.message || 'Error';
-      // notify.error(msg);
 
       if (msg.includes('Email')) {
         setError('email', { message: msg });
@@ -111,8 +132,12 @@ export function useEntityForm({
   };
 
   const onError = (errs) => {
-    const firstErrorField = Object.keys(errs)[0];
-    const el = document.querySelector(`[name='${firstErrorField}']`) || document.querySelector(`#${firstErrorField}`);
+    const firstField = Object.keys(errs)[0];
+
+    const el =
+      document.querySelector(`[name='${firstField}']`) ||
+      document.querySelector(`#${firstField}`);
+
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       el.focus();
@@ -122,28 +147,37 @@ export function useEntityForm({
   const handleActivate = async () => {
     const prev = isActive;
     setIsActive(true);
+
     try {
       await activate(id);
+
       queryClient.invalidateQueries({ queryKey, exact: false });
+
       notify.success(notifications.successActivate);
     } catch (err) {
       setIsActive(prev);
-      // notify.error(err.response?.data?.message);
     }
   };
 
   const handleDeactivate = async () => {
-    const prev = isActive;
-    const confirmed = window.confirm(notifications.confirmDeactivate);
+    const confirmed = await confirm({
+      title: notifications.confirmDeactivateTitle,
+      description: notifications.confirmDeactivateDesc,
+    });
+
     if (!confirmed) return;
+
+    const prev = isActive;
     setIsActive(false);
+
     try {
       await deactivate(id);
+
       queryClient.invalidateQueries({ queryKey, exact: false });
+
       notify.success(notifications.successDeactivate);
     } catch (err) {
       setIsActive(prev);
-      // notify.error(err.response?.data?.message);
     }
   };
 

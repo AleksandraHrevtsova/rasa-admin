@@ -5,7 +5,7 @@ export const getCounterpartyColumns = (props) => {
     {
       key: 'name',
       label: t(k.common.title),
-      render: (row) => row.role?.name || '—',
+      render: (row) => row.name || '—',
       width: '25%',
     },
     {

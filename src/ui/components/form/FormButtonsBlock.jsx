@@ -1,7 +1,5 @@
 import { buttonActionTypes } from "@/config/constants";
-
 import { useI18n } from '@/ui/hooks/useI18n';
-
 import { Button } from '@/ui/components/Button';
 
 export const Buttons = (props) => {

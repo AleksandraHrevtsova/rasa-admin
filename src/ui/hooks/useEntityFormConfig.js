@@ -5,9 +5,18 @@ const validationPatterns = {
   email: /^\S+@\S+\.\S+$/,
 };
 
-export function useEntityFormConfig({ t, k, fieldNames, isEdit, showClientFields = null, isActive }) {
+export function useEntityFormConfig({ t, k, fieldNames, showClientFields = null, isEdit, isActive, isCurrentUser }) {
+  const canDeactivateUser = isEdit && isActive && !isCurrentUser;
+  const canDeactivate = isEdit && isActive;
+  const canActivate = isEdit && !isActive;
   return {
+    
     user: {
+      pagetitle: isEdit ? t(k.user.editCurrent) : t(k.user.createNew),
+      permissions: {
+        canActivate,
+        canDeactivate: canDeactivateUser,
+      },
       fields: [
         { 
           type: formItemTypes.select, 
@@ -108,6 +117,11 @@ export function useEntityFormConfig({ t, k, fieldNames, isEdit, showClientFields
       },
     },
     product: {
+      pagetitle: isEdit ? t(k.product.editCurrent) : t(k.product.createNew),
+      permissions: {
+        canActivate,
+        canDeactivate,
+      },
       fields: [
         { 
           type: formItemTypes.input.text, 
@@ -221,6 +235,11 @@ export function useEntityFormConfig({ t, k, fieldNames, isEdit, showClientFields
       rules: {},
     },
     counterparty: {
+      pagetitle: isEdit ? t(k.product.editCurrent) : t(k.product.createNew),
+      permissions: {
+        canActivate,
+        canDeactivate,
+      },
       fields: [],
       rules: {},
     },

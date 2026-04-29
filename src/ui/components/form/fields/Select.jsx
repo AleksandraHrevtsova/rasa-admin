@@ -8,8 +8,8 @@ const MySelect = (props) => {
 
   function getValue(field) {
     const value = data.isMulti
-    ? options.filter((o) => field.value?.includes(o.value))
-    : options.find((o) => o.value === field.value) || null;
+    ? options?.filter((o) => field.value?.includes(o.value))
+    : options?.find((o) => o.value === field.value) || null;
     return value;
   }
 

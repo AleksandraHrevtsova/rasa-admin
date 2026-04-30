@@ -3,7 +3,7 @@ import { useI18n } from '@/ui/hooks/useI18n';
 import { Button } from '@/ui/components/Button';
 
 export const Buttons = (props) => {
-  const { isEdit, isChanged, isSubmitDisabled, onBack, onActivate, onDeactivate } = props;
+  const { isEdit, isChanged, isSubmitDisabled, onBack, onSubmit, onSubmitAndBack, onActivate, onDeactivate } = props;
   const { t, k } = useI18n();
   return (
     <>
@@ -11,6 +11,14 @@ export const Buttons = (props) => {
         type='submit'
         label={isEdit ? t(k.common.save) : t(k.common.create)}
         action={buttonActionTypes.submit}
+        onClick={onSubmit}
+        disabled={isSubmitDisabled}
+      />
+      <Button
+        type='submit'
+        label={isEdit ? t(k.common.saveAndBack) : t(k.common.createAndBack)}
+        action={buttonActionTypes.submit}
+        onClick={onSubmitAndBack}
         disabled={isSubmitDisabled}
       />
 

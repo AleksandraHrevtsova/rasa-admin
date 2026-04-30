@@ -1,4 +1,4 @@
-import { pageTags } from '@/config/constants';
+import { NAV, pageTags } from '@/config/constants';
 import {
   getUserById,
   createUser,
@@ -16,6 +16,12 @@ import { useUserFormDerived } from '@/domain/user/hooks/useUserFormDerived';
 export const forms = {
   user: {
     key: pageTags.user,
+
+    paths: {
+      list: NAV.users,
+      create: NAV.newUser,
+      edit: NAV.editUser,
+    },
 
     api: {
       getById: getUserById,

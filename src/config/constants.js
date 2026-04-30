@@ -89,6 +89,11 @@ export const buttonActionTypes = {
   ghost: 'ghost',
 };
 
+export const submitActions = {
+  save: 'save',
+  saveAndBack: 'save_and_back',
+};
+
 export const formItemTypes = {
   select: 'select',
   input: {

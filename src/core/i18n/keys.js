@@ -28,11 +28,13 @@ export const keys = {
   },
   common: {
     create: 'common.create',
+    createAndBack: 'common.createAndBack',
     edit: 'common.edit',
     activate: 'common.activate',
     deactivate: 'common.deactivate',
     
     save: 'common.save',
+    saveAndBack: 'common.saveAndBack',
     cancel: 'common.cancel',
     back: 'common.back',
     confirm: 'common.confirm',

@@ -36,8 +36,9 @@ export const getUserColumns = (props) => {
             const titleKey = row.isActive ? k.user.confirmDeactivateTitle : k.user.confirmActivateTitle;
             const descriptionKey = row.isActive ? k.user.confirmDeactivateDesc : k.user.confirmActivateDesc;
             return {
-              title: t(titleKey),
-              description: t(descriptionKey, { name: row.name }),
+              titleKey,
+              descriptionKey,
+              params: { name: row.name },
             }
           },
         },

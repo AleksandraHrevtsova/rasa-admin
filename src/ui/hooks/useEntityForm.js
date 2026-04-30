@@ -1,7 +1,8 @@
 import { useEffect, useRef, useMemo, useState, useCallback } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
+import { submitActions } from '@/config/constants';
 import { useNotify } from '@/ui/hooks/useNotify';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { useConfirm } from '@/ui/components/confirm/ConfirmProvider';
 
 export function useEntityForm({
@@ -20,8 +21,15 @@ export function useEntityForm({
 }) {
   const queryClient = useQueryClient();
   const notify = useNotify();
-  const confirm = useConfirm();
+  const onConfirm = useConfirm();
 
+  const [isActive, setIsActive] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
+  const initialValuesRef = useRef(null);
+  const submitRef = useRef(submitActions.save);
+  const abortRef = useRef(false);
+  
   const isEdit = Boolean(id);
 
   const form = useForm({ mode: 'onChange' });
@@ -30,108 +38,84 @@ export function useEntityForm({
     control,
     formState: { isValid },
     setError,
+    getValues,
     handleSubmit,
     reset,
   } = form;
 
-  const [loading, setLoading] = useState(false);
-  const [isActive, setIsActive] = useState(true);
-
-  const initialValuesRef = useRef(null);
   const values = useWatch({ control });
 
-  const isFormChanged = useMemo(() => {
-    if (!initialValuesRef.current) return false;
+  const { data, isLoading } = useQuery({
+    queryKey: [queryKey, id],
+    queryFn: async () => {
+      if (!isEdit) return null;
+      const { data } = await getById(id);
+      return data;
+    },
+    enabled: isEdit,
+    staleTime: 0,
+  });
 
-    if (compareValues) {
-      return !compareValues(values, initialValuesRef.current);
-    }
+  useEffect(() => {
+    if (!data) return;
+    if (abortRef.current) return;
 
-    return JSON.stringify(values) !== JSON.stringify(initialValuesRef.current);
-  }, [values, compareValues]);
-
-  const refresh = useCallback(async () => {
-    if (!id) return;
-
-    const { data } = await getById(id);
     const mapped = mapFromApi(data);
 
     initialValuesRef.current = mapped;
     setIsActive(data.isActive);
     reset(mapped);
-  }, [id]);
+  }, [data, reset, mapFromApi]);
 
-  useEffect(() => {
-    if (!isEdit) return;
+  const isFormChanged = useMemo(() => {
+    if (!initialValuesRef.current) return false;
 
-    let ignore = false;
+    return !compareValues
+      ? JSON.stringify(values) !== JSON.stringify(initialValuesRef.current)
+      : !compareValues(values, initialValuesRef.current);
 
-    const fetchItem = async () => {
-      setLoading(true);
+  }, [values, compareValues]);
 
-      try {
-        const { data } = await getById(id);
-        if (ignore) return;
+  const submitHandler = useCallback(async (values, { action = submitActions.save } = {}) => {
+    if (submitting) return;
+    setSubmitting(true);
 
-        const mapped = mapFromApi(data);
-
-        initialValuesRef.current = mapped;
-        setIsActive(data.isActive);
-        reset(mapped);
-
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchItem();
-
-    return () => {
-      ignore = true;
-    };
-  }, [id]);
-
-  const onSubmit = async (values) => {
-    console.log('onSubmit: isEdit & values', isEdit, values);
     try {
+      // Data layer (CRUD)
       const payload = mapToApi(values);
-      console.log('payload', payload);
+      const result = isEdit ? await update(id, payload) : await create(payload);
+      const entityId = isEdit ? id : result.data.id;
+      notify.success(isEdit ? notifications.successUpdate : notifications.successCreate);
+      
+      await queryClient.invalidateQueries({ queryKey, exact: false });
 
-      if (isEdit) {
-         console.log('update: payload', payload);
+      const fresh = mapFromApi(isEdit ? { ...values, id } : result.data);
+      initialValuesRef.current = fresh;
+      reset(fresh);
 
-        await update(id, payload);
-        notify.success(notifications.successUpdate);
-      } else {
-        console.log('create: payload', payload);
-
-        await create(payload);
-        notify.success(notifications.successCreate);
-      }
-
-      queryClient.invalidateQueries({ queryKey, exact: false });
-
-      await refresh();
-
-      onSuccess?.();
+      // Navigation layer (UX)
+      onSuccess?.({ id: entityId, action });
 
     } catch (err) {
       console.error(err);
-      const msg = err?.response?.data?.message || 'Error';
-
-      if (msg.includes('Email')) {
-        setError('email', { message: msg });
-      }
-
-      if (msg.includes('Phone')) {
-        setError('phone', { message: msg });
-      }
+    } finally {
+      setSubmitting(false);
     }
-  };
+  }, [
+    isEdit,
+    id,
+    create,
+    update,
+    queryClient,
+    queryKey,
+    notifications,
+    onSuccess,
+    mapToApi,
+    submitting,
+    setSubmitting,
+  ]);
 
-  const onError = (errs) => {
+  const onError = useCallback((errs) => {
     const firstField = Object.keys(errs)[0];
 
     const el =
@@ -142,27 +126,48 @@ export function useEntityForm({
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       el.focus();
     }
-  };
+  }, []);
 
-  const handleActivate = async () => {
+  const formSubmitHandler = handleSubmit((values) => {
+    submitHandler(values, { action: submitRef.current });
+  }, onError);
+
+  const submitSave = () => submitRef.current = submitActions.save;
+  const submitSaveAndBack = () => submitRef.current = submitActions.saveAndBack;
+
+  const confirmAction = useCallback(async (config) => {
+    const name = getValues('name');
+  
+    return onConfirm({
+      ...config,
+      params: { name },
+    });
+  }, [onConfirm, getValues]);
+
+  const handleActivate = useCallback(async () => {
+    const confirmed = await confirmAction({
+      titleKey: notifications.confirmActivateTitleKey,
+      descriptionKey: notifications.confirmActivateDescKey,
+    });
+
+    if (!confirmed) return;
+
     const prev = isActive;
     setIsActive(true);
 
     try {
       await activate(id);
-
-      queryClient.invalidateQueries({ queryKey, exact: false });
-
       notify.success(notifications.successActivate);
+      await queryClient.invalidateQueries({ queryKey, exact: false });
     } catch (err) {
       setIsActive(prev);
     }
-  };
+  }, [id, activate, notify, notifications, queryClient, queryKey, isActive, confirmAction]);
 
-  const handleDeactivate = async () => {
-    const confirmed = await confirm({
-      title: notifications.confirmDeactivateTitle,
-      description: notifications.confirmDeactivateDesc,
+  const handleDeactivate = useCallback(async () => {
+    const confirmed = await confirmAction({
+      titleKey: notifications.confirmDeactivateTitleKey,
+      descriptionKey: notifications.confirmDeactivateDescKey,
     });
 
     if (!confirmed) return;
@@ -172,21 +177,26 @@ export function useEntityForm({
 
     try {
       await deactivate(id);
-
-      queryClient.invalidateQueries({ queryKey, exact: false });
-
       notify.success(notifications.successDeactivate);
+      await queryClient.invalidateQueries({ queryKey, exact: false });
     } catch (err) {
       setIsActive(prev);
     }
-  };
+  }, [id, deactivate, notify, notifications, queryClient, queryKey, isActive, confirmAction]);
+
+  useEffect(() => {
+    return () => {
+      abortRef.current = true;
+    };
+  }, []);
 
   return {
     form,
-    handleSubmit,
-    onSubmit,
-    onError,
-    loading,
+    formSubmitHandler,
+    submitSave,
+    submitSaveAndBack,
+    submitting,
+    loading: isLoading,
     isEdit,
     isActive,
     isValid,

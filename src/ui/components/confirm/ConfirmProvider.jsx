@@ -1,10 +1,12 @@
 import { createContext, useContext, useState, useCallback } from 'react';
 import { ConfirmDialog } from '@/ui/components/confirm/ConfirmDialog';
+import { useI18n } from '@/ui/hooks/useI18n';
 
 const ConfirmContext = createContext(null);
 
 export function ConfirmProvider({ children }) {
   const [state, setState] = useState(null);
+  const { t } = useI18n();
 
   const confirm = useCallback((options) => {
     return new Promise((resolve) => {
@@ -15,9 +17,7 @@ export function ConfirmProvider({ children }) {
     });
   }, []);
 
-  const handleClose = useCallback(() => {
-    setState(null);
-  }, []);
+  const handleClose = useCallback(() => setState(null), []);
 
   const handleConfirm = useCallback(() => {
     state?.resolve(true);
@@ -29,6 +29,14 @@ export function ConfirmProvider({ children }) {
     handleClose();
   }, [state, handleClose]);
 
+  const resolvedTitle = state?.titleKey
+    ? t(state.titleKey)
+    : state?.title;
+
+  const resolvedDescription = state?.descriptionKey
+    ? t(state.descriptionKey, state?.params || {})
+    : state?.description;
+
   return (
     <ConfirmContext.Provider value={confirm}>
       {children}
@@ -36,8 +44,8 @@ export function ConfirmProvider({ children }) {
       {state && (
         <ConfirmDialog
           open
-          title={state.title}
-          description={state.description}
+          title={resolvedTitle}
+          description={resolvedDescription}
           variant={state.variant}
           onConfirm={handleConfirm}
           onCancel={handleCancel}

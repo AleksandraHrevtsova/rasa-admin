@@ -1,30 +1,53 @@
 import { useNavigate, useParams } from 'react-router';
+import { submitActions } from '@/config/constants';
 import { useAuth } from '@/core/auth/hooks/useAuth';
+import { navigateToEntity } from '@/core/utils/navigation';
 import { forms } from '@/domain/forms.registry';
 import { useI18n } from '@/ui/hooks/useI18n';
 import { useEntityForm } from '@/ui/hooks/useEntityForm';
+import { useCRUDnotification } from '@/ui/hooks/useCRUDnotification';
 import { BaseEntityForm } from '@/ui/pages/BaseEntityForm.jsx';
 
 export function EntityFormPage({ entity }) {
   const { id } = useParams();
   const { t, k } = useI18n();
-  const navigate = useNavigate();
   const { appUser } = useAuth();
-
+  const navigate = useNavigate();
   const config = forms[entity];
 
   const sideData = config.hooks?.useData?.() || {};
+  const notifications = useCRUDnotification(entity);
+  
+  const handleSuccess = ({ id, action }) => {
+    const targetId = id;
+    const paths = config.paths;
+  
+    if (action === submitActions.saveAndBack) {
+      navigate(paths.list, { replace: true });
+      return;
+    }
+  
+    navigateToEntity({
+      navigate,
+      location,
+      listPath: paths.list,
+      createPath: paths.create,
+      editPath: paths.edit,
+      id: targetId,
+    });
+  };
 
   const formConfig = {
     id,
     queryKey: config.key,
     ...config.api,
+    notifications,
     mapFromApi: config.mapper.fromApi,
     mapToApi: config.mapper.toApi,
+    onSuccess: handleSuccess,
     compareValues: (a, b) =>
       JSON.stringify(config.mapper.normalize(a)) ===
       JSON.stringify(config.mapper.normalize(b)),
-    onSuccess: () => {},
   };
 
   const formState = useEntityForm(formConfig);
@@ -34,7 +57,7 @@ export function EntityFormPage({ entity }) {
   const derived = config.useDerived?.({
     control: formState.form.control,
     fieldNames,
-    setValue: formState.setValue,
+    setValue: formState.form.setValue,
     ...sideData,
   }) || {};
 

@@ -1,10 +1,10 @@
 import { pageTags } from '@/config/constants';
 import { EntityFormPage } from '@/ui/pages/EntityFormPage';
 
-export default function User() {
+export default function Counterparty() {
   return (
     <EntityFormPage
-      entity={pageTags.user}
+      entity={pageTags.counterparty}
     />
   );
 };

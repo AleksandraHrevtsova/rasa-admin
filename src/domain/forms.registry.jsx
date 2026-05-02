@@ -1,4 +1,14 @@
 import { NAV, pageTags } from '@/config/constants';
+import { normalize } from '@/domain/entities.normalize';
+import { mappers } from '@/domain/entities.mapper';
+import { getEntityDerived } from '@/domain/entities.derive';
+
+import { useRoles } from '@/domain/role/hooks/useRoles';
+import { useProducts } from '@/domain/product/hooks/useProducts';
+import { useCounterparties } from '@/domain/counterparty/hooks/useCounterparties';
+
+import { useEntityFormConfig } from '@/ui/hooks/useEntityFormConfig';
+
 import {
   getUserById,
   createUser,
@@ -6,12 +16,22 @@ import {
   activateUser,
   deactivateUser,
 } from '@/domain/user/user.service';
-import { useRoles } from '@/domain/role/hooks/useRoles';
-import { useCounterparties } from '@/domain/counterparty/hooks/useCounterparties';
-import { mapFromApi, mapToApi } from '@/domain/user/user.mapper';
-import { normalizeUser } from '@/domain/user/user.compare';
-import { useEntityFormConfig } from '@/ui/hooks/useEntityFormConfig';
-import { useUserFormDerived } from '@/domain/user/hooks/useUserFormDerived';
+
+import {
+  getProductById,
+  createProduct,
+  updateProduct,
+  activateProduct,
+  deactivateProduct,
+} from '@/domain/product/product.service';
+
+import {
+  getCounterpartyById,
+  createCounterparty,
+  updateCounterparty,
+  activateCounterparty,
+  deactivateCounterparty,
+} from '@/domain/counterparty/counterparty.service';
 
 export const forms = {
   user: {
@@ -50,63 +70,108 @@ export const forms = {
     },
 
     mapper: {
-      fromApi: mapFromApi,
-      toApi: mapToApi,
-      normalize: normalizeUser,
+      ...mappers(pageTags.user),
+      normalize: () => normalize(pageTags.user),
     },
 
-    useDerived: useUserFormDerived,
+    useDerived: () => getEntityDerived(pageTags.user),
     config: (ctx) => useEntityFormConfig(ctx).user,
   },
 
-  // product: {
-  //   key: pageTags.product,
+  product: {
+    key: pageTags.product,
 
-  //   api: {
-  //     getById: getProductById,
-  //     create: createProduct,
-  //     update: updateProduct,
-  //   },
+    paths: {
+      list: NAV.products,
+      create: NAV.newProduct,
+      edit: NAV.editProduct,
+    },
 
-  //   hooks: {
-  //     useData: () => ({}), // 🔥 НИЧЕГО НЕ НУЖНО
-  //   },
+    api: {
+      getById: getProductById,
+      create: createProduct,
+      update: updateProduct,
+      activate: activateProduct,
+      deactivate: deactivateProduct,
+    },
 
-  //   mapper: {
-  //     fromApi: mapProductFromApi,
-  //     toApi: mapProductToApi,
-  //     normalize: normalizeProduct,
-  //   },
+    fieldNames: {
+      name: 'name',
+      namePublic: 'namePublic',
+      sku: 'sku',
+      netto: 'netto',
+      brutto: 'brutto',
+  
+      unitsInOneBox: 'unitsInOneBox',
+      unitsInOnePalletRegular: 'unitsInOnePalletRegular',
+      unitsInOnePalletMin: 'unitsInOnePalletMin',
+      
+      boxesInOnePalletRegular: 'boxesInOnePalletRegular',
+      boxesInOnePalletMin: 'boxesInOnePalletMin',
+      
+      unitsOverOnePallet: 'unitsOverOnePallet',
+      boxesOverOnePallet: 'boxesOverOnePallet',
+    },
 
-  //   config: (ctx) => useEntityFormConfig(ctx).product,
-  // },
+    hooks: {
+      useData: () => ({}),
+    },
 
-  // counterparty: {
-  //   key: pageTags.counterparty,
+    mapper: {
+      ...mappers(pageTags.product),
+      normalize: () => normalize(pageTags.product),
+    },
 
-  //   api: {
-  //     getById: getCounterpartyById,
-  //     create: createCounterparty,
-  //     update: updateCounterparty,
-  //   },
+    useDerived: () => getEntityDerived(pageTags.product),
+    config: (ctx) => useEntityFormConfig(ctx).product,
+  },
 
-  //   hooks: {
-  //     useData: () => {
-  //       const { data: products = [] } = useProducts();
+  counterparty: {
+    key: pageTags.counterparty,
+
+    paths: {
+      list: NAV.counterparties,
+      create: NAV.newCounterparty,
+      edit: NAV.editCounterparty,
+    },
+
+    api: {
+      getById: getCounterpartyById,
+      create: createCounterparty,
+      update: updateCounterparty,
+      activate: activateCounterparty,
+      deactivate: deactivateCounterparty,
+    },
+
+    fieldNames: {
+      name: 'name',
+      namePublic: 'namePublic',
+      hubs: 'hubs',
+      products: 'products',
+      users: 'users',
+      organizations: 'organizations',
+      paymentTypes: 'paymentTypes'
+    },
+
+    hooks: {
+      useData: () => {
+        const { data: products = [] } = useProducts();
   //       const { data: hubs = [] } = useHubs();
+  //       const { data: employees = [] } = useEmployees();
   //       const { data: organizations = [] } = useOrganizations();
-  //       const { data: users = [] } = useUsers();
+  //                     paymentTypes
+        return { products, 
+          // hubs, organizations, users 
+        };
+      },
+    },
 
-  //       return { products, hubs, organizations, users };
-  //     },
-  //   },
+    mapper: {
+      ...mappers(pageTags.counterparty),
+      normalize: () => normalize(pageTags.counterparty),
+    },
 
-  //   mapper: {
-  //     fromApi: mapCounterpartyFromApi,
-  //     toApi: mapCounterpartyToApi,
-  //     normalize: normalizeCounterparty,
-  //   },
-
-  //   config: (ctx) => useEntityFormConfig(ctx).counterparty,
-  // },
+    useDerived: () => getEntityDerived(pageTags.counterparty),
+    config: (ctx) => useEntityFormConfig(ctx).counterparty,
+  },
 };

@@ -88,7 +88,8 @@ export function BaseEntityPage({
       setPagination={setPagination}
       onFabClick={() => goToEntity()}
       table={
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-4">
+        // <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <DataTable
             data={data}
             columns={enhancedColumns}

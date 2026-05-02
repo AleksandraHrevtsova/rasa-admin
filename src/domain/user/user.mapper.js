@@ -1,22 +1,22 @@
-export const mapFromApi = (u) => {
+export const mapUserFromApi = (obj) => {
   return {
-    name: u.name,
-    email: u.email,
-    phone: u.phone,
-    roleId: u.role?.id || null,
-    counterpartyId: u.counterparty?.id || null,
-    hubIds: u.userHubs?.map(({ hub }) => hub.id) || [],
+    name: obj.name,
+    email: obj.email,
+    phone: obj.phone,
+    roleId: obj.role?.id || null,
+    counterpartyId: obj.counterparty?.id || null,
+    hubIds: obj.hubs?.map(({ el }) => el.id) || [],
   }
 };
 
-export const mapToApi = (f) => {
+export const mapUserToApi = (obj) => {
   return {
-    name: f.name,
-    email: f.email,
-    phone: f.phone,
-    roleId: f.roleId,
-    counterpartyId: f.counterpartyId || null,
-    hubIds: f.hubIds || [],
-    password: f.password,
+    name: obj.name,
+    email: obj.email,
+    phone: obj.phone,
+    roleId: obj.roleId,
+    counterpartyId: obj.counterpartyId || null,
+    hubIds: obj.hubIds || [],
+    password: obj.password,
   }
 };

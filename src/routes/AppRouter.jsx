@@ -7,12 +7,15 @@ import { Layout } from '@/ui/components/Navigation';
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
 
 import Login from '@/ui/pages/Login';
+
 import Users from '@/ui/pages/Users';
 import User from '@/ui/pages/User';
-import Counterparties from '@/ui/pages/Counterparties';
 
 import Products from '@/ui/pages/Products';
 import Product from '@/ui/pages/Product';
+
+import Counterparties from '@/ui/pages/Counterparties';
+import Counterparty from '@/ui/pages/Counterparty';
 
 export default function AppRouter() {
   return (
@@ -36,13 +39,13 @@ export default function AppRouter() {
             <Route path={NAV.newUser} element={<ProtectedRoute><User /></ProtectedRoute>} />
             <Route path={NAV.editUser} element={<ProtectedRoute><User /></ProtectedRoute>} />
 
-            <Route path={NAV.counterparties} element={<ProtectedRoute><Counterparties /></ProtectedRoute>} />
-            <Route path={NAV.newCounterparty} element={<ProtectedRoute><Counterparties /></ProtectedRoute>} />
-            <Route path={NAV.editCounterparty} element={<ProtectedRoute><Counterparties /></ProtectedRoute>} />
-
             <Route path={NAV.products} element={<ProtectedRoute><Products /></ProtectedRoute>} />
             <Route path={NAV.newProduct} element={<ProtectedRoute><Product /></ProtectedRoute>} />
             <Route path={NAV.editProduct} element={<ProtectedRoute><Product /></ProtectedRoute>} />
+            
+            <Route path={NAV.counterparties} element={<ProtectedRoute><Counterparties /></ProtectedRoute>} />
+            <Route path={NAV.newCounterparty} element={<ProtectedRoute><Counterparty /></ProtectedRoute>} />
+            <Route path={NAV.editCounterparty} element={<ProtectedRoute><Counterparty /></ProtectedRoute>} />
 
             <Route path={NAV.roles} element={<Products />} />
             <Route path={NAV.orders} element={<Products />} />

@@ -66,15 +66,32 @@ export const NAV = {
   editUser: '/users/:id',
   newUser: '/users/new',
 
-  counterparties: '/counterparties',
-  editCounterparty: '/counterparties/:id',
-  newCounterparty: '/counterparties/new',
-
+  roles: '/roles',
+  
   products: '/products',
   editProduct: '/products/:id',
   newProduct: '/products/new',
 
-  roles: '/roles',
+  counterparties: '/counterparties',
+  editCounterparty: '/counterparties/:id',
+  newCounterparty: '/counterparties/new',
+
+  hubs: '/hubs',
+  editHub: '/hubs/:id',
+  newHub: '/hubs/new',
+
+  paymentTypes: '/payment-types',
+  editPaymentType: '/payment-types/:id',
+  newPaymentType: '/payment-types/new',
+
+  organizations: '/organizations',
+  editOrganization: '/organizations/:id',
+  newOrganization: '/organizations/new',
+
+  requisites: '/requisites',
+  editRequisites: '/requisites/:id',
+  newRequisites: '/requisites/new',
+
   orders: '/orders',
   payments: '/payments',
   certificates: '/certificates',

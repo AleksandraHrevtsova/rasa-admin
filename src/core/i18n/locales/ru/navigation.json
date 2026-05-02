@@ -1,9 +1,12 @@
 {
   "users": "Пользователи",
   "roles": "Роли",
+  "products": "Продукты",
   "counterparties": "Контрагенты",
   "hubs": "Склады",
-  "products": "Продукты",
+  "paymentTypes": "Типы оплат",
+  "organizations": "Организации",
+  "requisites": "Реквизиты",
   "orders": "Заказы",
   "payments": "Оплаты",
   "certificates": "Сертификаты",

@@ -3,10 +3,14 @@ import { NavLink, Outlet, useLocation } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users,
-  // Shield,
+  UserCheck,
+  ShoppingCart,
+  Home,
+  List,
+  ListCheck,
+  Building,
   Building2,
   Package,
-  FileText,
   CreditCard,
   Award,
   Menu,
@@ -71,11 +75,18 @@ export const Layout = () => {
 
   const navItems = [
     { label: t(k.navigation.users), path: NAV.users, icon: Users },
-    // { label: t(k.navigation.roles), path: NAV.roles, icon: Shield },
-    { label: t(k.navigation.counterparties), path: NAV.counterparties, icon: Building2 },
+    // { label: t(k.navigation.roles), path: NAV.roles, icon: UserCheck },
     { label: t(k.navigation.products), path: NAV.products, icon: Package },
-    { label: t(k.navigation.orders), path: NAV.orders, icon: FileText },
+    { label: t(k.navigation.counterparties), path: NAV.counterparties, icon: Building },
+    { label: t(k.navigation.hubs), path: NAV.hubs, icon: Home },
+
+    { label: t(k.navigation.orders), path: NAV.orders, icon: ShoppingCart },
     { label: t(k.navigation.payments), path: NAV.payments, icon: CreditCard },
+
+    { label: t(k.navigation.paymentTypes), path: NAV.paymentTypes, icon: List },
+    { label: t(k.navigation.organizations), path: NAV.organizations, icon: Building2 },
+    { label: t(k.navigation.requisites), path: NAV.requisites, icon: ListCheck },
+
     { label: t(k.navigation.certificates), path: NAV.certificates, icon: Award },
   ];
 

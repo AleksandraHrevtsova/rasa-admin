@@ -1,9 +1,12 @@
 {
   "users": "Користувачі",
   "roles": "Ролі",
+  "products": "Продукти",
   "counterparties": "Контрагенти",
   "hubs": "Склади",
-  "products": "Продукти",
+  "paymentTypes": "Типи оплат",
+  "organizations": "Організації",
+  "requisites": "Реквізити",
   "orders": "Замовлення",
   "payments": "Оплати",
   "certificates": "Сертифікати",

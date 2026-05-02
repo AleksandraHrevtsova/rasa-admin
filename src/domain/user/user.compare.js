@@ -1,8 +1,8 @@
-export const normalizeUser = (u) => ({
-  name: u.name ?? '',
-  email: u.email ?? '',
-  phone: u.phone ?? '',
-  roleId: u.role?.id ?? null,
-  counterpartyId: u.counterparty?.id ?? null,
-  hubIds: (u.hubIds ?? []).slice().sort(),
+export const normalizeUser = (obj) => ({
+  name: obj.name ?? '',
+  email: obj.email ?? '',
+  phone: obj.phone ?? '',
+  roleId: obj.role?.id ?? null,
+  counterpartyId: obj.counterparty?.id ?? null,
+  hubIds: (obj.hubIds ?? []).slice().sort(),
 });

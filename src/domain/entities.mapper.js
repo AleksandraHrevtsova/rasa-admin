@@ -1,8 +1,8 @@
 import { pageTags } from '@/config/constants';
 
-import { mapUserFromApi, mapUserToApi } from '@/domain/user/user.mapper';
-import { mapProductFromApi, mapProductToApi } from '@/domain/product/product.mapper';
-import { mapCounterpartyFromApi, mapCounterpartyToApi } from '@/domain/counterparty/counterparty.mapper';
+import { userMapper } from '@/domain/user/user.mapper';
+import { productMapper } from '@/domain/product/product.mapper';
+import { counterpartyMapper } from '@/domain/counterparty/counterparty.mapper';
 
 export const mappers = (entity) => {
   const mapper = {
@@ -11,18 +11,18 @@ export const mappers = (entity) => {
   }
 
   if (entity === pageTags.user) {
-    mapper.fromApi = mapUserFromApi;
-    mapper.toApi = mapUserToApi;
+    mapper.fromApi = userMapper.fromApi;
+    mapper.toApi = userMapper.toApi;
   }
 
   if (entity === pageTags.product) {
-    mapper.fromApi = mapProductFromApi;
-    mapper.toApi = mapProductToApi;
+    mapper.fromApi = productMapper.fromApi;
+    mapper.toApi = productMapper.toApi;
   }
 
   if (entity === pageTags.counterparty) {
-    mapper.fromApi = mapCounterpartyFromApi;
-    mapper.toApi = mapCounterpartyToApi;
+    mapper.fromApi = counterpartyMapper.fromApi;
+    mapper.toApi = counterpartyMapper.toApi;
   }
 
   return mapper;

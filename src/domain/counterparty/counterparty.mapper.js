@@ -1,21 +1,25 @@
-export const mapCounterpartyFromApi = (obj) => {
-  return {
-    name: obj.name,
-    namePublic: obj.namePublic,
-    hubIds: obj.hubs?.map(({ el }) => el.id) || [],
-    productIds: obj.products?.map(({ el }) => el.id) || [],
-    employeeIds: obj.employees?.map(({ el }) => el.id) || [],
-    organizationIds: obj.organizations?.map(({ el }) => el.id) || [],
-  }
-};
+export const counterpartyMapper = {
+  fromApi: (data) => {
+    if (!data) return {};
 
-export const mapCounterpartyToApi = (obj) => {
-  return {
-    name: obj.name,
-    namePublic: obj.namePublic,
-    hubIds: obj.hubIds || [],
-    productIds: obj.productIds || [],
-    employeeIds: obj.eemployeeIds || [],
-    organizationIds: obj.organizationIds || [],
-  }
+    return {
+      name: data.name,
+      namePublic: data.namePublic,
+      hubIds: data.hubs?.map(({ el }) => el.id) || [],
+      productIds: data.products?.map(({ el }) => el.id) || [],
+      employeeIds: data.employees?.map(({ el }) => el.id) || [],
+      organizationIds: data.organizations?.map(({ el }) => el.id) || [],
+    };
+  },
+
+  toApi: (form) => {
+    return {
+      name: form.name,
+      namePublic: form.namePublic,
+      hubIds: form.hubIds || [],
+      productIds: form.productIds || [],
+      employeeIds: form.eemployeeIds || [],
+      organizationIds: form.organizationIds || [],
+    };
+  },
 };

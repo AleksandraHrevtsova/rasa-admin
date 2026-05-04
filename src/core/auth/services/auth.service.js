@@ -23,8 +23,8 @@ function mapAuthError(error) {
 export const login = async (email, password) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    const { data } = await api.post(LOGIN);
-    return data;
+    const res = await api.post(LOGIN);
+    return res.data.user;
   } catch (err) {
     console.error('Auth error:', err.code);
     return {
@@ -44,6 +44,6 @@ export const logout = async () => {
 };
 
 export const getMe = async () => {
-  const { data } = await api.get(ME);
-  return data;
+  const res = await api.get(ME);
+  return res.data.user;
 };

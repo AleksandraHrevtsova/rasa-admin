@@ -6,14 +6,14 @@ export const hydrateAuth = async () => {
   if (cachedUser) return cachedUser;
 
   try {
-    const { user } = await getMe();
+    const user = await getMe();
     cachedUser = user;
     return user;
   } catch (e) {
     // retry once
     await new Promise((r) => setTimeout(r, 300));
 
-    const { user } = await getMe();
+    const user = await getMe();
     cachedUser = user;
     return user;
   }

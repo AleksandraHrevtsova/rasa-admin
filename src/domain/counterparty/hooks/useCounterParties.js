@@ -7,7 +7,7 @@ export const useCounterparties = () => {
   return useQuery({
     queryKey: [pageTags.counterparties],
     queryFn: getCounterparties,
-    select: (res) => res.data.items,
+    select: (res) => res.data.data,
     staleTime: 1000 * 60 * 5,
   });
 };

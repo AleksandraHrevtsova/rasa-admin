@@ -48,15 +48,15 @@ export function useEntityTable(entityKEy, fetchFn, options = {}) {
         sortBy: sorting[0]?.id,
         sortOrder: sorting[0]?.desc ? SORTING.desc : SORTING.asc,
       };
-      const { data } = await fetchFn(params);
-      return data;
+      const res = await fetchFn(params);
+      return res.data;
     },
     keepPreviousData: true,
   });
 
   return {
-    data: query.data?.items || [],
-    total: query.data?.total || 0,
+    data: query.data?.data || [],
+    total: query.data?.meta.total || 0,
     loading: query.isLoading,
     isFetching: query.isFetching,
     refetch: query.refetch,

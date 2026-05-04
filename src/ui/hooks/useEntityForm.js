@@ -49,8 +49,8 @@ export function useEntityForm({
     queryKey: [queryKey, id],
     queryFn: async () => {
       if (!isEdit) return null;
-      const { data } = await getById(id);
-      return data;
+      const res = await getById(id);
+      return res.data.data;
     },
     enabled: isEdit,
     staleTime: 0,
@@ -83,13 +83,15 @@ export function useEntityForm({
     try {
       // Data layer (CRUD)
       const payload = mapToApi(values);
-      const result = isEdit ? await update(id, payload) : await create(payload);
-      const entityId = isEdit ? id : result.data.id;
+      const res = isEdit ? await update(id, payload) : await create(payload);
+      const data = res.data.data;
+
+      const entityId = isEdit ? id : data.id;
       notify.success(isEdit ? notifications.successUpdate : notifications.successCreate);
       
       await queryClient.invalidateQueries({ queryKey, exact: false });
 
-      const fresh = mapFromApi(isEdit ? { ...values, id } : result.data);
+      const fresh = mapFromApi(isEdit ? { ...values, id } : data);
       initialValuesRef.current = fresh;
       reset(fresh);
 

@@ -74,7 +74,7 @@ export const forms = {
       normalize: () => normalize(pageTags.user),
     },
 
-    useDerived: () => getEntityDerived(pageTags.user),
+    useDerived: (ctx) => getEntityDerived(pageTags.user, ctx),
     config: (ctx) => useEntityFormConfig(ctx).user,
   },
 
@@ -122,7 +122,7 @@ export const forms = {
       normalize: () => normalize(pageTags.product),
     },
 
-    useDerived: () => getEntityDerived(pageTags.product),
+    useDerived: (ctx) => getEntityDerived(pageTags.product, ctx),
     config: (ctx) => useEntityFormConfig(ctx).product,
   },
 
@@ -146,9 +146,9 @@ export const forms = {
     fieldNames: {
       name: 'name',
       namePublic: 'namePublic',
+      employees: 'employees',
       hubs: 'hubs',
       products: 'products',
-      users: 'users',
       organizations: 'organizations',
       paymentTypes: 'paymentTypes'
     },
@@ -161,7 +161,7 @@ export const forms = {
   //       const { data: organizations = [] } = useOrganizations();
   //                     paymentTypes
         return { products, 
-          // hubs, organizations, users 
+          // hubs, organizations, employees 
         };
       },
     },
@@ -171,7 +171,7 @@ export const forms = {
       normalize: () => normalize(pageTags.counterparty),
     },
 
-    useDerived: () => getEntityDerived(pageTags.counterparty),
+    useDerived: (ctx) => getEntityDerived(pageTags.counterparty, ctx),
     config: (ctx) => useEntityFormConfig(ctx).counterparty,
   },
 };

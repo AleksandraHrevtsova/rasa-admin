@@ -1,17 +1,23 @@
+const toNumber = (value) => {
+  if (value === '' || value === null || value === undefined) return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
 export const normalizeProduct = (obj) => ({
   name: obj.name ?? '',
   namePublic: obj.namePublic ?? '',
   sku: obj.sku ?? '',
-  netto: obj.netto ?? '',
-  brutto: obj.brutto ?? null,
+  netto: toNumber(obj.netto),
+  brutto: toNumber(obj.brutto),
 
-  unitsInOneBox: obj.unitsInOneBox ?? null,
-  unitsInOnePalletRegular: obj.unitsInOnePalletRegular ?? null,
-  unitsInOnePalletMin: obj.unitsInOnePalletMin ?? null,
+  unitsInOneBox: toNumber(obj.unitsInOneBox),
+  unitsInOnePalletRegular: toNumber(obj.unitsInOnePalletRegular),
+  unitsInOnePalletMin: toNumber(obj.unitsInOnePalletMin),
 
-  boxesInOnePalletRegular: obj.boxesInOnePalletRegular ?? null,
-  boxesInOnePalletMin: obj.boxesInOnePalletMin ?? null,
+  boxesInOnePalletRegular: toNumber(obj.boxesInOnePalletRegular),
+  boxesInOnePalletMin: toNumber(obj.boxesInOnePalletMin),
 
-  unitsOverOnePallet: obj.unitsOverOnePallet ?? null,
-  boxesOverOnePallet: obj.boxesOverOnePallet ?? null,
+  unitsOverOnePallet: toNumber(obj.unitsOverOnePallet),
+  boxesOverOnePallet: toNumber(obj.boxesOverOnePallet),
 });

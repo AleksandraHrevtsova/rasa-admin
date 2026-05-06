@@ -3,6 +3,7 @@ const authPath = 'auth';
 const receiptsPath = 'receipts';
 const usersPath = 'users';
 const rolesPath = 'roles';
+const paymentTypesPath = 'payment-types';
 const counterpartiesPath = 'counterparties';
 const productsPath = 'products';
 
@@ -32,6 +33,13 @@ export const ENDPOINTS = {
       UPDATE: apiPath + rolesPath + '/:id',
       DEACTIVATE: apiPath + rolesPath + '/:id/deactivate',
       ACTIVATE: apiPath + rolesPath + '/:id/activate',
+    },
+    PAYMENT_TYPES: {
+      LIST: apiPath + paymentTypesPath,
+      CREATE: apiPath + paymentTypesPath,
+      UPDATE: apiPath + paymentTypesPath + '/:id',
+      DEACTIVATE: apiPath + paymentTypesPath + '/:id/deactivate',
+      ACTIVATE: apiPath + paymentTypesPath + '/:id/activate',
     },
     COUNTERPARTIES: {
       LIST: apiPath + counterpartiesPath,
@@ -135,6 +143,7 @@ export const pageTags = {
   product: 'product',
   counterparties: 'counterparties',
   counterparty: 'counterparty',
+  paymentTypes: 'paymentTypes',
   roles: 'roles',
   role: 'role',
   orders: 'orders',

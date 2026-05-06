@@ -23,13 +23,13 @@ export const getProductColumns = (props) => {
     {
       key: 'netto',
       label: t(k.product.netto),
-      render: (row) => row.netto || '—',
+      render: (row) =>  row.netto || row.weight.netto || '—',
       width: '25%',
     },
     {
       key: 'brutto',
       label: t(k.product.brutto),
-      render: (row) => row.brutto || '-',
+      render: (row) =>  row.brutto || row.weight.brutto || '—',
       width: '25%',
     },
     {

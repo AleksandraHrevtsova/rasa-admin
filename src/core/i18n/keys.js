@@ -13,7 +13,7 @@ export const keys = {
     title: 'auth.title',
     email: 'auth.email',
     password: 'auth.password',
-    submit: 'auth.submit',
+    login: 'auth.login',
     logout: 'auth.logout',
   },
   navigation: {

@@ -16,7 +16,7 @@ const Input = (props) => {
       max: data.inputParams?.max ?? 100,
       step: data.inputParams?.step ?? 1,
     };
-  }, [data]);
+  }, [data.type, data.inputParams]);
 
   if (!data?.name) return null;
 

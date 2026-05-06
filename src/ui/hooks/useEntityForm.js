@@ -36,7 +36,7 @@ export function useEntityForm({
 
   const {
     control,
-    formState: { isValid },
+    formState,
     setError,
     getValues,
     handleSubmit,
@@ -70,9 +70,9 @@ export function useEntityForm({
   const isFormChanged = useMemo(() => {
     if (!initialValuesRef.current) return false;
 
-    return !compareValues
-      ? JSON.stringify(values) !== JSON.stringify(initialValuesRef.current)
-      : !compareValues(values, initialValuesRef.current);
+    return compareValues
+      ? !compareValues(values, initialValuesRef.current)
+      : JSON.stringify(values) !== JSON.stringify(initialValuesRef.current);
 
   }, [values, compareValues]);
 
@@ -201,7 +201,7 @@ export function useEntityForm({
     loading: isLoading,
     isEdit,
     isActive,
-    isValid,
+    formState,
     isFormChanged,
     handleActivate,
     handleDeactivate,

@@ -38,6 +38,8 @@ export const logout = async () => {
   try {
     await signOut(auth);
     await api.post(LOGOUT);
+  } catch (err) {
+    console.error('Log Out error:', err.code);
   } finally {
     window.location.href = NAV.login;
   }

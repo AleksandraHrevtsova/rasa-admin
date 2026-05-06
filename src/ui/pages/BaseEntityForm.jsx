@@ -16,7 +16,7 @@ export function BaseEntityForm({
   loading,
   isEdit,
   isActive,
-  isValid,
+  formState: { isDirty, isValid },
   isFormChanged,
   handleActivate,
   handleDeactivate,
@@ -48,17 +48,22 @@ export function BaseEntityForm({
   }, [externalDisabled, isEdit, isActive]);
 
   const isSubmitDisabled = useMemo(() => {
-    return submitting || !isValid || isDisabled || (isEdit && !isFormChanged);
+    const hasEffectiveChanges = isFormChanged;
+    return (
+      submitting ||
+      !isValid ||
+      isDisabled ||
+      (isEdit && !hasEffectiveChanges)
+    );
   }, [submitting, isValid, isDisabled, isEdit, isFormChanged]);
 
   const handleBack = () => {
-    const from = location.state?.from || NAV.home;
-
     if (isFormChanged) {
       reset();
-    } else {
-      navigate(from, { replace: true });
-    }
+      return;
+    } 
+    const from = location.state?.from || NAV.home;
+    navigate(from, { replace: true });
   };
 
   if (loading || submitting) return <Loading />;

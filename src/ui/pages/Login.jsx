@@ -55,7 +55,7 @@ export default function Login() {
         />
         <Button 
           type='submit' 
-          label={t(k.auth.submit)}
+          label={t(k.auth.login)}
           onClick={null} 
           action={buttonActionTypes.submit} 
           disabled={!email && !password}

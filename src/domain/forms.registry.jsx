@@ -71,7 +71,7 @@ export const forms = {
 
     mapper: {
       ...mappers(pageTags.user),
-      normalize: () => normalize(pageTags.user),
+      normalize: (ctx) => normalize(pageTags.user, ctx),
     },
 
     useDerived: (ctx) => getEntityDerived(pageTags.user, ctx),
@@ -119,7 +119,7 @@ export const forms = {
 
     mapper: {
       ...mappers(pageTags.product),
-      normalize: () => normalize(pageTags.product),
+      normalize: (ctx) => normalize(pageTags.product, ctx),
     },
 
     useDerived: (ctx) => getEntityDerived(pageTags.product, ctx),
@@ -168,7 +168,7 @@ export const forms = {
 
     mapper: {
       ...mappers(pageTags.counterparty),
-      normalize: () => normalize(pageTags.counterparty),
+      normalize: (ctx) => normalize(pageTags.counterparty, ctx),
     },
 
     useDerived: (ctx) => getEntityDerived(pageTags.counterparty, ctx),

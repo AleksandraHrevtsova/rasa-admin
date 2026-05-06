@@ -88,34 +88,49 @@ export function useEntityFormConfig({ t, k, fieldNames, showClientFields = null,
       ],
       rules: {
         roleId: { 
-          required: true,
-          validate: (v) => (showClientFields && !v) ? t(k.user.roleRequired) : true,
+          required: t(k.user.roleRequired),
         },
         counterpartyId: { 
-          required: showClientFields,
-          validate: (v) => (showClientFields && !v) ? t(k.user.counterpartyRequired) : true,
+          validate: (v) => {
+            if (!showClientFields) return true;
+            return v ? true : t(k.user.counterpartyRequired);
+          },
         },
         hubIds: { 
-          required: showClientFields,
-          validate: (v) => (showClientFields && (!v || v.length === 0)) ? t(k.user.hubsRequired) : true 
+          validate: (v) => {
+            if (!showClientFields) return true;
+            return (Array.isArray(v) && v.length > 0)
+              ? true
+              : t(k.user.hubsRequired);
+          },
         },
         name: { 
           required: t(k.user.nameRequired) 
         },
         phone: {
           required: t(k.user.phoneRequired),
-          pattern: { value: validationPatterns.phone, message: t(k.user.incorrectPhone) }
+          pattern: { 
+            value: validationPatterns.phone, 
+            message: t(k.user.incorrectPhone) 
+          },
         },
         email: {
           required: t(k.user.emailRequired),
-          pattern: { value: validationPatterns.email, message: t(k.user.incorrectEmail) }
+          pattern: { 
+            value: validationPatterns.email, 
+            message: t(k.user.incorrectEmail) 
+          },
         },
         password: { 
           required: !isEdit ? t(k.common.passwordRequired) : false, 
-          minLength: { value: 6, message: t(k.user.passwordMinLength) } 
+          minLength: { 
+            value: 6, 
+            message: t(k.user.passwordMinLength) 
+          }, 
         },
       },
     },
+    
     product: {
       pagetitle: isEdit ? t(k.product.editCurrent) : t(k.product.createNew),
       permissions: {
@@ -251,7 +266,7 @@ export function useEntityFormConfig({ t, k, fieldNames, showClientFields = null,
         { 
           type: formItemTypes.input.number, 
           inputParams: {
-            min: 1,
+            min: 0,
             max: 1000,
             step: 1
           },
@@ -265,7 +280,7 @@ export function useEntityFormConfig({ t, k, fieldNames, showClientFields = null,
         { 
           type: formItemTypes.input.number, 
           inputParams: {
-            min: 1,
+            min: 0,
             max: 1000,
             step: 1
           },

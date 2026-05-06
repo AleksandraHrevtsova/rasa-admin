@@ -7,15 +7,41 @@ const mapOption = (item) => ({ value: item.id, label: item.name });
 export function useUserFormDerived({ control, fieldNames, setValue, roles, counterparties }) {
   const selectedRoleId = useWatch({ control, name: fieldNames.role });
   const selectedCounterpartyId = useWatch({ control, name: fieldNames.counterparty });
+  const selectedHubIds = useWatch({ control, name: fieldNames.hubs });
+
+  const selectedRole = useMemo(
+    () => findItemById(roles, selectedRoleId),
+    [roles, selectedRoleId]
+  );
+
+  const showClientFields = selectedRole?.name?.includes('client-');
+
+  const resetParams = {
+    shouldDirty: true,
+    shouldTouch: true,
+    shouldValidate: true,
+  }
+
+  useEffect(() => {
+    if (!selectedRoleId) return;
+
+    if (!showClientFields) {
+      if (selectedCounterpartyId) setValue(fieldNames.counterparty, null, resetParams);
+      if (selectedHubIds?.length) setValue(fieldNames.hubs, [], resetParams);
+      return;
+    }
+
+    if (selectedHubIds?.length) {
+      setValue(fieldNames.hubs, [], resetParams);
+    }
+
+  }, [selectedRoleId]);
+
 
   useEffect(() => {
     if (!selectedCounterpartyId) return;
   
-    setValue(fieldNames.hubs, [], {
-      shouldDirty: true,
-      shouldTouch: true,
-      shouldValidate: true,
-    });
+    setValue(fieldNames.hubs, [], resetParams);
   }, [selectedCounterpartyId]);
 
   const filteredHubOptions = useMemo(() => {
@@ -28,13 +54,6 @@ export function useUserFormDerived({ control, fieldNames, setValue, roles, count
     counterpartyId: counterparties?.map(mapOption) || [],
     hubIds: filteredHubOptions || [],
   };
-
-  const selectedRole = useMemo(
-    () => findItemById(roles, selectedRoleId),
-    [roles, selectedRoleId]
-  );
-
-  const showClientFields = selectedRole?.name?.includes('client-');
 
   return {
     selectedRole,

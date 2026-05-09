@@ -1,12 +1,12 @@
-export const userMapper = {
+export const organizationMapper = {
   fromApi: (data) => {
     if (!data) return {};
 
     return {
       name: data.name,
-      email: data.email,
-      phone: data.phone,
-      roleId: data.role?.id || null,
+      code: data.code,
+      validFrom: data.validFrom,
+      validTo: data.validTo || null,
       counterpartyId: data.counterparty?.id || null,
       hubIds: data.hubs?.map(({ el }) => el.id) || [],
     };
@@ -15,12 +15,11 @@ export const userMapper = {
   toApi: (form) => {
     return {
       name: form.name,
-      email: form.email,
-      phone: form.phone,
-      roleId: form.roleId,
+      code: form.code,
+      validFrom: form.validFrom,
+      validTo: form.validTo,
       counterpartyId: form.counterpartyId || null,
       hubIds: form.hubIds || [],
-      password: form.password,
     };
   },
 };

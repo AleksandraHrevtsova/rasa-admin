@@ -180,14 +180,14 @@ export const formItemTypes = {
     tel: 'tel',
     email: 'email',
     password: 'password',
-    number: 'number'
+    number: 'number',
+    checkbox: 'checkbox',
+    radio: 'radio',
+    file: 'file',
+    range: 'range',
+    date: 'date',
+    color: 'color',
   },
-  checkbox: 'checkbox',
-  radio: 'radio',
-  file: 'file',
-  range: 'range',
-  date: 'date',
-  color: 'color',
 };
 
 

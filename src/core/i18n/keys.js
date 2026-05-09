@@ -71,6 +71,7 @@ export const keys = {
     count: 'common.count',
     enterCount: 'common.enterCount',
     toggleActiveError: 'common.toggleActiveError',
+    enterDate: 'common.enterDate',
   },
   table: {
     noData: 'table.noData',
@@ -181,5 +182,13 @@ export const keys = {
     title: 'organizations.title',
     name: 'organizations.name',
     code: 'organizations.code',
-  }
+  },
+  organization: {
+    editCurrent: 'organization.editCurrent',
+    createNew: 'organization.createNew',
+    code: 'organization.code',
+    enterCode: 'organization.enterCode',
+    validFrom: 'organization.validFrom',
+    validTo: 'organization.validTo',
+  },
 }

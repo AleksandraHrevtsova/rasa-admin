@@ -15,11 +15,11 @@ export function useCounterpartyFormDerived({
   organozations, 
 }) {
   const selectOptions = {
-    hubIds: hubs.map(mapOption) || [],
-    productIds: products.map(mapOption) || [],
-    employeeIds: employees.map(mapOption) || [],
-    paymentTypeIds: paymentTypes.map(mapOption) || [],
-    organozationIds: organozations.map(mapOption) || [],
+    hubIds: hubs?.map(mapOption) || [],
+    productIds: products?.map(mapOption) || [],
+    employeeIds: employees?.map(mapOption) || [],
+    paymentTypeIds: paymentTypes?.map(mapOption) || [],
+    organozationIds: organozations?.map(mapOption) || [],
   };
 
   return {

@@ -69,7 +69,7 @@ export const Layout = () => {
 
   const navItems = [
     { label: t(k.navigation.users), path: NAV.users, icon: Users },
-    { label: t(k.navigation.roles), path: NAV.roles, icon: UserCheck },
+    // { label: t(k.navigation.roles), path: NAV.roles, icon: UserCheck },
     { label: t(k.navigation.products), path: NAV.products, icon: Package },
     { label: t(k.navigation.counterparties), path: NAV.counterparties, icon: Building },
     { label: t(k.navigation.hubs), path: NAV.hubs, icon: Home },
@@ -77,7 +77,7 @@ export const Layout = () => {
     { label: t(k.navigation.orders), path: NAV.orders, icon: ShoppingCart },
     { label: t(k.navigation.payments), path: NAV.payments, icon: CreditCard },
 
-    { label: t(k.navigation.paymentTypes), path: NAV.paymentTypes, icon: List },
+    // { label: t(k.navigation.paymentTypes), path: NAV.paymentTypes, icon: List },
     { label: t(k.navigation.organizations), path: NAV.organizations, icon: Building2 },
     { label: t(k.navigation.requisites), path: NAV.requisites, icon: ListCheck },
 
@@ -105,7 +105,9 @@ export const Layout = () => {
         </div>
 
         <div className='flex flex-col gap-2'>
-          {navItems.map(item => (<SidebarItem key={item.path} item={item} collapsed={collapsed}/>))}
+          {navItems.map(item => {
+            return  (<SidebarItem key={item.path} item={item} collapsed={collapsed}/>)
+          })}
         </div>
 
         <div className='mt-auto flex flex-col gap-2'>
@@ -113,6 +115,7 @@ export const Layout = () => {
           {!collapsed && <div className='text-xl p-2'>{appUser?.name}</div>}
 
           <SidebarItem
+            key={'logout'}
             item={{ label: t(k.auth.logout), path: '#', icon: LogOut }}
             collapsed={collapsed}
             onClick={handleLogout}

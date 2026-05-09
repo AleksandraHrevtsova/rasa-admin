@@ -17,6 +17,9 @@ import Product from '@/ui/pages/Product';
 import Counterparties from '@/ui/pages/Counterparties';
 import Counterparty from '@/ui/pages/Counterparty';
 
+import Organizations from '@/ui/pages/Organizations';
+import Organization from '@/ui/pages/Organization';
+
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -46,6 +49,10 @@ export default function AppRouter() {
             <Route path={NAV.counterparties} element={<ProtectedRoute><Counterparties /></ProtectedRoute>} />
             <Route path={NAV.newCounterparty} element={<ProtectedRoute><Counterparty /></ProtectedRoute>} />
             <Route path={NAV.editCounterparty} element={<ProtectedRoute><Counterparty /></ProtectedRoute>} />
+
+            <Route path={NAV.organizations} element={<ProtectedRoute><Organizations /></ProtectedRoute>} />
+            <Route path={NAV.newOrganization} element={<ProtectedRoute><Organization /></ProtectedRoute>} />
+            <Route path={NAV.editOrganization} element={<ProtectedRoute><Organization /></ProtectedRoute>} />
 
             <Route path={NAV.roles} element={<Products />} />
             <Route path={NAV.orders} element={<Products />} />

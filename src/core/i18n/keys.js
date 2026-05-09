@@ -179,5 +179,7 @@ export const keys = {
   },
   organizations: {
     title: 'organizations.title',
+    name: 'organizations.name',
+    code: 'organizations.code',
   }
 }

@@ -177,4 +177,7 @@ export const keys = {
     updateError: 'counterparty.updateError',
     createError: 'counterparty.createError',
   },
+  organizations: {
+    title: 'organizations.title',
+  }
 }

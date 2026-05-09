@@ -12,6 +12,8 @@ import product from '@/core/i18n/locales/uk/product.json';
 import counterparties from '@/core/i18n/locales/uk/counterparties.json';
 import counterparty from '@/core/i18n/locales/uk/counterparty.json';
 
+import organizations from '@/core/i18n/locales/uk/organizations.json';
+
 export default { 
   auth,
   navigation,
@@ -23,4 +25,5 @@ export default {
   product,
   counterparties,
   counterparty,
+  organizations,
 };

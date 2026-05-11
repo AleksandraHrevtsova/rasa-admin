@@ -3,14 +3,25 @@ import clsx from 'clsx';
 const baseStyles =
   'inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50';
 
-const variants = {
-  submit: 'bg-blue-950 text-white hover:bg-blue-700 active:bg-blue-800',
-  create: 'bg-blue-950 text-white hover:bg-blue-700 active:bg-blue-800',
-  activate: 'bg-green-600 text-white hover:bg-green-700 active:bg-green-800',
-  deactivate: 'bg-red-500 text-white hover:bg-red-600 active:bg-red-700',
-  show: 'bg-white text-blue-950 border hover:bg-blue-700 hover:text-white active:bg-blue-800',
-  ghost: 'bg-transparent hover:bg-gray-100',
-};
+  const variants = {
+    submit:
+      'bg-blue-950 text-white hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-950',
+  
+    create:
+      'bg-blue-950 text-white hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-950',
+  
+    activate:
+      'bg-green-600 text-white hover:bg-green-700 active:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-green-600',
+  
+    deactivate:
+      'bg-red-500 text-white hover:bg-red-600 active:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-red-500',
+  
+    show:
+      'bg-white text-blue-950 border hover:bg-blue-700 hover:text-white active:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-blue-950',
+  
+    ghost:
+      'bg-transparent hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent',
+  };
 
 const sizes = {
   sm: 'text-sm px-3 py-1.5 rounded',

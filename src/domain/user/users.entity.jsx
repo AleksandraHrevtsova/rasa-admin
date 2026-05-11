@@ -1,9 +1,9 @@
-import { getUsers } from "./user.service";
-import { getUserColumns } from "./users.table";
-import { toggleUserActive } from "./user.mutations";
+import { getUsers } from './user.service';
+import { getUserColumns } from './users.table';
+import { toggleUserActive } from './user.mutations';
 
-import { useRoles } from "@/domain/role/hooks/useRoles";
-import { RolesList } from "@/ui/components/Roles";
+import { useRoles } from '@/domain/role/hooks/useRoles';
+import { RolesList } from '@/ui/components/Roles';
 
 export const usersEntity = (ctx) => {
 

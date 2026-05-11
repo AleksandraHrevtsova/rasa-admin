@@ -4,7 +4,7 @@ import { toggleProductActive } from '@/domain/product/product.mutations';
 
 export const productsEntity = (ctx) => ({
   key: ctx.pageTags.products,
-  title: ctx.k.users.title,
+  title: ctx.k.products.title,
 
   fetchFn: getProducts,
   columns: getProductColumns,

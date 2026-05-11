@@ -178,12 +178,12 @@ export default function DataTable({
 
   if (loading && data.length === 0) {
     return (
-      <div className="hidden md:block overflow-x-auto">
-        <table className="min-w-full border border-gray-200 rounded-xl overflow-hidden table-fixed">
-          <thead className="bg-gray-50">
+      <div className='hidden md:block overflow-x-auto'>
+        <table className='min-w-full border border-gray-200 rounded-xl overflow-hidden table-fixed'>
+          <thead className='bg-gray-50'>
             <tr>
               {columns.map((col, ci) => (
-                <th key={col.key || ci} className="p-3 text-left text-sm text-gray-400">
+                <th key={col.key || ci} className='p-3 text-left text-sm text-gray-400'>
                   {col.label}
                 </th>
               ))}
@@ -197,26 +197,26 @@ export default function DataTable({
   }
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       {/* WRAPPER ДЛЯ OVERLAY */}
       <div className={`relative transition-opacity duration-200 ${
         isFetching ? 'opacity-60' : 'opacity-100'
       }`}>
         {/* DESKTOP */}
-        <div className="hidden md:block overflow-x-auto">
-          <table className="min-w-full border border-gray-200 rounded-xl overflow-hidden table-fixed">
+        <div className='hidden md:block overflow-x-auto'>
+          <table className='min-w-full border border-gray-200 rounded-xl overflow-hidden table-fixed'>
 
-            <thead className="bg-gray-50 sticky top-0 z-10">
+            <thead className='bg-gray-50 sticky top-0 z-10'>
               {table.getHeaderGroups().map((hg, ci) => (
                 <tr key={hg.id || ci}>
                   {hg.headers.map((header) => (
                     <th
                       key={header.id}
-                      className="p-3 text-left text-sm font-semibold text-gray-600 cursor-pointer select-none"
+                      className='p-3 text-left text-sm font-semibold text-gray-600 cursor-pointer select-none'
                       style={{ width: header.column.columnDef.size }}
                       onClick={header.column.getToggleSortingHandler()}
                     >
-                      <div className="flex items-center gap-1">
+                      <div className='flex items-center gap-1'>
                         {flexRender(header.column.columnDef.header, header.getContext())}
                         {{
                           asc: ' 🔼',
@@ -243,7 +243,7 @@ export default function DataTable({
                   {row.getVisibleCells().map((cell) => (
                     <td 
                       key={cell.id} 
-                      className="p-3 text-sm text-gray-800"
+                      className='p-3 text-sm text-gray-800'
                       style={{ width: cell.column.columnDef.size }}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -256,13 +256,13 @@ export default function DataTable({
         </div>
 
         {/* ================= MOBILE CARDS ================= */}
-        <div className="md:hidden flex flex-col gap-3">
+        <div className='md:hidden flex flex-col gap-3'>
           {table.getRowModel().rows.map((row) => {
             const item = row.original;
             return (
               <div
                 key={row.id}
-                className="border rounded-xl p-3 shadow-sm bg-white hover:bg-gray-50 transition cursor-pointer"
+                className='border rounded-xl p-3 shadow-sm bg-white hover:bg-gray-50 transition cursor-pointer'
                 onClick={() => onRowClick?.(item)}
               >
                 {columns.map((col, ci) => {
@@ -279,7 +279,7 @@ export default function DataTable({
       </div>
 
       {(data.length > effectivePagination.pageSize) && (effectivePagination.total < effectivePagination.pageSize) && (
-        <div className="mt-4 flex justify-center md:justify-between">
+        <div className='mt-4 flex justify-center md:justify-between'>
           <Pagination
             pageCount={pageCount}
             pagination={effectivePagination}
@@ -294,9 +294,9 @@ export default function DataTable({
 
 const Shimmer = () => {
   return (
-    <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-start justify-center pt-2 z-20">
-      <div className="w-full px-2">
-        <div className="h-1 w-full bg-blue-400/40 animate-pulse rounded" />
+    <div className='absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-start justify-center pt-2 z-20'>
+      <div className='w-full px-2'>
+        <div className='h-1 w-full bg-blue-400/40 animate-pulse rounded' />
       </div>
     </div>
   );
@@ -306,13 +306,13 @@ const MobileCard = ({ col, value }) => {
   return (
     <div
       key={col.key}
-      className="flex justify-between text-sm py-1 border-b last:border-b-0"
+      className='flex justify-between text-sm py-1 border-b last:border-b-0'
     >
-      <span className="text-gray-500">
+      <span className='text-gray-500'>
         {col.label}
       </span>
 
-      <span className="text-gray-900 font-medium text-right">
+      <span className='text-gray-900 font-medium text-right'>
         {value ?? '—'}
       </span>
     </div>

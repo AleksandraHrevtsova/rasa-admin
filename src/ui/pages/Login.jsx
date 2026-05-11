@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useI18n } from '@/ui/hooks/useI18n';
-import { formItemTypes } from "@/config/constants";
+import { formItemTypes } from '@/config/constants';
 import { login } from '@/core/auth/services/auth.service';
 import { useLocation, useNavigate } from 'react-router';
 import { NAV } from '@/config/constants';
-import { buttonActionTypes } from "@/config/constants";
+import { buttonActionTypes } from '@/config/constants';
 
 import { Button } from '@/ui/components/Button';
 

@@ -1,5 +1,5 @@
 import { Plus, ShieldCheck, ShieldClose } from 'lucide-react';
-import { buttonActionTypes } from "@/config/constants";
+import { buttonActionTypes } from '@/config/constants';
 
 import { FAB } from '@/ui/components/Fab';
 import { Button } from '@/ui/components/Button';

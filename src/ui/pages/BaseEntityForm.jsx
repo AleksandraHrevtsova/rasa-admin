@@ -2,7 +2,8 @@ import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { NAV } from '@/config/constants';
 import { EntityFormLayout } from '@/ui/components/form/EntityFormLayout';
-import { EntityFormFieldsRenderer } from '@/ui/components/form/EntityFormFieldsRenderer';
+import { EntityFormRenderer } from '@/ui/components/form/EntityFormRenderer';
+
 import { Buttons } from '@/ui/components/form/FormButtonsBlock';
 import { Loading } from '@/ui/components/Loading';
 
@@ -86,11 +87,11 @@ export function BaseEntityForm({
         />
       }
     >
-      <EntityFormFieldsRenderer
+      <EntityFormRenderer
+        nodes={fields}
         control={control}
         register={register}
         errors={errors}
-        fields={fields}
         rules={rules}
         options={options}
         setValue={setValue}

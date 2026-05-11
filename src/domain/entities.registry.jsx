@@ -1,9 +1,9 @@
-import { createRegistryContext } from "@/core/registry/registry.context";
+import { createRegistryContext } from '@/core/registry/registry.context';
 
-import { users } from "@/domain/user";
-import { products } from "@/domain/product";
-import { counterparties } from "@/domain/counterparty";
-import { organizations } from "@/domain/organization";
+import { users } from '@/domain/user';
+import { products } from '@/domain/product';
+import { counterparties } from '@/domain/counterparty';
+import { organizations } from '@/domain/organization';
 
 const ctx = createRegistryContext();
 

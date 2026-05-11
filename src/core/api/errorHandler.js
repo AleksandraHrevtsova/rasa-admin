@@ -20,6 +20,6 @@ export function handleApiError(err) {
 
   text = i18nStore.t('errors.unknown');
 
-  console.log("NOTIFY TEXT:", text);
+  console.log('NOTIFY TEXT:', text);
   notify.error(text);
 }

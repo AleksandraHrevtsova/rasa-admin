@@ -85,7 +85,7 @@ export const i18nStore = {
     const currentLocale = locale;
 
     // if (!translations[locale]?.[ns]) {
-    //   console.warn(`Namespace "${ns}" not loaded`);
+    //   console.warn(`Namespace '${ns}' not loaded`);
     //   return key;
     // }
 

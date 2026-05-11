@@ -1,4 +1,4 @@
-import { formItemTypes } from "@/config/constants";
+import { formItemTypes } from '@/config/constants';
 
 export const formConfig = ({
   t, 

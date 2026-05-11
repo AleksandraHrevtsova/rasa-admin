@@ -188,6 +188,16 @@ export const formItemTypes = {
     date: 'date',
     color: 'color',
   },
+  group: {
+    checkbox: 'checkbox',
+    radio: 'radio',
+  }
+};
+
+export const fieldTypes = {
+  group: 'group',
+  grid: 'grid',
+  row: 'row',
 };
 
 

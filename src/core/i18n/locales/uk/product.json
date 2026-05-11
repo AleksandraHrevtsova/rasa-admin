@@ -2,16 +2,22 @@
   "title": "Продукти",
   "sku": "Артикул",
   "enterSku": "Вкажіть артикул",
-  "netto": "Вага нетто, кг",
-  "brutto": "Вага брутто, кг",
+  "weight": "Вага",
+  "netto": "Нетто, кг",
+  "brutto": "Брутто, кг",
 
-  "unitsInOneBox": "Кількість одиниць в 1 ящику",
-  "unitsInOnePalletRegular": "Кількість одиниць в 1 палеті (загальна)",
-  "unitsInOnePalletMin": "Кількість одиниць в 1 палеті (мінімальна)",
-  "boxesInOnePalletRegular": "Кількість ящиків в 1 палеті (загальна)",
-  "boxesInOnePalletMin": "Кількість ящиків в 1 палеті (мінімальна)",
-  "unitsOverOnePallet": "Дозволена кількість одиниць поверх 1 палети",
-  "boxesOverOnePallet": "Дозволена кількість ящиків поверх 1 палети",
+  "countIn": "Кількість шт в:",
+  "unitsInOneBox": "1 ящику",
+  "unitsInOnePalletRegular": "1 палеті (заг)",
+  "unitsInOnePalletMin": "1 палеті (мін)",
+
+  "countBoxIn": "Кількість ящиків в:",
+  "boxesInOnePalletRegular": "1 палеті (заг)",
+  "boxesInOnePalletMin": "1 палеті (мін)",
+
+  "countOverOnePallet": "Дозволена кількість поверх 1 палети",
+  "unitsOverOnePallet": "шт",
+  "boxesOverOnePallet": "ящиків",
 
   "items": {
     "zero": "Немає товарів",

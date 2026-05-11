@@ -13,7 +13,7 @@ export function ToggleActiveAction(props) {
   return (
     <button
       onClick={handleClick}
-      className="text-xs px-2 py-1 rounded border hover:bg-gray-100"
+      className='text-xs px-2 py-1 rounded border hover:bg-gray-100'
     >
       {row.isActive ? (
         <ShieldClose size={20} />

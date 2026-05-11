@@ -9,7 +9,7 @@ function App() {
   if (!ready) return <Loading />;
   if (ready) return (
     
-    <div className="text-sm font-medium text-gray-600 tracking-wide">
+    <div className='text-sm font-medium text-gray-600 tracking-wide'>
       <AppRouter/> 
     </div>
   )

@@ -25,7 +25,7 @@ export function renderRowActions(actions, context) {
 
         return (
           <ToggleActiveAction
-            key="toggle"
+            key='toggle'
             row={row}
             isHidden={row.id === appUser?.id}
             onToggle={handleToggle}
@@ -36,7 +36,7 @@ export function renderRowActions(actions, context) {
       case 'edit':
         return (
           <EditAction
-            key="edit"
+            key='edit'
             row={row}
             onEdit={onEdit}
           />

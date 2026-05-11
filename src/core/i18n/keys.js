@@ -124,16 +124,20 @@ export const keys = {
   },
   product: {
     sku: 'product.sku',
+    weight: 'product.weight',
     netto: 'product.netto',
     brutto: 'product.brutto',
 
+    countIn: 'product.countIn',
     unitsInOneBox: 'product.unitsInOneBox',
     unitsInOnePalletRegular: 'product.unitsInOnePalletRegular',
     unitsInOnePalletMin: 'product.unitsInOnePalletMin',
 
+    countBoxIn: 'product.countBoxIn',
     boxesInOnePalletRegular: 'product.boxesInOnePalletRegular',
     boxesInOnePalletMin: 'product.boxesInOnePalletMin',
 
+    countOverOnePallet: 'product.countOverOnePallet',
     unitsOverOnePallet: 'product.unitsOverOnePallet',
     boxesOverOnePallet: 'product.boxesOverOnePallet',
 
@@ -190,5 +194,6 @@ export const keys = {
     enterCode: 'organization.enterCode',
     validFrom: 'organization.validFrom',
     validTo: 'organization.validTo',
+    isRelated: 'organization.isRelated',
   },
 }

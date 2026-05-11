@@ -1,4 +1,4 @@
-import { formItemTypes } from "@/config/constants";
+import { formItemTypes } from '@/config/constants';
 
 const validationPatterns = {
   phone: /^[\d+()\-\s]{7,20}$/,

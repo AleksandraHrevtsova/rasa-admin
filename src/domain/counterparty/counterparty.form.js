@@ -10,6 +10,7 @@ import { fields } from '@/domain/counterparty/counterparty.fields';
 
 import { useProducts } from '@/domain/product/hooks/useProducts';
 import { usePaymentTypes } from '@/domain/payment-type/hooks/usePaymentTypes';
+import { useOrganizations } from '@/domain/organization/hooks/useOrganizations';
 
 import { counterpartyMapper } from '@/domain/counterparty/counterparty.mapper';
 import { normalizeCounterparty } from '@/domain/counterparty/counterparty.compare';
@@ -39,15 +40,17 @@ export const counterpartyForm = (ctx) => {
 
     hooks: {
       useData: () => {
+        //       const { data: hubs = [] } = useHubs();
         const { data: products = [] } = useProducts();
         const { data: paymentTypes = [] } = usePaymentTypes();
-  //       const { data: hubs = [] } = useHubs();
-  //       const { data: employees = [] } = useEmployees();
-  //       const { data: organizations = [] } = useOrganizations();
+        const { data: organizations = [] } = useOrganizations();
+        //       const { data: employees = [] } = useEmployees();
+        
         return { 
           products,
           paymentTypes,
-          // hubs, organizations, employees 
+          organizations,
+          // hubs, employees 
         };
       },
     },

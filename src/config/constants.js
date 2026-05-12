@@ -202,8 +202,9 @@ export const compositeTypes = {
 };
 
 export const compositeBlocks = {
-  paymentTypes: 'paymentTypesManager',
-  products: 'productsManager',
+  hubs: 'hubs-manager',
+  paymentTypes: 'payment-types-manager',
+  products: 'products-manager',
   organizations: 'organizations-manager',
   employees: 'employees-manager',
 };

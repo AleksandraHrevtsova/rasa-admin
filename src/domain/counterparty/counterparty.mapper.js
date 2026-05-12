@@ -5,10 +5,11 @@ export const counterpartyMapper = {
     return {
       name: data.name,
       namePublic: data.namePublic,
-      hubIds: data.hubs?.map(({ el }) => el.id) || [],
+      hubIds: data.hubs?.map(({ el }) => el?.id) || [],
+      paymentTypeIds: data.paymentTypes?.map(({ el }) => el.id) || [],
       productIds: data.products?.map(({ el }) => el.id) || [],
-      employeeIds: data.employees?.map(({ el }) => el.id) || [],
       organizationIds: data.organizations?.map(({ el }) => el.id) || [],
+      employeeIds: data.employees?.map(({ el }) => el.id) || [],
     };
   },
 
@@ -16,10 +17,11 @@ export const counterpartyMapper = {
     return {
       name: form.name,
       namePublic: form.namePublic,
-      hubIds: form.hubIds || [],
-      productIds: form.productIds || [],
-      employeeIds: form.eemployeeIds || [],
-      organizationIds: form.organizationIds || [],
+      hubs: form.hubIds || [],
+      paymentTypes: form.paymentTypes || [],
+      products: form.productIds || [],
+      organizations: form.organizationIds || [],
+      employees: form.eemployeeIds || [],
     };
   },
 };

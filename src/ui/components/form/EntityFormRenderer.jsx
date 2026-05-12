@@ -1,8 +1,10 @@
-import { formItemTypes, compositeTypes } from '@/config/constants';
+import { formItemTypes, compositeTypes, compositeBlocks } from '@/config/constants';
 import { WrappedInput } from '@/ui/components/form/fields/Input';
 import { WrappedSelect } from '@/ui/components/form/fields/Select';
 
 import { CheckboxListManager } from '@/ui/components/form/composites/CheckboxListManager';
+import { OrganizationsManager } from '@/ui/components/form/composites/OrganizationsManager';
+import { EmployeesManager } from '@/ui/components/form/composites/EmployeesManager';
 
 const gridCols = {
   1: 'grid-cols-1',
@@ -70,11 +72,32 @@ function NodeRenderer(props) {
 
    // GROUP CHECKBOX MANAGER
    if (
-    node.type === compositeTypes.manager &&
-    (node.component === 'paymentTypesManager' || node.component === 'productsManager')
+    node.type === compositeTypes.manager && (
+      node.component === compositeBlocks.paymentTypes || 
+      node.component === compositeBlocks.products ||
+      node.component === compositeBlocks.hubs
+      )
   ) {
     return (
       <CheckboxListManager node={node} control={control} />
+    );
+  }
+
+  if (
+    node.type === compositeTypes.manager &&
+    node.component === compositeBlocks.organizations
+  ) {
+    return (
+      <OrganizationsManager node={node} control={control} />
+    );
+  }
+
+  if (
+    node.type === compositeTypes.manager &&
+    node.component === compositeBlocks.employees
+  ) {
+    return (
+      <EmployeesManager node={node} control={control} />
     );
   }
 

@@ -181,6 +181,13 @@ export const keys = {
     confirmActivateDesc: 'counterparty.confirmActivateDesc',
     updateError: 'counterparty.updateError',
     createError: 'counterparty.createError',
+
+    availablePaymentTypes: 'counterparty.availablePaymentTypes',
+    availableProducts: 'counterparty.availableProducts',
+    availableOrganizations: 'counterparty.availableOrganizations',
+    groupOne: 'counterparty.groupOne',
+    groupTwo: 'counterparty.groupTwo',
+    employees: 'counterparty.employees',
   },
   organizations: {
     title: 'organizations.title',

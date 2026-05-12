@@ -194,11 +194,17 @@ export const formItemTypes = {
   }
 };
 
-export const fieldTypes = {
+export const compositeTypes = {
   group: 'group',
   grid: 'grid',
   row: 'row',
+  manager: 'manager',
 };
 
-
+export const compositeBlocks = {
+  paymentTypes: 'paymentTypesManager',
+  products: 'productsManager',
+  organizations: 'organizations-manager',
+  employees: 'employees-manager',
+};
 

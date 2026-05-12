@@ -1,3 +1,5 @@
+import { formatDateForInput } from '@/core/utils/date.format';
+
 export const organizationMapper = {
   fromApi: (data) => {
     if (!data) return {};
@@ -5,10 +7,11 @@ export const organizationMapper = {
     return {
       name: data.name,
       code: data.code,
-      validFrom: data.validFrom,
-      validTo: data.validTo || null,
+      validFrom: formatDateForInput(data.validFrom),
+      validTo: formatDateForInput(data.validTo),
+      isRelated: !!data.counterparty?.id,
       counterpartyId: data.counterparty?.id || null,
-      hubIds: data.hubs?.map(({ el }) => el.id) || [],
+      // hubIds: data.hubs?.map(({ el }) => el.id) || [],
     };
   },
 
@@ -19,7 +22,7 @@ export const organizationMapper = {
       validFrom: form.validFrom,
       validTo: form.validTo,
       counterpartyId: form.counterpartyId || null,
-      hubIds: form.hubIds || [],
+      // hubIds: form.hubIds || [],
     };
   },
 };

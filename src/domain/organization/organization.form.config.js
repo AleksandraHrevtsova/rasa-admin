@@ -1,10 +1,10 @@
-import { formItemTypes } from "@/config/constants";
+import { formItemTypes } from '@/config/constants';
 
 export const formConfig = ({
   t, 
   k, 
   fieldNames, 
-  showClientFields = null, 
+  isRelatedToCounterparty = null, 
   isEdit, 
   isActive, 
 }) => {
@@ -54,43 +54,50 @@ export const formConfig = ({
         isShowField: true,
         isDisabled: !isActive,
       },
+      {
+        type: formItemTypes.input.checkbox,
+        name: 'isRelated',
+        label: t(k.organization.isRelated),
+        isShowField: true,
+        isDisabled: !isActive,
+      },
       { 
         type: formItemTypes.select, 
         name: fieldNames.counterparty, 
         label: t(k.common.counterparty), 
         placeholder: t(k.user.selectCounterparty), 
         isMulti: false,
-        required: showClientFields,
-        isShowField: showClientFields, 
-        isDisabled: !isActive,
+        required: isRelatedToCounterparty,
+        isShowField: true, 
+        isDisabled: !isActive && isRelatedToCounterparty,
       },
-      { 
-        type: formItemTypes.select, 
-        name: fieldNames.hubs, 
-        label: t(k.common.hubs), 
-        placeholder: t(k.user.selectHubs), 
-        isMulti: false,
-        isMulti: true, 
-        required: showClientFields,
-        isShowField: showClientFields, 
-        isDisabled: !isActive,
-      },
+      // { 
+      //   type: formItemTypes.select, 
+      //   name: fieldNames.hubs, 
+      //   label: t(k.common.hubs), 
+      //   placeholder: t(k.user.selectHubs), 
+      //   isMulti: false,
+      //   isMulti: true, 
+      //   required: isRelatedToCounterparty,
+      //   isShowField: isRelatedToCounterparty, 
+      //   isDisabled: !isActive,
+      // },
     ],
     rules: {
       counterpartyId: { 
         validate: (v) => {
-          if (!showClientFields) return true;
+          if (!isRelatedToCounterparty) return true;
           return v ? true : t(k.user.counterpartyRequired);
         },
       },
-      hubIds: { 
-        validate: (v) => {
-          if (!showClientFields) return true;
-          return (Array.isArray(v) && v.length > 0)
-            ? true
-            : t(k.user.hubsRequired);
-        },
-      },
+      // hubIds: { 
+      //   validate: (v) => {
+      //     if (!isRelatedToCounterparty) return true;
+      //     return (Array.isArray(v) && v.length > 0)
+      //       ? true
+      //       : t(k.user.hubsRequired);
+      //   },
+      // },
       name: { 
         required: t(k.user.nameRequired) 
       },

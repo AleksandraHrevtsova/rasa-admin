@@ -13,6 +13,11 @@ export const getOrganizationColumns = (props) => {
       label: t(k.organizations.code),
       render: (row) => row.code || '—',
       width: '25%',
+    },
+    {
+      key: 'counterparty',
+      label: t(k.common.counterparty),
+      render: (row) => row?.counterparty?.name || '-',
     }
   ]
 }

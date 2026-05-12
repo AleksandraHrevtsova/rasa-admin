@@ -1,31 +1,8 @@
-import { formItemTypes } from '@/config/constants';
+import { formItemTypes, compositeTypes } from '@/config/constants';
 import { WrappedInput } from '@/ui/components/form/fields/Input';
 import { WrappedSelect } from '@/ui/components/form/fields/Select';
 
-export function EntityFormRenderer({
-  nodes,
-  control,
-  register,
-  errors,
-  rules,
-  options,
-  setValue,
-}) {
-  if (!nodes) return null;
-
-  return nodes.map((node, i) => (
-    <NodeRenderer
-      key={i}
-      node={node}
-      control={control}
-      register={register}
-      errors={errors}
-      rules={rules}
-      options={options}
-      setValue={setValue}
-    />
-  ));
-};
+import { CheckboxListManager } from '@/ui/components/form/composites/CheckboxListManager';
 
 const gridCols = {
   1: 'grid-cols-1',
@@ -34,58 +11,81 @@ const gridCols = {
   4: 'grid-cols-4',
 };
 
-const colSpan = {
+const colSpans = {
   1: 'col-span-1',
   2: 'col-span-2',
+  3: 'col-span-3',
+};
+
+export function EntityFormRenderer(props) {
+  const { nodes } = props;
+
+  if (!nodes) return null;
+
+  return nodes.map((node, i) => (
+    <NodeRenderer
+      key={i}
+      node={node}
+      {...props}
+    />
+  ));
 };
 
 function NodeRenderer(props) {
-  const { node } = props;
+  const { node, control } = props;
 
   // GROUP
-  if (node.type === 'group') {
+  if (node.type === compositeTypes.group) {
     return (
       <div className='mb-6'>
         {node.label && (
-          <div className='text-sm font-semibold mb-2'>
+          <div className='text-m font-semibold mb-3'>
             {node.label}
           </div>
         )}
 
         <div className='flex flex-col gap-3'>
-          <EntityFormRenderer
-            {...props}
-            nodes={node.children}
-          />
+          <EntityFormRenderer {...props} nodes={node.children} />
         </div>
       </div>
     );
   }
 
+  // GRID
+  if (node.type === compositeTypes.grid) {
+    return (
+      <div
+        className={`grid ${gridCols[node.columns || 1]} gap-3 items-start`}>
+        {node.children?.map((child, idx) => (
+          <div key={idx} className={colSpans[child.span || 1]}>
+            <NodeRenderer
+              {...props}
+              node={child}
+            />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+   // GROUP CHECKBOX MANAGER
+   if (
+    node.type === compositeTypes.manager &&
+    (node.component === 'paymentTypesManager' || node.component === 'productsManager')
+  ) {
+    return (
+      <CheckboxListManager node={node} control={control} />
+    );
+  }
+
   // ROW
-  if (node.type === 'row') {
+  if (node.type === compositeTypes.row) {
     return (
       <div className='grid grid-cols-2 gap-3'>
         <EntityFormRenderer
           {...props}
           nodes={node.children}
         />
-      </div>
-    );
-  }
-
-  // GRID
-  if (node.type === 'grid') {
-    return (
-      <div className={`${gridCols[node.columns] || 'grid-cols-2'} grid gap-3`}>
-        {node.children.map((child, i) => (
-          <div
-            key={i}
-            className={colSpan[child.span || 1] || 'col-span-1'}
-          >
-            <NodeRenderer {...props} node={child} />
-          </div>
-        ))}
       </div>
     );
   }

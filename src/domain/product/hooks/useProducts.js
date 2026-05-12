@@ -7,7 +7,7 @@ export const useProducts = () => {
   return useQuery({
     queryKey: [pageTags.products],
     queryFn: getProducts,
-    select: (res) => res.data.items,
+    select: (res) => res.data.data,
     staleTime: 1000 * 60 * 5,
   });
 };

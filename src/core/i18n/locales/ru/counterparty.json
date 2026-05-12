@@ -12,5 +12,12 @@
   "confirmActivateTitle": "Активация контрагента.",
   "confirmActivateDesc": "Контрагент {{name}} будет активирован. Вы подтвержаете это действие?",
   "updateError": "Ошибка при изменении контрагента",
-  "createError": "Ошибка при создании контрагента"
+  "createError": "Ошибка при создании контрагента",
+
+  "availablePaymentTypes": "Доступные типы оплат",
+  "availableProducts": "Доступные к заказу продукты",
+  "availableOrganizations": "Доступные получатели",
+  "groupOne": "(1)",
+  "groupTwo": "(2)",
+  "employees": "Сотрудники"
 }

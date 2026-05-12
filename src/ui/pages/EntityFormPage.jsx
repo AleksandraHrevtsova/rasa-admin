@@ -83,7 +83,7 @@ export function EntityFormPage({ entity }) {
       permissions={permissions}
       fields={fields}
       rules={rules}
-      options={derived.selectOptions}
+      options={derived.options}
     />
   );
 }

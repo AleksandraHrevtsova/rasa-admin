@@ -1,5 +1,5 @@
 import { ErrorMessage } from '@/ui/components/form/fields/ErrorMessage';
-import { formItemTypes, fieldTypes } from '@/config/constants';
+import { formItemTypes, compositeTypes } from '@/config/constants';
 
 const { checkbox, radio } = formItemTypes.input;
 const INLINE_TYPES = [checkbox, radio];
@@ -12,7 +12,7 @@ const withFormItemWrapper = (Component) => {
     if (!data) return null;
 
     const isInline = INLINE_TYPES.includes(data.type);
-    const isGroup = data.variant === fieldTypes.group;
+    const isGroup = data.variant === compositeTypes.group;
 
     return (
       <div className='mt-2'>

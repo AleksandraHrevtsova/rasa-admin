@@ -1,4 +1,4 @@
-import { formItemTypes, fieldTypes } from '@/config/constants';
+import { formItemTypes, compositeTypes } from '@/config/constants';
 
 export const formConfig = ({
   t, 
@@ -18,11 +18,11 @@ export const formConfig = ({
     },
     fields: [
       {
-        type: fieldTypes.group,
+        type: compositeTypes.group,
         label: '',
         children: [
           {
-            type: fieldTypes.grid,
+            type: compositeTypes.grid,
             columns: 2,
             children: [
               { 
@@ -61,11 +61,11 @@ export const formConfig = ({
       },
     
       {
-        type: fieldTypes.group,
+        type: compositeTypes.group,
         label: t(k.product.weight),
         children: [
           {
-            type: fieldTypes.row,
+            type: compositeTypes.row,
             children: [
               { 
                 type: formItemTypes.input.number, 
@@ -101,11 +101,11 @@ export const formConfig = ({
       },
     
       {
-        type: fieldTypes.group,
+        type: compositeTypes.group,
         label: t(k.product.countIn), 
         children: [
           {
-            type: fieldTypes.grid,
+            type: compositeTypes.grid,
             columns: 3,
             children: [
               { 
@@ -159,11 +159,11 @@ export const formConfig = ({
       },
 
       {
-        type: fieldTypes.group,
+        type: compositeTypes.group,
         label: t(k.product.countBoxIn), 
         children: [
           {
-            type: fieldTypes.row,
+            type: compositeTypes.row,
             children: [
               { 
                 type: formItemTypes.input.number, 
@@ -199,11 +199,11 @@ export const formConfig = ({
       },
 
       {
-        type: fieldTypes.group,
+        type: compositeTypes.group,
         label: t(k.product.countOverOnePallet), 
         children: [
           {
-            type: fieldTypes.row,
+            type: compositeTypes.row,
             children: [
               { 
                 type: formItemTypes.input.number, 

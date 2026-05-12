@@ -30,7 +30,7 @@ export function useEntityForm({
   const submitRef = useRef(submitActions.save);
   const abortRef = useRef(false);
   
-  const isEdit = Boolean(id);
+  const isEdit = Boolean(id && id !== 'undefined');
 
   const form = useForm({ mode: 'onChange' });
 

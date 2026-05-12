@@ -1,7 +1,7 @@
 import api from '@/core/api/apiClient';
 import { ENDPOINTS } from '@/config/constants';
 
-const { LIST, CREATE, UPDATE, DEACTIVATE, ACTIVATE } = ENDPOINTS.API.COUNTERPARTIES;
+const { LIST, GET, CREATE, UPDATE, DEACTIVATE, ACTIVATE } = ENDPOINTS.API.COUNTERPARTIES;
 
 const withId = (url, id) => url.replace(':id', id);
 

@@ -44,18 +44,18 @@ export function useUserFormDerived({ control, fieldNames, setValue, roles, count
 
   const filteredHubOptions = useMemo(() => {
     const counterpartyHubs = findItemById(counterparties, selectedCounterpartyId)?.hubs;
-    return counterpartyHubs?.map(mapOption);
+    return counterpartyHubs?.map(el => mapOption(el));
   }, [selectedCounterpartyId, counterparties]);
 
-  const selectOptions = {
-    roleId: roles?.map(mapOption) || [],
-    counterpartyId: counterparties?.map(mapOption) || [],
+  const options = {
+    roleId: roles?.map(el => mapOption(el)) || [],
+    counterpartyId: counterparties?.map(el => mapOption(el)) || [],
     hubIds: filteredHubOptions || [],
   };
 
   return {
     selectedRole,
-    selectOptions,
+    options,
     showClientFields,
   };
 }

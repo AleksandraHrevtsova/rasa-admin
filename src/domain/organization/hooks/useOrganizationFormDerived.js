@@ -38,11 +38,11 @@ export function useOrganizationFormDerived({ control, fieldNames, setValue, coun
 
   const filteredHubOptions = useMemo(() => {
     const counterpartyHubs = findItemById(counterparties, selectedCounterpartyId)?.hubs;
-    return counterpartyHubs?.map(mapOption);
+    return counterpartyHubs?.map(el => mapOption(el));
   }, [selectedCounterpartyId, counterparties]);
 
   const selectOptions = {
-    counterpartyId: counterparties?.map(mapOption) || [],
+    counterpartyId: counterparties?.map(el => mapOption(el)) || [],
     hubIds: filteredHubOptions || [],
   };
 

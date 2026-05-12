@@ -8,20 +8,19 @@ export function useCounterpartyFormDerived({
   setValue, 
   hubs,
   products,
-  employees, 
   paymentTypes,
-  organozations, 
+  organizations, 
+  employees, 
 }) {
   const options = {
     // hubIds: hubs?.map(mapOption) || [],
     products: products?.map(el => mapOption(el, 'namePublic')) || [],
     // employeeIds: employees?.map(mapOption) || [],
-    paymentTypes: paymentTypes?.map(mapOption) || [],
-    // organozationIds: organozations?.map(mapOption) || [],
+    paymentTypes: paymentTypes?.map(el => mapOption(el)) || [],
+    organizations: organizations?.map(el => mapOption(el)) || [],
   };
 
   return {
-    products,
     options,
   };
 }

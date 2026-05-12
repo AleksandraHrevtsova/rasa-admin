@@ -1,14 +1,14 @@
 import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 
-const findItemById = (arr, id) => arr.find(el => el.id === id);
-const mapOption = (item) => ({ value: item.id, label: item.name });
+import { mapOption, findItemById } from '@/core/utils/options.map';
 
 export function useOrganizationFormDerived({ control, fieldNames, setValue, counterparties }) {
   const selectedCounterpartyId = useWatch({ control, name: fieldNames.counterparty });
   const selectedHubIds = useWatch({ control, name: fieldNames.hubs });
+  const checkedIsRelated = useWatch({ control, name: fieldNames.isRelated })
 
-  const showClientFields = true; // TODO: add check for role
+  const isRelatedToCounterparty = checkedIsRelated;
 
   const resetParams = {
     shouldDirty: true,
@@ -17,7 +17,7 @@ export function useOrganizationFormDerived({ control, fieldNames, setValue, coun
   }
 
   useEffect(() => {
-    if (!showClientFields) {
+    if (!isRelatedToCounterparty) {
       if (selectedCounterpartyId) setValue(fieldNames.counterparty, null, resetParams);
       if (selectedHubIds?.length) setValue(fieldNames.hubs, [], resetParams);
       return;
@@ -27,7 +27,7 @@ export function useOrganizationFormDerived({ control, fieldNames, setValue, coun
       setValue(fieldNames.hubs, [], resetParams);
     }
 
-  }, []);
+  }, [isRelatedToCounterparty]);
 
 
   useEffect(() => {
@@ -48,6 +48,6 @@ export function useOrganizationFormDerived({ control, fieldNames, setValue, coun
 
   return {
     selectOptions,
-    showClientFields,
+    isRelatedToCounterparty,
   };
 }

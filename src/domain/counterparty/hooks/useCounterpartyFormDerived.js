@@ -1,8 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
-
-const findItemById = (arr, id) => arr.find(el => el.id === id);
-const mapOption = (item) => ({ value: item.id, label: item.name });
+import { mapOption } from '@/core/utils/options.map';
 
 export function useCounterpartyFormDerived({ 
   control, 
@@ -14,15 +12,16 @@ export function useCounterpartyFormDerived({
   paymentTypes,
   organozations, 
 }) {
-  const selectOptions = {
-    hubIds: hubs?.map(mapOption) || [],
-    productIds: products?.map(mapOption) || [],
-    employeeIds: employees?.map(mapOption) || [],
-    paymentTypeIds: paymentTypes?.map(mapOption) || [],
-    organozationIds: organozations?.map(mapOption) || [],
+  const options = {
+    // hubIds: hubs?.map(mapOption) || [],
+    products: products?.map(el => mapOption(el, 'namePublic')) || [],
+    // employeeIds: employees?.map(mapOption) || [],
+    paymentTypes: paymentTypes?.map(mapOption) || [],
+    // organozationIds: organozations?.map(mapOption) || [],
   };
 
   return {
-    selectOptions,
+    products,
+    options,
   };
 }

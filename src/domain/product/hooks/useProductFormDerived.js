@@ -1,8 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
-
-const findItemById = (arr, id) => arr.find(el => el.id === id);
-const mapOption = (item) => ({ value: item.id, label: item.name });
+import { mapOption } from '@/core/utils/options.map';
 
 export function useProductFormDerived({ 
   control, 

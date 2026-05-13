@@ -1,8 +1,16 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useWatch } from 'react-hook-form';
 import { mapOption, findItemById } from '@/core/utils/options.map';
 
-export function useUserFormDerived({ control, fieldNames, setValue, roles, counterparties }) {
+export function useUserFormDerived(props) {
+  const {
+    control,
+    fieldNames,
+    setValue,
+    roles,
+    counterparties,
+  } = props;
+
   const selectedRoleId = useWatch({ control, name: fieldNames.role });
   const selectedCounterpartyId = useWatch({ control, name: fieldNames.counterparty });
   const selectedHubIds = useWatch({ control, name: fieldNames.hubs });
@@ -18,29 +26,45 @@ export function useUserFormDerived({ control, fieldNames, setValue, roles, count
     shouldDirty: true,
     shouldTouch: true,
     shouldValidate: true,
-  }
+  };
 
+  const prevCounterpartyRef = useRef();
+  // ROLE CHANGE
   useEffect(() => {
     if (!selectedRoleId) return;
 
     if (!showClientFields) {
       if (selectedCounterpartyId) setValue(fieldNames.counterparty, null, resetParams);
       if (selectedHubIds?.length) setValue(fieldNames.hubs, [], resetParams);
+    }
+  }, [
+    selectedRoleId,
+    showClientFields,
+    selectedCounterpartyId,
+    selectedHubIds,
+    setValue,
+    fieldNames,
+  ]);
+
+  // COUNTERPARTY CHANGE
+  useEffect(() => {
+    // initial form load
+    if (prevCounterpartyRef.current === undefined) {
+      prevCounterpartyRef.current = selectedCounterpartyId;
       return;
     }
 
-    if (selectedHubIds?.length) {
+    // user changed counterparty
+    if (prevCounterpartyRef.current !== selectedCounterpartyId) {
       setValue(fieldNames.hubs, [], resetParams);
     }
 
-  }, [selectedRoleId]);
-
-
-  useEffect(() => {
-    if (!selectedCounterpartyId) return;
-  
-    setValue(fieldNames.hubs, [], resetParams);
-  }, [selectedCounterpartyId]);
+    prevCounterpartyRef.current = selectedCounterpartyId;
+  }, [
+    selectedCounterpartyId,
+    setValue,
+    fieldNames,
+  ]);
 
   const filteredHubOptions = useMemo(() => {
     const counterpartyHubs = findItemById(counterparties, selectedCounterpartyId)?.hubs;

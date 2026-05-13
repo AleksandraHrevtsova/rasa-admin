@@ -36,6 +36,9 @@ export function EntityFormRenderer(props) {
 function NodeRenderer(props) {
   const { node, control } = props;
 
+  if (node?.isShowField === false) {
+    return null;
+  }
   // GROUP
   if (node.type === compositeTypes.group) {
     return (

@@ -7,7 +7,7 @@ export function EntityFormLayout({ title, children, actions, isDisabled, onSubmi
         {children}
       </div>
 
-      <div className='flex gap-2 mt-4'>
+      <div className='flex flex-wrap gap-2 mt-4 items-start'>
         {actions}
       </div>
     </form>

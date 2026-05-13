@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from 'react-router';
 import { submitActions } from '@/config/constants';
 import { useAuth } from '@/core/auth/hooks/useAuth';
-import { navigateToEntity } from '@/core/utils/navigation';
 import { forms } from '@/domain/forms.registry';
 import { useI18n } from '@/ui/hooks/useI18n';
 import { useEntityForm } from '@/ui/hooks/useEntityForm';
@@ -17,24 +16,21 @@ export function EntityFormPage({ entity }) {
 
   const sideData = config.hooks?.useData?.() || {};
   const notifications = useCRUDnotification(entity);
-  
-  const handleSuccess = ({ id, action }) => {
-    const targetId = id;
+
+  const handleSuccess = ({ id: entityId, action }) => {
     const paths = config.paths;
   
+    // save and back
     if (action === submitActions.saveAndBack) {
       navigate(paths.list, { replace: true });
       return;
     }
   
-    navigateToEntity({
-      navigate,
-      location,
-      listPath: paths.list,
-      createPath: paths.create,
-      editPath: paths.edit,
-      id: targetId,
-    });
+    // save
+    navigate(
+      paths.edit.replace(':id', entityId),
+      { replace: true }
+    );
   };
 
   const formConfig = {

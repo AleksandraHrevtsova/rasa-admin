@@ -8,7 +8,7 @@ export const userMapper = {
       phone: data.phone,
       roleId: data.role?.id || null,
       counterpartyId: data.counterparty?.id || null,
-      hubIds: data.hubs?.map(({ el }) => el.id) || [],
+      hubIds: data.hubs?.map((el) => el.id) || [],
     };
   },
 

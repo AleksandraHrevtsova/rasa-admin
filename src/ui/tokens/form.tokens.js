@@ -24,6 +24,7 @@ const inputText = {
 
 const flex = {
   rowBetween: 'flex items-center justify-between',
+  col: 'flex flex-col',
 };
 
 export const styleTokens = {
@@ -46,9 +47,13 @@ export const styleTokens = {
 
   groupControlContainer: 'flex flex-col gap-2',
   inlineControlLabel: 'flex items-center gap-2 cursor-pointer',
-  
+  inlineControlText: 'text-base text-gray-700',
+
   fieldLabel: labels.formField,
   fieldError: `${colors.textError} ml-1`,
+
+  rowsContainer: flex.col,
+  rowField: `${flex.rowBetween} p-3 border-b border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors`,
 
   inputBase:
     `w-full p-2 

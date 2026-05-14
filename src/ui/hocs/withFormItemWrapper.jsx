@@ -1,5 +1,6 @@
 import { ErrorMessage } from '@/ui/components/form/fields/ErrorMessage';
 import { formItemTypes, compositeTypes } from '@/config/constants';
+import { FormFieldContainer } from '@/ui/components/form/FormFieldContainer';
 
 const { checkbox, radio } = formItemTypes.input;
 const INLINE_TYPES = [checkbox, radio];
@@ -15,30 +16,16 @@ const withFormItemWrapper = (Component) => {
     const isGroup = data.variant === compositeTypes.group;
 
     return (
-      <div className='mt-2'>
-        {/* GROUP TITLE */}
-        {isGroup && data.groupLabel && (
-          <div className='mb-2 text-m font-medium text-gray-700'>
-            {data.groupLabel}
-          </div>
-        )}
-
-        {/* NORMAL LABEL */}
-        {!isInline && !isGroup && (
-          <label className='block text-sm mb-1'>
-            {data.label}
-            {(data.required || data.validation) && (
-              <span className='text-red-500 ml-1'>*</span>
-            )}
-          </label>
-        )}
-
+      <FormFieldContainer
+        label={!isInline && !isGroup ? data.label : null}
+        required={data.required || data.validation}
+      >
         <Component {...props} />
 
         {data.type !== formItemTypes.select && (
           <ErrorMessage error={error} />
         )}
-      </div>
+      </FormFieldContainer>
     );
   };
 

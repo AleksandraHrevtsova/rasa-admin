@@ -27,8 +27,7 @@ export function BaseEntityForm({
   permissions,
   fields,
   rules,
-  options = {},
-
+  derived,
   // optional
   isDisabled: externalDisabled,
 }) {
@@ -93,7 +92,7 @@ export function BaseEntityForm({
         register={register}
         errors={errors}
         rules={rules}
-        options={options}
+        derived={derived}
         setValue={setValue}
       />
     </EntityFormLayout>

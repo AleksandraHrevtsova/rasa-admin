@@ -100,7 +100,7 @@ function NodeRenderer(props) {
     node.component === compositeBlocks.employees
   ) {
     return (
-      <EmployeesManager node={node} control={control} />
+      <EmployeesManager node={node} derived={props.derived} />
     );
   }
 
@@ -122,7 +122,7 @@ function NodeRenderer(props) {
       <WrappedSelect
         control={props.control}
         data={node}
-        options={props.options[node.name]}
+        options={props.derived.options[node.name]}
         isDisabled={node.isDisabled}
         rules={props.rules?.[node.name]}
         errors={props.errors}

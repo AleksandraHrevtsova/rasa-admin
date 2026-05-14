@@ -205,5 +205,7 @@ export function useEntityForm({
     isFormChanged,
     handleActivate,
     handleDeactivate,
+
+    data,
   };
 }

@@ -18,14 +18,12 @@ export function EntityFormPage({ entity }) {
   const notifications = useCRUDnotification(entity);
 
   const handleSuccess = ({ id: entityId, action }) => {
-    const paths = config.paths;
-  
+    const paths = config.paths;  
     // save and back
     if (action === submitActions.saveAndBack) {
       navigate(paths.list, { replace: true });
       return;
     }
-  
     // save
     navigate(
       paths.edit.replace(':id', entityId),
@@ -55,6 +53,7 @@ export function EntityFormPage({ entity }) {
     fieldNames,
     setValue: formState.form.setValue,
     ...sideData,
+    data: formState.data,
   }) || {};
 
   const isCurrentUser = id === appUser?.id;
@@ -79,7 +78,7 @@ export function EntityFormPage({ entity }) {
       permissions={permissions}
       fields={fields}
       rules={rules}
-      options={derived.options}
+      derived={derived}
     />
   );
 }

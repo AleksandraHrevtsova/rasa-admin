@@ -6,21 +6,28 @@ export function useCounterpartyFormDerived({
   control, 
   fieldNames, 
   setValue, 
-  hubs,
-  products,
-  paymentTypes,
-  organizations, 
-  employees, 
+  productsSet,
+  paymentTypesSet,
+  data, 
 }) {
   const options = {
-    // hubIds: hubs?.map(mapOption) || [],
-    products: products?.map(el => mapOption(el, 'namePublic')) || [],
-    // employeeIds: employees?.map(mapOption) || [],
-    paymentTypes: paymentTypes?.map(el => mapOption(el)) || [],
-    organizations: organizations?.map(el => mapOption(el)) || [],
+    products: productsSet?.map(el => mapOption(el, 'namePublic')) || [],
+    paymentTypes: paymentTypesSet?.map(el => mapOption(el)) || [],
   };
+
+  const employeesView = useMemo(() => {
+    return data?.employees?.map(e => {
+      console.log('E:', e.hubs);
+      return {
+        id: e.id,
+        name: e.name,
+        hubNames: (e.hubs || []).map(h => h.name).join(', '),
+      };
+    });
+  }, [data?.employees]);
 
   return {
     options,
+    employeesView,
   };
 }

@@ -166,6 +166,9 @@ export const buttonActionTypes = {
   deactivate: 'deactivate',
   show: 'show',
   ghost: 'ghost',
+  edit: 'edit',
+  close: 'close',
+  toggle: 'toggle',
 };
 
 export const submitActions = {

@@ -1,5 +1,5 @@
-import { ToggleActiveAction } from '@/ui/components/table/actions/ToggleActiveAction';
-import { EditAction } from '@/ui/components/table/actions/EditAction';
+import { buttonActionTypes } from '@/config/constants';
+import { IconAction } from '@/ui/components/table/actions/IconAction';
 
 export function renderRowActions(actions, context) {
   const { row, appUser, onConfirm, onToggle, onEdit } = context;
@@ -8,7 +8,7 @@ export function renderRowActions(actions, context) {
     const type = typeof action === 'string' ? action : action.type;
 
     switch (type) {
-      case 'toggle': {
+      case buttonActionTypes.toggle: {
         const handleToggle = async () => {
           if (action.confirm) {
             const config =
@@ -24,21 +24,26 @@ export function renderRowActions(actions, context) {
         };
 
         return (
-          <ToggleActiveAction
-            key='toggle'
-            row={row}
-            isHidden={row.id === appUser?.id}
-            onToggle={handleToggle}
+          <IconAction
+            key={buttonActionTypes.toggle}
+            icon={row.isActive ? buttonActionTypes.deactivate : buttonActionTypes.activate}
+            disabled={row.id === appUser?.id}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleToggle();
+            }}
           />
         );
       }
 
-      case 'edit':
+      case buttonActionTypes.edit:
         return (
-          <EditAction
-            key='edit'
-            row={row}
-            onEdit={onEdit}
+          <IconAction
+            icon={buttonActionTypes.edit}
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit(row);
+            }}
           />
         );
 

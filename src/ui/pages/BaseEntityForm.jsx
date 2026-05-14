@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { NAV } from '@/config/constants';
+import { EntityFormProvider } from '@/ui/components/form/EntityFormProvider';
 import { EntityFormLayout } from '@/ui/components/form/EntityFormLayout';
 import { EntityFormRenderer } from '@/ui/components/form/EntityFormRenderer';
 
@@ -34,13 +35,7 @@ export function BaseEntityForm({
   const location = useLocation();
   const navigate = useNavigate();
    
-  const {
-    register,
-    control,
-    reset,
-    setValue,
-    formState: { errors },
-  } = form;
+  const { reset } = form;
 
   const isDisabled = useMemo(() => {
     if (externalDisabled !== undefined) return externalDisabled;
@@ -69,32 +64,31 @@ export function BaseEntityForm({
   if (loading || submitting) return <Loading />;
 
   return (
-    <EntityFormLayout
-      title={title}
-      isDisabled={isDisabled}
-      onSubmit={formSubmitHandler}
-      actions={
-        <Buttons
+    <EntityFormProvider form={form}>
+      <EntityFormLayout
+        title={title}
+        isDisabled={isDisabled}
+        onSubmit={formSubmitHandler}
+        actions={
+          <Buttons
+            isEdit={isEdit}
+            isChanged={isFormChanged}
+            isSubmitDisabled={isSubmitDisabled}
+            onBack={handleBack}
+            onSubmit={submitSave}
+            onSubmitAndBack={submitSaveAndBack}
+            onActivate={permissions.canActivate ? handleActivate : null}
+            onDeactivate={permissions.canDeactivate ? handleDeactivate : null}
+          />
+        }
+      >
+        <EntityFormRenderer
+          fields={fields}
+          rules={rules}
+          derived={derived}
           isEdit={isEdit}
-          isChanged={isFormChanged}
-          isSubmitDisabled={isSubmitDisabled}
-          onBack={handleBack}
-          onSubmit={submitSave}
-          onSubmitAndBack={submitSaveAndBack}
-          onActivate={permissions.canActivate ? handleActivate : null}
-          onDeactivate={permissions.canDeactivate ? handleDeactivate : null}
         />
-      }
-    >
-      <EntityFormRenderer
-        nodes={fields}
-        control={control}
-        register={register}
-        errors={errors}
-        rules={rules}
-        derived={derived}
-        setValue={setValue}
-      />
-    </EntityFormLayout>
+      </EntityFormLayout>
+    </EntityFormProvider>
   );
 }

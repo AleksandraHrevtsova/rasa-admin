@@ -15,7 +15,7 @@ const colors = {
 const labels = {
   table: `${text.sm} text-gray-400`,
   text: `${text.sm} text-gray-700`,
-  formField: `${text.lg} text-gray-800`,
+  formField: `${text.sm} text-gray-600`,
 };
 
 const inputText = {
@@ -25,6 +25,15 @@ const inputText = {
 const flex = {
   rowBetween: 'flex items-center justify-between',
   col: 'flex flex-col',
+};
+
+const disabled = {
+  opacity: 'disabled:opacity-50',
+  cursor: 'disabled:cursor-not-allowed',
+};
+
+const hover = {
+  bg: 'hover:bg-gray-100',
 };
 
 export const styleTokens = {
@@ -53,7 +62,10 @@ export const styleTokens = {
   fieldError: `${colors.textError} ml-1`,
 
   rowsContainer: flex.col,
-  rowField: `${flex.rowBetween} p-3 border-b border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors`,
+  rowField: `${flex.rowBetween} 
+    p-3 border-b border-gray-200 
+    hover:bg-gray-50 
+    cursor-pointer transition-colors`,
 
   inputBase:
     `w-full p-2 
@@ -62,6 +74,13 @@ export const styleTokens = {
     disabled:opacity-50 
     disabled:cursor-not-allowed`,
   inputError: colors.borderError,
+
+  // Buttons
+  iconBtn: text.xs 
+    + 'px-2 py-1 rounded border' 
+    + hover.bg 
+    + disabled.opacity 
+    + disabled.cursor,
 
 
 };

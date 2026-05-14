@@ -1,142 +1,42 @@
-import { formItemTypes, compositeTypes, compositeBlocks } from '@/config/constants';
-import { WrappedInput } from '@/ui/components/form/fields/Input';
-import { WrappedSelect } from '@/ui/components/form/fields/Select';
-
-import { CheckboxListManager } from '@/ui/components/form/composites/CheckboxListManager';
-import { OrganizationsManager } from '@/ui/components/form/composites/OrganizationsManager';
-import { EmployeesManager } from '@/ui/components/form/composites/EmployeesManager';
-
-const gridCols = {
-  1: 'grid-cols-1',
-  2: 'grid-cols-2',
-  3: 'grid-cols-3',
-  4: 'grid-cols-4',
-};
-
-const colSpans = {
-  1: 'col-span-1',
-  2: 'col-span-2',
-  3: 'col-span-3',
-};
+import { useFormContext } from 'react-hook-form';
+import { fieldRenderers } from '@/ui/components/form/form.renderers';
 
 export function EntityFormRenderer(props) {
-  const { nodes } = props;
+  const { fields } = props;
 
-  if (!nodes) return null;
+  const form = useFormContext();
 
-  return nodes.map((node, i) => (
-    <NodeRenderer
-      key={i}
-      node={node}
-      {...props}
-    />
-  ));
-};
+  if (!fields?.length) return null;
 
-function NodeRenderer(props) {
-  const { node, control } = props;
+  const renderNode = (node, index = 0) => {
+    if (!node || node.isShowField === false) {
+      return null;
+    }
 
-  if (node?.isShowField === false) {
-    return null;
-  }
-  // GROUP
-  if (node.type === compositeTypes.group) {
+    const {
+      control,
+      register,
+      formState: { errors },
+    } = form;
+
+    const renderer = fieldRenderers[node.type] || fieldRenderers.default;
+
     return (
-      <div className='mb-6'>
-        {node.label && (
-          <div className='text-m font-semibold mb-3'>
-            {node.label}
-          </div>
-        )}
-
-        <div className='flex flex-col gap-3'>
-          <EntityFormRenderer {...props} nodes={node.children} />
-        </div>
+      <div key={node.name || index}>
+        {renderer({
+          node,
+          control,
+          register,
+          errors,
+          rules: props.rules,
+          derived: props.derived,
+          isEdit: props.isEdit,
+          renderNode,
+          renderChildren: (children) => (<EntityFormRenderer {...props} fields={children} />),
+        })}
       </div>
     );
-  }
+  };
 
-  // GRID
-  if (node.type === compositeTypes.grid) {
-    return (
-      <div
-        className={`grid ${gridCols[node.columns || 1]} gap-3 items-start`}>
-        {node.children?.map((child, idx) => (
-          <div key={idx} className={colSpans[child.span || 1]}>
-            <NodeRenderer
-              {...props}
-              node={child}
-            />
-          </div>
-        ))}
-      </div>
-    );
-  }
-
-   // GROUP CHECKBOX MANAGER
-   if (
-    node.type === compositeTypes.manager && (
-      node.component === compositeBlocks.paymentTypes || 
-      node.component === compositeBlocks.products ||
-      node.component === compositeBlocks.hubs
-      )
-  ) {
-    return (
-      <CheckboxListManager node={node} control={control} />
-    );
-  }
-
-  if (
-    node.type === compositeTypes.manager &&
-    node.component === compositeBlocks.organizations
-  ) {
-    return (
-      <OrganizationsManager node={node} control={control} />
-    );
-  }
-
-  if (
-    node.type === compositeTypes.manager &&
-    node.component === compositeBlocks.employees
-  ) {
-    return (
-      <EmployeesManager node={node} derived={props.derived} />
-    );
-  }
-
-  // ROW
-  if (node.type === compositeTypes.row) {
-    return (
-      <div className='grid grid-cols-2 gap-3'>
-        <EntityFormRenderer
-          {...props}
-          nodes={node.children}
-        />
-      </div>
-    );
-  }
-
-  // SELECT
-  if (node.type === formItemTypes.select) {
-    return (
-      <WrappedSelect
-        control={props.control}
-        data={node}
-        options={props.derived.options[node.name]}
-        isDisabled={node.isDisabled}
-        rules={props.rules?.[node.name]}
-        errors={props.errors}
-      />
-    );
-  }
-
-  // INPUT (default)
-  return (
-    <WrappedInput
-      register={props.register}
-      data={node}
-      rules={props.rules?.[node.name]}
-      errors={props.errors}
-    />
-  );
+  return fields.map(renderNode);
 }

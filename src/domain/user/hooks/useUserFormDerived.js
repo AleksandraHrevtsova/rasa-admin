@@ -20,7 +20,7 @@ export function useUserFormDerived(props) {
     [roles, selectedRoleId]
   );
 
-  const showClientFields = selectedRole?.name?.includes('client-');
+  const showClientFields = selectedRole?.name?.startsWith('client');
 
   const resetParams = {
     shouldDirty: true,

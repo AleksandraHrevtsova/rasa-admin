@@ -3,23 +3,25 @@ import { formItemTypes } from '@/config/constants';
 import { parseNumber } from '@/core/utils/number.parser';
 import { handleNumberKeyDown } from '@/ui/components/form/fields/number.input.helpers';
 import withFormItemWrapper from '@/ui/hocs/withFormItemWrapper';
-
-const baseInputClass = 'w-full p-2 border border-[#cccccc] rounded disabled:opacity-50 disabled:cursor-not-allowed';
-const errorClass = 'border-red-500';
+import { InsideInputLabel } from '@/ui/components/form/FormFieldLabel';
+import { styleTokens } from '@/ui/tokens/form.tokens';
 
 const getInputClassName = (hasError) =>
-  `${baseInputClass} ${hasError ? errorClass : ''}`;
+  `${styleTokens.inputBase} ${hasError ? styleTokens.inputError : ''}`;
 
 const TextInput = ({ register, data, errors, rules }) => {
-  const { email, tel } = formItemTypes.input;
-  const autoComplete = [email, tel].includes(data.type) ? data.type : 'off';
+  const autoComplete =
+    data.type === formItemTypes.input.email
+      ? 'email'
+      : data.type === formItemTypes.input.tel
+        ? 'tel'
+        : 'off';
 
   return (
     <input
       type={data.type || formItemTypes.input.text}
       {...register(data.name, rules)}
       id={data.name}
-      name={data.name}
       placeholder={data.placeholder}
       autoComplete={autoComplete}
       disabled={data.isDisabled}
@@ -29,11 +31,11 @@ const TextInput = ({ register, data, errors, rules }) => {
 };
 
 const NumberInput = ({ register, data, errors, rules }) => {
-  const inputParams = useMemo(() => ({
-      min: data.inputParams?.min ?? 0,
-      max: data.inputParams?.max ?? 100,
-      step: data.inputParams?.step ?? 1,
-    }), [data.inputParams]);
+  const inputParams = {
+    min: data.inputParams?.min ?? 0,
+    max: data.inputParams?.max ?? 100,
+    step: data.inputParams?.step ?? 1,
+  };
 
   return (
     <input
@@ -47,7 +49,6 @@ const NumberInput = ({ register, data, errors, rules }) => {
         ...rules,
       })}
       id={data.name}
-      name={data.name}
       placeholder={data.placeholder}
       disabled={data.isDisabled}
       className={getInputClassName(errors[data.name])}
@@ -62,7 +63,6 @@ const DateInput = ({ register, data, errors, rules }) => {
         type={formItemTypes.input.date}
         {...register(data.name, rules)}
         id={data.name}
-        name={data.name}
         disabled={data.isDisabled}
         className={getInputClassName(errors[data.name])}
       />
@@ -70,28 +70,20 @@ const DateInput = ({ register, data, errors, rules }) => {
   );
 };
 
-const InputInsideLabel = (label) => (
-  <span className='text-sm text-gray-700'>
-    {label}
-  </span>
-);
-
-const InlineControl = ({ type, label, labelPosition = 'right', register, data, rules }) => {
+const InlineControl = ({ type, label, labelPosition = 'right', register, data, rules, errors }) => {
   return (
-    <label className='flex items-center gap-2 cursor-pointer'>
-      {labelPosition === 'left' && (<InputInsideLabel label={label} />)}
+    <label className={styleTokens.inlineControlLabel}>
+      {labelPosition === 'left' && (<InsideInputLabel label={label} />)}
 
       <input
         id={data.name}
-        name={data.name}
         type={type}
         {...register(data.name, rules)}
-        value={data.value}
         disabled={data.isDisabled}
-        className='h-4 w-4 cursor-pointer disabled:cursor-not-allowed'
+        className={getInputClassName(errors[data.name])}
       />
 
-      {labelPosition === 'right' && (<InputInsideLabel label={label} />)}
+      {labelPosition === 'right' && (<InsideInputLabel label={label} />)}
     </label>
   );
 };
@@ -114,20 +106,20 @@ const RadioInput = (props) => (
 
 const GroupControl = ({ data, register, rules }) => {
   return (
-    <div className='flex flex-col gap-2'>
+    <div className={styleTokens.groupControlContainer}>
       {data.options?.map((opt) => (
         <label
           key={opt.value}
-          className='flex items-center gap-2 cursor-pointer'
+          className={styleTokens.inlineControlLabel}
         >
           <input
             type={data.type}
             value={opt.value}
             {...register(data.name, rules)}
-            className='h-4 w-4'
+            className={getInputClassName(errors[data.name])}
           />
 
-          <InputInsideLabel label={opt.label} />
+          <InsideInputLabel label={opt.label} />
         </label>
       ))}
     </div>

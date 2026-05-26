@@ -6,7 +6,7 @@ export const getProductColumns = (props) => {
       key: 'name',
       label: t(k.common.nameBase),
       render: (row) => row.name || '—',
-      width: '25%',
+      width: '40%',
     },
     {
       key: 'namePublic',
@@ -18,19 +18,19 @@ export const getProductColumns = (props) => {
       key: 'sku',
       label: t(k.product.sku),
       render: (row) => row.sku || '-',
-      width: '25%',
+      width: '10%',
     },
     {
       key: 'netto',
       label: t(k.product.netto),
       render: (row) =>  row.netto || row.weight.netto || '—',
-      width: '25%',
+      width: '10%',
     },
     {
       key: 'brutto',
       label: t(k.product.brutto),
       render: (row) =>  row.brutto || row.weight.brutto || '—',
-      width: '25%',
+      width: '10%',
     },
     {
       key: 'actions',
@@ -48,6 +48,7 @@ export const getProductColumns = (props) => {
           },
         },
       ],
+      width: '5%',
     },
   ];
 };

@@ -109,7 +109,7 @@ export const formConfig = ({
             columns: 3,
             children: [
               { 
-                span: 3,
+                span: 1,
                 type: formItemTypes.input.number, 
                 inputParams: {
                   min: 1,
@@ -124,7 +124,7 @@ export const formConfig = ({
                 isDisabled: !isActive,
               },
               { 
-                span: 3,
+                span: 1,
                 type: formItemTypes.input.number, 
                 inputParams: {
                   min: 1,
@@ -139,7 +139,7 @@ export const formConfig = ({
                 isDisabled: !isActive,
               },
               { 
-                span: 3,
+                span: 1,
                 type: formItemTypes.input.number, 
                 inputParams: {
                   min: 1,

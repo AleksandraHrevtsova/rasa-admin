@@ -23,7 +23,6 @@ export function useEntityForm({
   const notify = useNotify();
   const onConfirm = useConfirm();
 
-  const [isActive, setIsActive] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
   const initialValuesRef = useRef(null);
@@ -37,7 +36,6 @@ export function useEntityForm({
   const {
     control,
     formState,
-    setError,
     getValues,
     handleSubmit,
     reset,
@@ -56,6 +54,8 @@ export function useEntityForm({
     staleTime: 0,
   });
 
+  const isActive = data?.isActive ?? false;
+
   useEffect(() => {
     if (!data) return;
     if (abortRef.current) return;
@@ -63,7 +63,6 @@ export function useEntityForm({
     const mapped = mapFromApi(data);
 
     initialValuesRef.current = mapped;
-    setIsActive(data.isActive);
     reset(mapped);
   }, [data, reset, mapFromApi]);
 
@@ -154,17 +153,15 @@ export function useEntityForm({
 
     if (!confirmed) return;
 
-    const prev = isActive;
-    setIsActive(true);
-
     try {
       await activate(id);
       notify.success(notifications.successActivate);
       await queryClient.invalidateQueries({ queryKey, exact: false });
     } catch (err) {
-      setIsActive(prev);
+      notify.error(notifications.requestError);
+      console.error(err);
     }
-  }, [id, activate, notify, notifications, queryClient, queryKey, isActive, confirmAction]);
+  }, [id, activate, notify, notifications, queryClient, queryKey, confirmAction]);
 
   const handleDeactivate = useCallback(async () => {
     const confirmed = await confirmAction({
@@ -174,17 +171,15 @@ export function useEntityForm({
 
     if (!confirmed) return;
 
-    const prev = isActive;
-    setIsActive(false);
-
     try {
       await deactivate(id);
       notify.success(notifications.successDeactivate);
       await queryClient.invalidateQueries({ queryKey, exact: false });
     } catch (err) {
-      setIsActive(prev);
+      notify.error(notifications.requestError);
+      console.error(err);
     }
-  }, [id, deactivate, notify, notifications, queryClient, queryKey, isActive, confirmAction]);
+  }, [id, deactivate, notify, notifications, queryClient, queryKey, confirmAction]);
 
   useEffect(() => {
     return () => {

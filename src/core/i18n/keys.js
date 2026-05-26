@@ -121,6 +121,8 @@ export const keys = {
   },
   products: {
     title: 'products.title',
+    activated: 'product.activated',
+    deactivated: 'product.deactivated',
   },
   product: {
     sku: 'product.sku',

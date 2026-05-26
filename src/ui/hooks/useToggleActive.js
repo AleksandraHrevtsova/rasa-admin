@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNotify } from '@/ui/hooks/useNotify';
 
-export function useToggleActive({ queryKey, mutationFn, errorMessage }) {
+export function useToggleActive({ queryKey, mutationFn, notifications }) {
   const queryClient = useQueryClient();
   const notify = useNotify();
 
@@ -18,8 +18,8 @@ export function useToggleActive({ queryKey, mutationFn, errorMessage }) {
         (old, context) => {
           if (!old) return old;
 
-          const queryKey = context?.queryKey;
-          const filters = queryKey?.[1]?.filters || {};
+          const key = context?.queryKey;
+          const filters = key?.[1]?.filters || {};
           const currentIsActive = filters.isActive;
 
           let updatedItems = old.items.map((el) =>
@@ -42,6 +42,17 @@ export function useToggleActive({ queryKey, mutationFn, errorMessage }) {
       return { previous };
     },
 
+    onSuccess: (data, variables) => {
+      const currentActiveState = data.data.data.isActive;
+      const prevActiveState = variables?.isActive;
+
+      if (prevActiveState && !currentActiveState) {
+        notify.success(notifications.successDeactivate);
+      } else {
+        notify.success(notifications.successActivate);
+      }
+    },
+
     onError: (err, _vars, context) => {
       if (context?.previous) {
         context.previous.forEach(([key, data]) => {
@@ -49,9 +60,7 @@ export function useToggleActive({ queryKey, mutationFn, errorMessage }) {
         });
       }
 
-      notify.error(
-        err?.response?.data?.message || errorMessage || 'Update error'
-      );
+      notify.error(notifications.requestError);
     },
 
     onSettled: () => {

@@ -72,6 +72,7 @@ export const keys = {
     enterCount: 'common.enterCount',
     toggleActiveError: 'common.toggleActiveError',
     enterDate: 'common.enterDate',
+    rows: 'common.rows',
   },
   table: {
     noData: 'table.noData',

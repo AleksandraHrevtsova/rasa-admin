@@ -4,79 +4,16 @@ import {
   getCoreRowModel,
   flexRender,
 } from '@tanstack/react-table';
+import { 
+  ArrowUp, 
+  ArrowDown, 
+  ArrowUpDown,
+} from 'lucide-react';
 
+import { styleTokens } from '@/ui/tokens/form.tokens';
+import { Pagination } from '@/ui/components/table/Pagination';
 import { Loading } from '@/ui/components/Loading';
 import { DataTableSkeleton } from '@/ui/components/DataTableSkeleton';
-
-const Pagination = ({
-  pageCount,
-  pagination,
-  setPagination,
-  pageSizeOptions,
-}) => {
-  const pageIndex = pagination.pageIndex;
-
-  const canPrev = pageIndex > 0;
-  const canNext = pageIndex < pageCount - 1;
-
-  const handleStart = () => setPagination(p => ({ ...p, pageIndex: 0 }));
-
-  const handlePrev = () =>
-    setPagination(p => ({
-      ...p,
-      pageIndex: Math.max(0, p.pageIndex - 1),
-    }));
-
-  const handleNext = () =>
-    setPagination(p => ({
-      ...p,
-      pageIndex: Math.min(pageCount - 1, p.pageIndex + 1),
-    }));
-
-  const handleEnd = () =>
-    setPagination(p => ({
-      ...p,
-      pageIndex: pageCount - 1,
-    }));
-  
-  const handleSelect = (e) =>
-    setPagination(p => ({
-      ...p,
-      pageSize: Number(e.target.value),
-      pageIndex: 0,
-    }));
-
-  return (
-    <div className='flex gap-2 mt-3 text-sm items-center'>
-      <button onClick={handleStart} disabled={!canPrev}>
-        ⏮
-      </button>
-
-      <button onClick={handlePrev} disabled={!canPrev}>
-        ◀
-      </button>
-      <span>{pageIndex + 1} / {pageCount || 1}</span>
-      <button onClick={handleNext} disabled={!canNext}>
-        ▶
-      </button>
-
-      <button onClick={handleEnd} disabled={!canNext}>
-        ⏭
-      </button>
-
-      <select
-        value={pagination.pageSize}
-        onChange={handleSelect}
-      >
-        {pageSizeOptions.map((s) => (
-          <option key={s} value={s}>
-            {s}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-};
 
 export default function DataTable({
   data = [],
@@ -166,9 +103,17 @@ export default function DataTable({
       },
     },
     manualPagination: true,
+    manualSorting: true,
     pageCount,
     
-    onSortingChange: setSorting,
+    onSortingChange: (updater) => {
+      setSorting(updater);
+    
+      setPagination((prev) => ({
+        ...prev,
+        pageIndex: 0,
+      }));
+    },
     onPaginationChange: setPagination,
 
     getCoreRowModel: getCoreRowModel(),
@@ -179,11 +124,11 @@ export default function DataTable({
   if (loading && data.length === 0) {
     return (
       <div className='hidden md:block overflow-x-auto'>
-        <table className='min-w-full border border-gray-200 rounded-xl overflow-hidden table-fixed'>
+        <table className={styleTokens.table.desktop}>
           <thead className='bg-gray-50'>
             <tr>
               {columns.map((col, ci) => (
-                <th key={col.key || ci} className='p-3 text-left text-sm text-gray-400'>
+                <th key={col.key || ci} className={styleTokens.table.label}>
                   {col.label}
                 </th>
               ))}
@@ -204,7 +149,7 @@ export default function DataTable({
       }`}>
         {/* DESKTOP */}
         <div className='hidden md:block overflow-x-auto'>
-          <table className='min-w-full border border-gray-200 rounded-xl overflow-hidden table-fixed'>
+          <table className={styleTokens.table.desktop}>
 
             <thead className='bg-gray-50 sticky top-0 z-10'>
               {table.getHeaderGroups().map((hg, ci) => (
@@ -212,16 +157,29 @@ export default function DataTable({
                   {hg.headers.map((header) => (
                     <th
                       key={header.id}
-                      className='p-3 text-left text-sm font-semibold text-gray-600 cursor-pointer select-none'
+                      className={`
+                        p-3 text-sm text-gray-600 text-left font-semibold select-none
+                        ${header.column.getCanSort() ? 'cursor-pointer' : ''}
+                      `}
                       style={{ width: header.column.columnDef.size }}
-                      onClick={header.column.getToggleSortingHandler()}
+                      onClick={
+                        header.column.getCanSort()
+                          ? header.column.getToggleSortingHandler()
+                          : undefined
+                      }
                     >
                       <div className='flex items-center gap-1'>
                         {flexRender(header.column.columnDef.header, header.getContext())}
-                        {{
-                          asc: ' 🔼',
-                          desc: ' 🔽',
-                        }[header.column.getIsSorted()] ?? null}
+                        {header.column.getCanSort() && (
+                          <>
+                            {{
+                              asc: <ArrowUp size={14} className='text-gray-500' />,
+                              desc: <ArrowDown size={14} className='text-gray-500' />,
+                            }[header.column.getIsSorted()] ?? (
+                              <ArrowUpDown size={14} className='text-gray-400' />
+                            )}
+                          </>
+                        )}
                       </div>
                     </th>
                   ))}
@@ -278,7 +236,7 @@ export default function DataTable({
         {isFetching && data.length > 0 && (<Shimmer />)}
       </div>
 
-      {(data.length > effectivePagination.pageSize) && (effectivePagination.total < effectivePagination.pageSize) && (
+      {(effectivePagination.total > effectivePagination.pageSize) && (
         <div className='mt-4 flex justify-center md:justify-between'>
           <Pagination
             pageCount={pageCount}

@@ -1,19 +1,12 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
-import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-} from '@tanstack/react-table';
-import { 
-  ArrowUp, 
-  ArrowDown, 
-  ArrowUpDown,
-} from 'lucide-react';
+import { useReactTable, getCoreRowModel } from '@tanstack/react-table';
 
-import { styleTokens } from '@/ui/tokens/form.tokens';
-import { Pagination } from '@/ui/components/table/Pagination';
 import { Loading } from '@/ui/components/Loading';
-import { DataTableSkeleton } from '@/ui/components/DataTableSkeleton';
+import { DataTableSkeleton } from '@/ui/components/table/DataTableSkeleton';
+import { TableWrappers } from '@/ui/components/table/TableWrappers';
+import { DesktopTable } from '@/ui/components/table/DesktopTable';
+import { MobileTable } from '@/ui/components/table/MobileTable';
+import { Shimmer } from '@/ui/components/table/Shimmer';
 
 export default function DataTable({
   data = [],
@@ -120,159 +113,23 @@ export default function DataTable({
   });
 
   if (isFetching && data.length > 0) return <Loading />;
-
-  if (loading && data.length === 0) {
-    return (
-      <div className='hidden md:block overflow-x-auto'>
-        <table className={styleTokens.table.desktop}>
-          <thead className='bg-gray-50'>
-            <tr>
-              {columns.map((col, ci) => (
-                <th key={col.key || ci} className={styleTokens.table.label}>
-                  {col.label}
-                </th>
-              ))}
-            </tr>
-          </thead>
-
-          <DataTableSkeleton columns={columns} />
-        </table>
-      </div>
-    );
-  }
+  if (loading && data.length === 0) return <DataTableSkeleton columns={columns} />;
 
   return (
-    <div className='w-full'>
-      {/* WRAPPER ДЛЯ OVERLAY */}
-      <div className={`relative transition-opacity duration-200 ${
-        isFetching ? 'opacity-60' : 'opacity-100'
-      }`}>
-        {/* DESKTOP */}
-        <div className='hidden md:block overflow-x-auto'>
-          <table className={styleTokens.table.desktop}>
-
-            <thead className='bg-gray-50 sticky top-0 z-10'>
-              {table.getHeaderGroups().map((hg, ci) => (
-                <tr key={hg.id || ci}>
-                  {hg.headers.map((header) => (
-                    <th
-                      key={header.id}
-                      className={`
-                        p-3 text-sm text-gray-600 text-left font-semibold select-none
-                        ${header.column.getCanSort() ? 'cursor-pointer' : ''}
-                      `}
-                      style={{ width: header.column.columnDef.size }}
-                      onClick={
-                        header.column.getCanSort()
-                          ? header.column.getToggleSortingHandler()
-                          : undefined
-                      }
-                    >
-                      <div className='flex items-center gap-1'>
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                        {header.column.getCanSort() && (
-                          <>
-                            {{
-                              asc: <ArrowUp size={14} className='text-gray-500' />,
-                              desc: <ArrowDown size={14} className='text-gray-500' />,
-                            }[header.column.getIsSorted()] ?? (
-                              <ArrowUpDown size={14} className='text-gray-400' />
-                            )}
-                          </>
-                        )}
-                      </div>
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr
-                  key={row.id}
-                  className={`
-                    border-b cursor-pointer transition-colors duration-700
-                    hover:bg-gray-50
-                    ${highlightedRows.has(row.original.id) ? 'bg-yellow-50 animate-pulse' : ''}
-                  `}
-                  onClick={() => onRowClick?.(row.original)}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <td 
-                      key={cell.id} 
-                      className='p-3 text-sm text-gray-800'
-                      style={{ width: cell.column.columnDef.size }}
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* ================= MOBILE CARDS ================= */}
-        <div className='md:hidden flex flex-col gap-3'>
-          {table.getRowModel().rows.map((row) => {
-            const item = row.original;
-            return (
-              <div
-                key={row.id}
-                className='border rounded-xl p-3 shadow-sm bg-white hover:bg-gray-50 transition cursor-pointer'
-                onClick={() => onRowClick?.(item)}
-              >
-                {columns.map((col, ci) => {
-                  const value = col.render ? col.render(item) : item[col.key];
-                  return (<MobileCard key={col.id || ci} col={col} value={value} />);
-                })}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* SHIMMER) */}
-        {isFetching && data.length > 0 && (<Shimmer />)}
-      </div>
-
-      {(effectivePagination.total > effectivePagination.pageSize) && (
-        <div className='mt-4 flex justify-center md:justify-between'>
-          <Pagination
-            pageCount={pageCount}
-            pagination={effectivePagination}
-            setPagination={setPagination}
-            pageSizeOptions={pageSizeOptions}
-          />
-        </div>
-      )}
-    </div>
-  );
-};
-
-const Shimmer = () => {
-  return (
-    <div className='absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-start justify-center pt-2 z-20'>
-      <div className='w-full px-2'>
-        <div className='h-1 w-full bg-blue-400/40 animate-pulse rounded' />
-      </div>
-    </div>
-  );
-};
-
-const MobileCard = ({ col, value }) => {
-  return (
-    <div
-      key={col.key}
-      className='flex justify-between text-sm py-1 border-b last:border-b-0'
+    <TableWrappers
+      isFetching={isFetching}
+      effectivePagination={effectivePagination}
+      pageCount={pageCount}
+      setPagination={setPagination}
+      pageSizeOptions={pageSizeOptions}
     >
-      <span className='text-gray-500'>
-        {col.label}
-      </span>
+      {/* DESKTOP */}
+      <DesktopTable table={table} onRowClick={onRowClick} highlightedRows={highlightedRows}/>
 
-      <span className='text-gray-900 font-medium text-right'>
-        {value ?? '—'}
-      </span>
-    </div>
+      {/* MOBILE */}
+      <MobileTable table={table} onRowClick={onRowClick} columns={columns}/>
+
+      {isFetching && data.length > 0 && (<Shimmer />)}
+    </TableWrappers>
   );
 };

@@ -212,3 +212,6 @@ export const compositeBlocks = {
   employees: 'employees-manager',
 };
 
+export const defaultValues = {
+  table: '—',
+};

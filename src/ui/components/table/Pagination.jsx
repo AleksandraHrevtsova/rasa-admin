@@ -5,13 +5,14 @@ import {
   ChevronsRight, 
 } from 'lucide-react';
 import { useI18n } from '@/ui/hooks/useI18n';
+import { styleTokens } from '@/ui/tokens/form.tokens';
 
 const ArrowButton = ({ onClick, isDisabled, children }) => {
   return (
     <button
       onClick={onClick}
       disabled={isDisabled}
-      className='p-2 rounded-md border bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition'
+      className={styleTokens.pagination.arrowButton}
     >
       {children}
     </button>
@@ -37,45 +38,43 @@ export const Pagination = ({
   const handleSelect = (e) => setPagination(p => ({ ...p, pageSize: Number(e.target.value), pageIndex: 0 }));
 
   return (
-    <div className='flex items-center justify-between gap-3 mt-4 flex-wrap'>
-      <div className='flex items-center gap-1'>
-        <ArrowButton onClick={handleStart} isDisabled={!canPrev}>
-          <ChevronsLeft size={16} />
-        </ArrowButton>
+    <div className={styleTokens.pagination.wrapper1}>
+      <div className={styleTokens.pagination.wrapper2}>
+        <div className={styleTokens.pagination.arrowBlock}>
+          <ArrowButton onClick={handleStart} isDisabled={!canPrev}>
+            <ChevronsLeft size={16} />
+          </ArrowButton>
 
-        <ArrowButton onClick={handlePrev} isDisabled={!canPrev}>
-          <ChevronLeft size={16} />
-        </ArrowButton>
+          <ArrowButton onClick={handlePrev} isDisabled={!canPrev}>
+            <ChevronLeft size={16} />
+          </ArrowButton>
 
-        <div className='px-3 text-sm text-gray-700 font-medium min-w-17,5 text-center'>
-          {pageIndex + 1} / {pageCount || 1}
+          <div className='px-3 text-sm text-gray-700 font-medium min-w-17,5 text-center'>
+            {pageIndex + 1} / {pageCount || 1}
+          </div>
+
+          <ArrowButton onClick={handleNext} isDisabled={!canNext}>
+            <ChevronRight size={16} />
+          </ArrowButton>
+
+          <ArrowButton onClick={handleEnd} isDisabled={!canNext}>
+            <ChevronsRight size={16} />
+          </ArrowButton>
         </div>
 
-        <ArrowButton onClick={handleNext} isDisabled={!canNext}>
-          <ChevronRight size={16} />
-        </ArrowButton>
+        <div className={styleTokens.pagination.countBlock}>
+          <span className={styleTokens.pagination.content}>
+            {t(k.common.rows)}
+          </span>
 
-        <ArrowButton onClick={handleEnd} isDisabled={!canNext}>
-          <ChevronsRight size={16} />
-        </ArrowButton>
-      </div>
-
-      <div className='flex items-center gap-2'>
-        <span className='text-sm text-gray-500'>
-          {t(k.common.rows)}
-        </span>
-
-        <select
-          value={pagination.pageSize}
-          onChange={handleSelect}
-          className='border rounded-md px-2 py-1 text-sm bg-white'
-        >
-          {pageSizeOptions.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
+          <select
+            value={pagination.pageSize}
+            onChange={handleSelect}
+            className={styleTokens.pagination.select}
+          >
+            {pageSizeOptions.map((s) => (<option key={s} value={s}>{s}</option>))}
+          </select>
+        </div>
       </div>
     </div>
   );

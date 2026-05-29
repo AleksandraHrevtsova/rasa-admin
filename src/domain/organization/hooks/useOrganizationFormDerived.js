@@ -1,53 +1,98 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { mapOption, findItemById } from '@/core/utils/options.map';
 
-export function useOrganizationFormDerived({ control, fieldNames, setValue, counterparties }) {
+export function useOrganizationFormDerived({
+  t,
+  k,
+  control,
+  fieldNames,
+  setValue,
+  getValues,
+  counterparties,
+  data,
+}) {
+  const type = useWatch({ control, name: fieldNames.type });
   const selectedCounterpartyId = useWatch({ control, name: fieldNames.counterparty });
-  const selectedHubIds = useWatch({ control, name: fieldNames.hubs });
-  const checkedIsRelated = useWatch({ control, name: fieldNames.isRelated })
 
-  const isRelatedToCounterparty = checkedIsRelated;
-
-  const resetParams = {
+  const resetParams = useMemo(() => ({
     shouldDirty: true,
     shouldTouch: true,
     shouldValidate: true,
-  }
+  }), []);
+
+  const isLogistics = type === 'LOGISTICS';
+  const isPayment = type === 'PAYMENT';
+
+  const initialRef = useRef(null);
 
   useEffect(() => {
-    if (!isRelatedToCounterparty) {
-      if (selectedCounterpartyId) setValue(fieldNames.counterparty, null, resetParams);
-      if (selectedHubIds?.length) setValue(fieldNames.hubs, [], resetParams);
-      return;
+    if (!initialRef.current && data) {
+      initialRef.current = {
+        counterpartyId: data?.counterpartyId || null,
+        hubIds: data?.hubIds || [],
+      };
     }
-
-    if (selectedHubIds?.length) {
-      setValue(fieldNames.hubs, [], resetParams);
-    }
-
-  }, [isRelatedToCounterparty]);
-
-
-  useEffect(() => {
-    if (!selectedCounterpartyId) return;
+  }, [data]);
   
+  useEffect(() => {
+    if (!isPayment) return;
+
+    setValue(fieldNames.counterparty, null, resetParams);
     setValue(fieldNames.hubs, [], resetParams);
-  }, [selectedCounterpartyId]);
+  }, [isPayment, setValue, fieldNames, resetParams]);
+
+  useEffect(() => {
+    if (!isLogistics) return;
+    if (!initialRef.current) return;
+
+    const { counterpartyId, hubIds } = initialRef.current;
+
+    const currentCounterparty = getValues(fieldNames.counterparty);
+
+    if (counterpartyId && currentCounterparty !== counterpartyId) {
+      setValue(fieldNames.counterparty, counterpartyId, resetParams);
+    }
+
+    const currentHubs = getValues(fieldNames.hubs);
+
+    if (hubIds?.length && JSON.stringify(currentHubs) !== JSON.stringify(hubIds)) {
+      setValue(fieldNames.hubs, hubIds, resetParams);
+    }
+  }, [
+    isLogistics,
+    getValues,
+    setValue,
+    fieldNames,
+    resetParams,
+  ]);
+  
+  useEffect(() => {
+    if (!isLogistics) return;
+    if (!selectedCounterpartyId) return;
+
+    setValue(fieldNames.hubs, [], resetParams);
+  }, [isLogistics, selectedCounterpartyId, setValue, fieldNames, resetParams]);
+
 
   const filteredHubOptions = useMemo(() => {
     const counterpartyHubs = findItemById(counterparties, selectedCounterpartyId)?.hubs;
     return counterpartyHubs?.map(el => mapOption(el));
   }, [selectedCounterpartyId, counterparties]);
 
-  const selectOptions = {
+  const options = useMemo(() => ({
     counterpartyId: counterparties?.map(el => mapOption(el)) || [],
     hubIds: filteredHubOptions || [],
-  };
+    type: [
+      { value: 'LOGISTICS', label: t(k.organization.typeLogistics) },
+      { value: 'PAYMENT', label: t(k.organization.typePayment) },
+    ],
+  }), [counterparties, filteredHubOptions, t, k]);
 
   return {
-    selectOptions,
-    isRelatedToCounterparty,
+    options,
+    isLogistics,
+    isPayment,
   };
 }

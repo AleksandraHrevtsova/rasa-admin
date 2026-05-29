@@ -204,6 +204,9 @@ export const keys = {
     enterCode: 'organization.enterCode',
     validFrom: 'organization.validFrom',
     validTo: 'organization.validTo',
-    isRelated: 'organization.isRelated',
+    type: 'organization.type',
+    selectType: 'organization.selectType',
+    typeLogistics: 'organization.typeLogistics',
+    typePayment: 'organization.typePayment',
   },
 }

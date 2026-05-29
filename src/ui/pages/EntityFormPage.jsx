@@ -49,9 +49,12 @@ export function EntityFormPage({ entity }) {
   const fieldNames = config.fieldNames;
 
   const derived = config.useDerived?.({
+    t,
+    k,
     control: formState.form.control,
     fieldNames,
     setValue: formState.form.setValue,
+    getValues: formState.form.getValues,
     ...sideData,
     data: formState.data,
   }) || {};

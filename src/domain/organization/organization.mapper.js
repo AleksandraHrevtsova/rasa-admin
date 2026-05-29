@@ -9,9 +9,9 @@ export const organizationMapper = {
       code: data.code,
       validFrom: formatDateForInput(data.validFrom),
       validTo: formatDateForInput(data.validTo),
-      isRelated: !!data.counterparty?.id,
+      type: data.type,
       counterpartyId: data.counterparty?.id || null,
-      // hubIds: data.hubs?.map(({ el }) => el.id) || [],
+      hubIds: data.hubs?.map(({ el }) => el.id) || [],
     };
   },
 
@@ -21,8 +21,9 @@ export const organizationMapper = {
       code: form.code,
       validFrom: form.validFrom,
       validTo: form.validTo,
+      type: form.type,
       counterpartyId: form.counterpartyId || null,
-      // hubIds: form.hubIds || [],
+      hubIds: form.hubIds || [],
     };
   },
 };

@@ -3,6 +3,7 @@ export const fields = {
   code: 'code',
   validFrom: 'validFrom',
   validTo: 'validTo',
+  type: 'type',
   counterparty: 'counterpartyId',
   hubs: 'hubIds',
 };

@@ -4,7 +4,8 @@ export const formConfig = ({
   t, 
   k, 
   fieldNames, 
-  isRelatedToCounterparty = null, 
+  isLogistics,
+  isPaymentOrg,
   isEdit, 
   isActive, 
 }) => {
@@ -25,7 +26,7 @@ export const formConfig = ({
         placeholder: t(k.common.enterNameBase), 
         required: true,
         isShowField: true,
-        isDisabled: !isActive,
+        isDisabled: false,
       },
       { 
         type: formItemTypes.input.text, 
@@ -34,7 +35,7 @@ export const formConfig = ({
         placeholder: t(k.organization.enterCode), 
         required: true,
         isShowField: true,
-        isDisabled: !isActive,
+        isDisabled: false,
       },
       { 
         type: formItemTypes.input.date, 
@@ -43,7 +44,7 @@ export const formConfig = ({
         placeholder: t(k.common.enterDate), 
         required: true, 
         isShowField: true,
-        isDisabled: !isActive,
+        isDisabled: false,
       },
       { 
         type: formItemTypes.input.date, 
@@ -52,14 +53,16 @@ export const formConfig = ({
         placeholder: t(k.common.enterDate), 
         required: false,
         isShowField: true,
-        isDisabled: !isActive,
+        isDisabled: false,
       },
       {
-        type: formItemTypes.input.checkbox,
-        name: 'isRelated',
-        label: t(k.organization.isRelated),
+        type: formItemTypes.select,
+        name: fieldNames.type,
+        label: t(k.organization.type),
+        placeholder: t(k.organization.selectType),
+        required: true,
         isShowField: true,
-        isDisabled: !isActive,
+        isDisabled: false,
       },
       { 
         type: formItemTypes.select, 
@@ -67,37 +70,37 @@ export const formConfig = ({
         label: t(k.common.counterparty), 
         placeholder: t(k.user.selectCounterparty), 
         isMulti: false,
-        required: isRelatedToCounterparty,
-        isShowField: true, 
-        isDisabled: !isActive && isRelatedToCounterparty,
+        required: isLogistics,
+        isShowField: isLogistics, 
+        isDisabled: !isActive && !isLogistics,
       },
-      // { 
-      //   type: formItemTypes.select, 
-      //   name: fieldNames.hubs, 
-      //   label: t(k.common.hubs), 
-      //   placeholder: t(k.user.selectHubs), 
-      //   isMulti: false,
-      //   isMulti: true, 
-      //   required: isRelatedToCounterparty,
-      //   isShowField: isRelatedToCounterparty, 
-      //   isDisabled: !isActive,
-      // },
+      { 
+        type: formItemTypes.select, 
+        name: fieldNames.hubs, 
+        label: t(k.common.hubs), 
+        placeholder: t(k.user.selectHubs), 
+        isMulti: false,
+        isMulti: true, 
+        required: isLogistics,
+        isShowField: isLogistics, 
+        isDisabled: !isActive && !isLogistics,
+      },
     ],
     rules: {
       counterpartyId: { 
         validate: (v) => {
-          if (!isRelatedToCounterparty) return true;
+          if (isPaymentOrg) return true;
           return v ? true : t(k.user.counterpartyRequired);
         },
       },
-      // hubIds: { 
-      //   validate: (v) => {
-      //     if (!isRelatedToCounterparty) return true;
-      //     return (Array.isArray(v) && v.length > 0)
-      //       ? true
-      //       : t(k.user.hubsRequired);
-      //   },
-      // },
+      hubIds: { 
+        validate: (v) => {
+          if (isPaymentOrg) return true;
+          return (Array.isArray(v) && v.length > 0)
+            ? true
+            : t(k.user.hubsRequired);
+        },
+      },
       name: { 
         required: t(k.user.nameRequired) 
       },

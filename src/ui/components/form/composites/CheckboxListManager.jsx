@@ -7,6 +7,15 @@ export function CheckboxListManager({ node, field, isEdit }) {
   const [editMode, setEditMode] = useState(!isEdit);
 
   const toggleMode = () => setEditMode(prev => !prev);
+
+  const selectedValues = field.value || [];
+  const allValues = node.options?.map(opt => opt.value) || [];
+
+  const isAllSelected =
+    allValues.length > 0 &&
+    allValues.every(v => selectedValues.includes(v));
+
+  const handleToggleAll = (checked) => field.onChange(checked ? allValues : []);
   
   return (
     <FormFieldContainer
@@ -27,6 +36,17 @@ export function CheckboxListManager({ node, field, isEdit }) {
         </div>
       ) : (
         <div className="flex flex-col gap-2">
+          {node.options?.length > 0 && (
+            <label className="flex items-center gap-2 font-medium">
+              <input
+                type="checkbox"
+                checked={isAllSelected}
+                onChange={(e) => handleToggleAll(e.target.checked)}
+              />
+
+              <span>Все</span>
+            </label>
+          )}
           {node.options?.map(opt => {
             const checked =
               field.value?.includes(opt.value);

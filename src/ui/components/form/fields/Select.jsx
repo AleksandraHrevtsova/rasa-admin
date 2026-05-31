@@ -14,12 +14,12 @@ const MySelect = (props) => {
     : options?.find(o => o.value === field.value) || null;
 
   const handleChange = (selected) => {
-    let newValue = isMulti 
-      ? selected?.map((s) => s.value) || [] 
-      : selected.value ?? null;
-    
+    const newValue = isMulti
+      ? selected?.map((s) => s.value) || []
+      : selected?.value ?? null;
+  
     field.onChange(newValue);
-  }
+  };
 
   return (
     <>

@@ -210,8 +210,10 @@ export const compositeBlocks = {
   products: 'products-manager',
   organizations: 'organizations-manager',
   employees: 'employees-manager',
+  bankAccounts: 'bank-accounts-manager',
 };
 
 export const defaultValues = {
   table: '—',
+  requisiteMode: 'TARGET_ONLY',
 };

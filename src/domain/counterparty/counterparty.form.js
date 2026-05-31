@@ -40,17 +40,14 @@ export const counterpartyForm = (ctx) => {
 
     hooks: {
       useData: () => {
-        //       const { data: hubs = [] } = useHubs();
         const { data: products = [] } = useProducts();
         const { data: paymentTypes = [] } = usePaymentTypes();
         const { data: organizations = [] } = useOrganizations();
-        //       const { data: employees = [] } = useEmployees();
-        
+
         return { 
           products,
           paymentTypes,
           organizations,
-          // hubs, employees 
         };
       },
     },

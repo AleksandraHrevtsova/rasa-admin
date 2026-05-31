@@ -11,7 +11,7 @@ export const organizationMapper = {
       validTo: formatDateForInput(data.validTo),
       type: data.type,
       counterpartyId: data.counterparty?.id || null,
-      hubIds: data.hubs?.map(({ el }) => el.id) || [],
+      bankAccounts: data.bankAccounts || []
     };
   },
 
@@ -23,7 +23,7 @@ export const organizationMapper = {
       validTo: form.validTo,
       type: form.type,
       counterpartyId: form.counterpartyId || null,
-      hubIds: form.hubIds || [],
+      bankAccounts: form.bankAccounts || []
     };
   },
 };

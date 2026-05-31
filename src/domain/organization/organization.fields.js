@@ -5,5 +5,5 @@ export const fields = {
   validTo: 'validTo',
   type: 'type',
   counterparty: 'counterpartyId',
-  hubs: 'hubIds',
+  bankAccounts: 'bankAccounts'
 };

@@ -3,10 +3,11 @@ export const normalizeCounterparty = (obj) => {
   return {
     name: obj.name ?? '',
     namePublic: obj.namePublic ?? '',
-    hubIds:(obj.hubIds ?? []).slice().sort(),
+
+    requisiteMode: obj.requisiteMode ?? 'TARGET_ONLY',
+    weeklyLimit: obj.weeklyLimit ?? null,
+    
     paymentTypeIds: (obj.paymentTypeIds ?? []).slice().sort(),
     productIds: (obj.productIds ?? []).slice().sort(),
-    employeeIds: (obj.employeeIds ?? []).slice().sort(),
-    organizationIds: (obj.organizationIds ?? []).slice().sort(),
   }
 };

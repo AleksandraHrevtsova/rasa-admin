@@ -1,9 +1,16 @@
 export const fields = {
   name: 'name',
   namePublic: 'namePublic',
-  hubs: 'hubIds',
-  products: 'productIds',
+
+  requisiteMode: 'requisiteMode',
+  weeklyLimit: 'weeklyLimit',
+
   paymentTypes: 'paymentTypeIds',
-  organizations: 'organizationIds',
+  products: 'productIds',
+
+  hubs: 'hubIds',
   employees: 'employeeIds',
+  
+  organizations: 'organizationIds',
+  requisites: 'requisites',
 };

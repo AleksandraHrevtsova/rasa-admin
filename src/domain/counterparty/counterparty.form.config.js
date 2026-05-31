@@ -4,6 +4,7 @@ export const formConfig = ({
   t, 
   k, 
   fieldNames, 
+  isTargetModeOnly,
   options,
   isEdit, 
   isActive,
@@ -25,7 +26,7 @@ export const formConfig = ({
         placeholder: t(k.common.enterNameBase), 
         required: true,
         isShowField: true,
-        isDisabled: !isActive,
+        isDisabled: !isActive && isEdit,
       },
       { 
         type: formItemTypes.input.text, 
@@ -34,74 +35,93 @@ export const formConfig = ({
         placeholder: t(k.common.enterNamePublic), 
         required: true,
         isShowField: true,
-        isDisabled: !isActive,
+        isDisabled: !isActive && isEdit,
+      },
+      {
+        type: compositeTypes.group,
+        label: t(k.counterparty.requisiteSettings),
+        children: [
+          {
+            type: compositeTypes.grid,
+            columns: 2,
+            children: [
+              {
+                span: 1,
+                type: formItemTypes.select, 
+                name: fieldNames.requisiteMode,  
+                label: t(k.counterparty.requisiteMode), 
+                placeholder: t(k.counterparty.selectRequisiteMode), 
+                required: true, 
+                isShowField: true,
+                isDisabled: false,
+              },
+              {
+                span: 1,
+                type: formItemTypes.input.number, 
+                inputParams: {
+                  min: 100000,
+                  max: 3000000,
+                  step: 50000
+                },
+                name: fieldNames.weeklyLimit, 
+                label: t(k.counterparty.weeklyLimit), 
+                placeholder: t(k.counterparty.enterWeeklyLimit), 
+                required: !isTargetModeOnly,
+                isShowField: !isTargetModeOnly,
+              },
+            ],
+          }
+        ],
+      },
+      {
+        type: compositeTypes.group,
+        label: '',
+        children: [
+          {
+            type: compositeTypes.grid,
+            columns: 2,
+            children: [
+              {
+                span: 1,
+                type: compositeTypes.manager,
+                component: compositeBlocks.paymentTypes,
+                label: t(k.counterparty.availablePaymentTypes),
+                name: fieldNames.paymentTypes,
+                required: !isEdit,
+                isEdit,
+                options: options.paymentTypes,
+              },
+              {
+                span: 1,
+                type: compositeTypes.manager,
+                component: compositeBlocks.products,
+                label: t(k.counterparty.availableProducts),
+                name: fieldNames.products,
+                required: !isEdit,
+                isEdit,
+                options: options.products,
+              },
+            ]
+          }
+        ],
+      },
+      {
+        type: compositeTypes.manager,
+        component: compositeBlocks.employees,
+        label: t(k.counterparty.employees),
+        name: fieldNames.employees,
+        isShowField: isEdit,
+        children: []
       },
       {
         type: compositeTypes.manager,
         component: compositeBlocks.hubs,
         label: t(k.common.hubs),
         name: fieldNames.hubs,
-        isEdit,
-        options: options.hubs,
-        // хабы создаются внутри формы создания и редактирования контрагента
-        // после сохранения и проверки, что у контрагента есть хотя бы 1 хаб, можно добавлять орагнизации группы 1, потому что организация должна иметь привязку к 1 и более хабам
-        // аналогично с пользователями
-        // 
+        isShowField: isEdit,
+        children: []
       },
-      // {
-      //   type: compositeTypes.manager,
-      //   component: compositeBlocks.paymentTypes,
-      //   label: t(k.counterparty.availablePaymentTypes),
-      //   name: fieldNames.paymentTypes,
-      //   isEdit,
-      //   options: options.paymentTypes,
-      // },
-      // {
-      //   type: compositeTypes.manager,
-      //   component: compositeBlocks.products,
-      //   label: t(k.counterparty.availableProducts),
-      //   name: fieldNames.products,
-      //   isEdit,
-      //   options: options.products,
-      // },
-      // {
-      //   type: compositeTypes.manager,
-      //   component: compositeBlocks.organizations,
-      //   label: t(k.counterparty.availableOrganizations),
-      //   name: fieldNames.organizations,
-      //   leftTitle: 'Группа 1',
-      //   rightTitle: 'Группа 2',
-      //   counterpartyName: 'Counterparty Base',
-      //   hubs: [
-      //     {
-      //       id: '1',
-      //       name: 'Hub A',
-      //     },
-      //     {
-      //       id: '2',
-      //       name: 'Hub B',
-      //     },
-      //   ],
-        // children: [
-          // 2 столбца (с подзаголовками: группа 1 и группа 2)
-          // в 1 столбце (группа 1) у заголовка кнопка добавить (+)
-          // список доступных организаций в столбик с кнопкой (-) удалить(деактивировать) в каждой организации
-          // в 2 столбце (группа 2) без кнопки (+)
-          // список орагнизаций, сформированный в виде имя контрагента counterparty.nameBase + hub.nameBase
-          // то есть организаций в группе 2 будет столько, суолько складов (хабов) у контрагента
-        // ]
-      // },
-      // {
-      //   type: compositeTypes.manager,
-      //   component: compositeBlocks.employees,
-      //   label: t(k.counterparty.employees),
-      //   name: fieldNames.employees,
-      //   children: [
-      //     // у залоговка кнопка добавить/пригласить (+) 
-      //     // отображать таблицу пользователей в виде
-      //     // имя, склад и кнопка (-) удалить(деактивировать)
-      //   ]
-      // },
+
     ],
     rules: {},
   }

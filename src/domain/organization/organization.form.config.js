@@ -1,4 +1,4 @@
-import { formItemTypes } from '@/config/constants';
+import { formItemTypes, compositeTypes, compositeBlocks } from '@/config/constants';
 
 export const formConfig = ({
   t, 
@@ -19,6 +19,15 @@ export const formConfig = ({
       canDeactivate,
     },
     fields: [
+      {
+        type: formItemTypes.select,
+        name: fieldNames.type,
+        label: t(k.organization.type),
+        placeholder: t(k.organization.selectType),
+        required: true,
+        isShowField: true,
+        isDisabled: false,
+      },
       { 
         type: formItemTypes.input.text, 
         name: fieldNames.name,  
@@ -37,32 +46,37 @@ export const formConfig = ({
         isShowField: true,
         isDisabled: false,
       },
-      { 
-        type: formItemTypes.input.date, 
-        name: fieldNames.validFrom,  
-        label: t(k.organization.validFrom), 
-        placeholder: t(k.common.enterDate), 
-        required: true, 
-        isShowField: true,
-        isDisabled: false,
-      },
-      { 
-        type: formItemTypes.input.date, 
-        name: fieldNames.validTo, 
-        label: t(k.organization.validTo), 
-        placeholder: t(k.common.enterDate), 
-        required: false,
-        isShowField: true,
-        isDisabled: false,
-      },
       {
-        type: formItemTypes.select,
-        name: fieldNames.type,
-        label: t(k.organization.type),
-        placeholder: t(k.organization.selectType),
-        required: true,
-        isShowField: true,
-        isDisabled: false,
+        type: compositeTypes.group,
+        label: '',
+        children: [
+          {
+            type: compositeTypes.grid,
+            columns: 2,
+            children: [
+              {
+                span: 1,
+                type: formItemTypes.input.date, 
+                name: fieldNames.validFrom,  
+                label: t(k.organization.validFrom), 
+                placeholder: t(k.common.enterDate), 
+                required: true, 
+                isShowField: true,
+                isDisabled: false,
+              },
+              {
+                span: 1,
+                type: formItemTypes.input.date, 
+                name: fieldNames.validTo, 
+                label: t(k.organization.validTo), 
+                placeholder: t(k.common.enterDate), 
+                required: false,
+                isShowField: true,
+                isDisabled: false,
+              },
+            ],
+          }
+        ],
       },
       { 
         type: formItemTypes.select, 
@@ -74,16 +88,13 @@ export const formConfig = ({
         isShowField: isLogistics, 
         isDisabled: !isActive && !isLogistics,
       },
-      { 
-        type: formItemTypes.select, 
-        name: fieldNames.hubs, 
-        label: t(k.common.hubs), 
-        placeholder: t(k.user.selectHubs), 
-        isMulti: false,
-        isMulti: true, 
-        required: isLogistics,
-        isShowField: isLogistics, 
-        isDisabled: !isActive && !isLogistics,
+      {
+        type: compositeTypes.manager,
+        component: compositeBlocks.bankAccounts,
+        label: t(k.common.bankAccounts),
+        name: fieldNames.bankAccounts,
+        required: isPaymentOrg,
+        isEdit,
       },
     ],
     rules: {
@@ -91,14 +102,6 @@ export const formConfig = ({
         validate: (v) => {
           if (isPaymentOrg) return true;
           return v ? true : t(k.user.counterpartyRequired);
-        },
-      },
-      hubIds: { 
-        validate: (v) => {
-          if (isPaymentOrg) return true;
-          return (Array.isArray(v) && v.length > 0)
-            ? true
-            : t(k.user.hubsRequired);
         },
       },
       name: { 

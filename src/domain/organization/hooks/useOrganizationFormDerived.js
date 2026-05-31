@@ -14,7 +14,6 @@ export function useOrganizationFormDerived({
   data,
 }) {
   const type = useWatch({ control, name: fieldNames.type });
-  const selectedCounterpartyId = useWatch({ control, name: fieldNames.counterparty });
 
   const resetParams = useMemo(() => ({
     shouldDirty: true,
@@ -28,71 +27,61 @@ export function useOrganizationFormDerived({
   const initialRef = useRef(null);
 
   useEffect(() => {
-    if (!initialRef.current && data) {
-      initialRef.current = {
-        counterpartyId: data?.counterpartyId || null,
-        hubIds: data?.hubIds || [],
-      };
-    }
+    if (initialRef.current || !data) return;
+
+    initialRef.current = {
+      counterpartyId: data?.counterparty?.id || data?.counterpartyId || null,
+    };
   }, [data]);
   
   useEffect(() => {
     if (!isPayment) return;
 
-    setValue(fieldNames.counterparty, null, resetParams);
-    setValue(fieldNames.hubs, [], resetParams);
-  }, [isPayment, setValue, fieldNames, resetParams]);
+    const currentCounterparty = getValues(fieldNames.counterparty);
+
+    if (currentCounterparty) {
+      setValue( fieldNames.counterparty, null, resetParams);
+    }
+  }, [
+    isPayment,
+    getValues,
+    setValue,
+    fieldNames.counterparty,
+    resetParams,
+  ]);
 
   useEffect(() => {
     if (!isLogistics) return;
     if (!initialRef.current) return;
 
-    const { counterpartyId, hubIds } = initialRef.current;
-
+    const initialCounterpartyId = initialRef.current.counterpartyId;
     const currentCounterparty = getValues(fieldNames.counterparty);
 
-    if (counterpartyId && currentCounterparty !== counterpartyId) {
-      setValue(fieldNames.counterparty, counterpartyId, resetParams);
-    }
-
-    const currentHubs = getValues(fieldNames.hubs);
-
-    if (hubIds?.length && JSON.stringify(currentHubs) !== JSON.stringify(hubIds)) {
-      setValue(fieldNames.hubs, hubIds, resetParams);
+    if (initialCounterpartyId && currentCounterparty !== initialCounterpartyId) {
+      setValue(fieldNames.counterparty, initialCounterpartyId, resetParams);
     }
   }, [
     isLogistics,
     getValues,
     setValue,
-    fieldNames,
+    fieldNames.counterparty,
     resetParams,
   ]);
   
-  useEffect(() => {
-    if (!isLogistics) return;
-    if (!selectedCounterpartyId) return;
-
-    setValue(fieldNames.hubs, [], resetParams);
-  }, [isLogistics, selectedCounterpartyId, setValue, fieldNames, resetParams]);
-
-
-  const filteredHubOptions = useMemo(() => {
-    const counterpartyHubs = findItemById(counterparties, selectedCounterpartyId)?.hubs;
-    return counterpartyHubs?.map(el => mapOption(el));
-  }, [selectedCounterpartyId, counterparties]);
-
   const options = useMemo(() => ({
     counterpartyId: counterparties?.map(el => mapOption(el)) || [],
-    hubIds: filteredHubOptions || [],
     type: [
       { value: 'LOGISTICS', label: t(k.organization.typeLogistics) },
       { value: 'PAYMENT', label: t(k.organization.typePayment) },
     ],
-  }), [counterparties, filteredHubOptions, t, k]);
+  }), [counterparties, t, k]);
 
   return {
     options,
     isLogistics,
     isPayment,
+    bankAccounts: data?.bankAccounts || [],
+    organizationId: data?.id,
+    organizationName: data?.name,
   };
 }

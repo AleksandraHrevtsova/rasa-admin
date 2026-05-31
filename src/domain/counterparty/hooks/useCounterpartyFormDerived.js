@@ -3,21 +3,38 @@ import { useWatch } from 'react-hook-form';
 import { mapOption } from '@/core/utils/options.map';
 
 export function useCounterpartyFormDerived({ 
+  t,
+  k,
   control, 
   fieldNames, 
   setValue, 
-  productsSet,
-  paymentTypesSet,
+  products,
+  paymentTypes,
   data, 
 }) {
+
+  const requisiteMode = useWatch({ control, name: fieldNames.requisiteMode });
+
+  const resetParams = useMemo(() => ({
+    shouldDirty: true,
+    shouldTouch: true,
+    shouldValidate: true,
+  }), []);
+
+  const isTargetModeOnly = requisiteMode === 'TARGET_ONLY';
+
   const options = {
-    products: productsSet?.map(el => mapOption(el, 'namePublic')) || [],
-    paymentTypes: paymentTypesSet?.map(el => mapOption(el)) || [],
+    products: products?.map(el => mapOption(el, 'namePublic')) || [],
+    paymentTypes: paymentTypes?.map(el => mapOption(el)) || [],
+    requisiteMode: [
+      { value: 'REGULAR_ONLY', label: t(k.counterparty.regular) },
+      { value: 'TARGET_ONLY', label: t(k.counterparty.target) },
+      { value: 'BOTH', label: t(k.counterparty.both) },
+    ],
   };
 
   const employeesView = useMemo(() => {
     return data?.employees?.map(e => {
-      console.log('E:', e.hubs);
       return {
         id: e.id,
         name: e.name,
@@ -26,8 +43,20 @@ export function useCounterpartyFormDerived({
     });
   }, [data?.employees]);
 
+  const hubsView = useMemo(() => {
+    return data?.hubs?.map(e => {
+      return {
+        id: e.id,
+        name: e.namePublic,
+        address: e.address,
+      };
+    });
+  }, [data?.employees]);
+
   return {
     options,
     employeesView,
+    hubsView,
+    isTargetModeOnly,
   };
 }

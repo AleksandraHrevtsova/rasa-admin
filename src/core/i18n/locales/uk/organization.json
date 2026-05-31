@@ -9,6 +9,6 @@
   "validTo": "Кінець дії організації",
   "type": "Тип організації",
   "selectType": "Оберіть тип",
-  "typeLogistics": "Логістика",
-  "typePayment": "Платежи"
+  "typeLogistics": "Контрагент",
+  "typePayment": "Платіжна"
 }

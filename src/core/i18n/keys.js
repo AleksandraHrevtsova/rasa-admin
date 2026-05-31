@@ -67,6 +67,7 @@ export const keys = {
 
     products: 'common.products',
     counterparties: 'common.counterparties',
+    bankAccounts: 'common.bankAccounts',
 
     count: 'common.count',
     enterCount: 'common.enterCount',
@@ -191,6 +192,15 @@ export const keys = {
     groupOne: 'counterparty.groupOne',
     groupTwo: 'counterparty.groupTwo',
     employees: 'counterparty.employees',
+
+    requisiteSettings: 'counterparty.requisiteSettings',
+    requisiteMode: 'counterparty.requisiteMode',
+    regular: 'counterparty.regular',
+    target: 'counterparty.target',
+    both: 'counterparty.both',
+    selectRequisiteMode: 'counterparty.selectRequisiteMode',
+    weeklyLimit: 'counterparty.weeklyLimit',
+    enterWeeklyLimit: 'counterparty.enterWeeklyLimit',
   },
   organizations: {
     title: 'organizations.title',
@@ -208,5 +218,18 @@ export const keys = {
     selectType: 'organization.selectType',
     typeLogistics: 'organization.typeLogistics',
     typePayment: 'organization.typePayment',
+  },
+
+  requisites: {
+    payee: 'requisites.payee',
+    bankName: 'requisites.bankName',
+    iban: 'requisites.iban',
+    validFrom: 'requisites.validFrom',
+    validTo: 'requisites.validTo',
+    validInternal: 'requisites.validInternal',
+    copyRequisites: 'requisites.copyRequisites',
+    requisitesCopied: 'requisites.requisitesCopied',
+    backAccounts: 'requisites.backAccounts',
+    noBackAccounts: 'requisites.noBackAccounts',
   },
 }

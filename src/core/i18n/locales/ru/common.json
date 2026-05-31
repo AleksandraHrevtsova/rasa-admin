@@ -35,6 +35,7 @@
   "hubs": "Склады",
   "products": "Продукты",
   "counterparties": "Контрагенты",
+  "bankAccounts": "Банковские реквизиты",
 
   "count": "количесво",
   "enterCount": "Введите количество",

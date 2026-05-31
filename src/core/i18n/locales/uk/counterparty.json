@@ -20,5 +20,13 @@
   "availableOrganizations": "Доступні отримувачі",
   "groupOne": "(1)",
   "groupTwo": "(2)",
-  "employees": "Співробітники"
+  "employees": "Співробітники",
+  "requisiteSettings": "Параметри реквізитів",
+  "requisiteMode": "Доступні типи реквізитів",
+  "regular": "Осама (3303)",
+  "target": "Разові",
+  "both": "Всі",
+  "selectRequisiteMode": "Оберіт тип",
+  "weeklyLimit": "Ліміт оплат Осама",
+  "enterWeeklyLimit": "Встановіть ліміт"
 }

@@ -15,6 +15,8 @@ import counterparty from '@/core/i18n/locales/uk/counterparty.json';
 import organizations from '@/core/i18n/locales/uk/organizations.json';
 import organization from '@/core/i18n/locales/uk/organization.json';
 
+import requisites from '@/core/i18n/locales/uk/requisites.json';
+
 export default { 
   auth,
   navigation,
@@ -28,4 +30,5 @@ export default {
   counterparty,
   organizations,
   organization,
+  requisites,
 };

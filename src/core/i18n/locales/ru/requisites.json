@@ -1,0 +1,12 @@
+{
+  "payee": "Получатель:",
+  "bankName": "Банк:",
+  "iban": "р/с:",
+  "validFrom": "Действует с:",
+  "validTo": "по:",
+  "validInternal": "Без ограничения",
+  "copyRequisites": "Копировать реквизиты",
+  "requisitesCopied": "Реквизиты скопированы",
+  "backAccounts": "Банковские счета",
+  "noBackAccounts": "Банковские счета отсутствуют"
+}

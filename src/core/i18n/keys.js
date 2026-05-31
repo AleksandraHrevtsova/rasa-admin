@@ -74,6 +74,7 @@ export const keys = {
     toggleActiveError: 'common.toggleActiveError',
     enterDate: 'common.enterDate',
     rows: 'common.rows',
+    selectAll: 'common.selectAll',
   },
   table: {
     noData: 'table.noData',

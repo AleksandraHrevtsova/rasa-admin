@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { FormFieldContainer } from '@/ui/components/form/FormFieldContainer';
 import { IconAction } from '@/ui/components/table/actions/IconAction';
 import { buttonActionTypes } from '@/config/constants';
+import { useI18n } from '@/ui/hooks/useI18n';
 
 export function CheckboxListManager({ node, field, isEdit }) {
+  const { t, k } = useI18n();
   const [editMode, setEditMode] = useState(!isEdit);
 
   const toggleMode = () => setEditMode(prev => !prev);
@@ -44,7 +46,7 @@ export function CheckboxListManager({ node, field, isEdit }) {
                 onChange={(e) => handleToggleAll(e.target.checked)}
               />
 
-              <span>Все</span>
+              <span className='text-blue-950 font-bold'>{t(k.common.selectAll)}</span>
             </label>
           )}
           {node.options?.map(opt => {

@@ -15,7 +15,7 @@
   "createError": "Ошибка при создании контрагента",
 
   "availablePaymentTypes": "Доступные типы оплат",
-  "availableProducts": "Доступные к заказу продукты",
+  "availableProducts": "Продукты к заказу",
   "availableOrganizations": "Доступные получатели",
   "groupOne": "(1)",
   "groupTwo": "(2)",

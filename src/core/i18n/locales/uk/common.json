@@ -42,5 +42,6 @@
 
   "toggleActiveError": "Помилка зміни статусу активності",
   "enterDate": "Оберіть дату",
-  "rows": "по"
+  "rows": "по",
+  "selectAll": "Обрати всі"
 }

@@ -64,6 +64,7 @@ export const keys = {
     role: 'common.role',
     counterparty: 'common.counterparty',
     hubs: 'common.hubs',
+    hub: 'common.hub',
 
     products: 'common.products',
     counterparties: 'common.counterparties',
@@ -233,4 +234,34 @@ export const keys = {
     backAccounts: 'requisites.backAccounts',
     noBackAccounts: 'requisites.noBackAccounts',
   },
+
+  orders: {
+    title: 'orders.title',
+  },
+  
+  order: {
+    drafted: 'order.drafted',
+    submitted: 'order.submitted',
+    accepted: 'order.accepted',
+    shipped: 'order.shipped',
+    completed: 'order.completed',
+    canceled: 'order.canceled',
+
+    editCurrent: 'order.editCurrent',
+    createNew: 'order.createNew',
+
+    deliveryBlocked: 'order.deliveryBlocked',
+    deliveryUnBlocked: 'order.deliveryUnBlocked',
+    comment: 'order.comment',
+    status: 'order.status',
+    source: 'order.source',
+    regularOrder: 'order.regularOrder',
+    irRegularOrder: 'order.irRegularOrder',
+    submittedAt: 'order.submittedAt',
+    acceptedAt: 'order.acceptedAt',
+    shippedAt: 'order.shippedAt',
+    completedAt: 'order.completedAt',
+    
+  },
+
 }

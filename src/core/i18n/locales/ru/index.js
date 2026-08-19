@@ -17,6 +17,9 @@ import organization from '@/core/i18n/locales/ru/organization.json';
 
 import requisites from '@/core/i18n/locales/ru/requisites.json';
 
+import orders from '@/core/i18n/locales/ru/orders.json';
+import order from '@/core/i18n/locales/ru/order.json';
+
 export default { 
   auth,
   navigation,
@@ -31,4 +34,6 @@ export default {
   organizations,
   organization,
   requisites,
+  orders,
+  order,
 };

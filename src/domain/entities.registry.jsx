@@ -4,6 +4,7 @@ import { users } from '@/domain/user';
 import { products } from '@/domain/product';
 import { counterparties } from '@/domain/counterparty';
 import { organizations } from '@/domain/organization';
+import { orders } from '@/domain/order';
 
 const ctx = createRegistryContext();
 
@@ -12,4 +13,5 @@ export const entities = {
   products: products(ctx),
   counterparties: counterparties(ctx),
   organizations: organizations(ctx),
+  orders: orders(ctx),
 };

@@ -33,6 +33,7 @@
   "role": "Роль",
   "counterparty": "Контрагент",
   "hubs": "Склади",
+  "hub": "Склад",
   "products": "Продукти",
   "counterparties": "Контрагенти",
   "bankAccounts": "Банківські реквізити",

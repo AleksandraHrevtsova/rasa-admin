@@ -29,6 +29,7 @@ export const pageTags = {
   organization: 'organization',
   requisites: 'requisites',
   certificates: 'certificates',
+  orderStatuses: 'order-statuses'
 };
 
 const authPath = '/auth';
@@ -38,7 +39,6 @@ const getMePath = '/me';
 
 const receiptsPath = '/' + pageTags.receipts;
 const usersPath = '/' + pageTags.users;
-const rolesPath = '/' + pageTags.roles;
 const paymentTypesPath = '/' + pageTags.paymentTypes;
 const counterpartiesPath = '/' + pageTags.counterparties;
 const productsPath = '/' + pageTags.products;
@@ -46,9 +46,15 @@ const organizationsPath = '/' + pageTags.organizations;
 const requisitesPath = '/' + pageTags.requisites;
 const ordersPath = '/' + pageTags.orders;
 const certificatesPath = '/' + pageTags.certificates;
+const rolesPath = '/' + pageTags.roles;
+const orderStatusesPath = '/' + pageTags.orderStatuses
 
 export const ENDPOINTS = {
   API: {
+    REFS: {
+      ROLES: apiPath + rolesPath,
+      ORDER_STASUSES: apiPath + orderStatusesPath,
+    },
     AUTH: {
       LOGIN: apiPath + authPath + loginPath,
       LOGOUT: apiPath + authPath + logoutPath,
@@ -67,14 +73,7 @@ export const ENDPOINTS = {
       DEACTIVATE: apiPath + usersPath + pathRoutes.deactivate,
       ACTIVATE: apiPath + usersPath + pathRoutes.activate,
     },
-    ROLES: {
-      LIST: apiPath + rolesPath,
-      GET: apiPath + rolesPath + pathRoutes.getById,
-      CREATE: apiPath + rolesPath,
-      UPDATE: apiPath + rolesPath + pathRoutes.update,
-      DEACTIVATE: apiPath + rolesPath + pathRoutes.deactivate,
-      ACTIVATE: apiPath + rolesPath + pathRoutes.activate,
-    },
+
     PAYMENT_TYPES: {
       LIST: apiPath + paymentTypesPath,
       GET: apiPath + paymentTypesPath + pathRoutes.getById,
@@ -106,6 +105,14 @@ export const ENDPOINTS = {
       UPDATE: apiPath + organizationsPath + pathRoutes.update,
       DEACTIVATE: apiPath + organizationsPath + pathRoutes.deactivate,
       ACTIVATE: apiPath + organizationsPath + pathRoutes.activate,
+    },
+    ORDERS: {
+      LIST: apiPath + ordersPath,
+      GET: apiPath + ordersPath + pathRoutes.getById,
+      CREATE: apiPath + ordersPath,
+      UPDATE: apiPath + ordersPath + pathRoutes.update,
+      DEACTIVATE: apiPath + ordersPath + pathRoutes.deactivate,
+      ACTIVATE: apiPath + ordersPath + pathRoutes.activate,
     },
   },
   ADMIN: {
@@ -153,7 +160,7 @@ export const NAV = {
 
   orders: ordersPath,
   editOrder: ordersPath + pathRoutes.update,
-  newOrder: requisitesPath + createNewPath,
+  newOrder: ordersPath + createNewPath,
 
   payments: receiptsPath,
   certificates: certificatesPath,
@@ -217,3 +224,12 @@ export const defaultValues = {
   table: '—',
   requisiteMode: 'TARGET_ONLY',
 };
+
+export const orderStatusCodes = {
+  'DRAFTED': 'drafted', 
+  'SUBMITTED': 'submitted', 
+  'ACCEPTED': 'accepted', 
+  'SHIPPED': 'shipped', 
+  'COMPLETED': 'completed', 
+  'CANCELED': 'canceled',
+}

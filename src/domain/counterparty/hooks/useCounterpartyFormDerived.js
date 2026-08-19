@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 import { mapOption } from '@/core/utils/options.map';
 
@@ -15,11 +15,11 @@ export function useCounterpartyFormDerived({
 
   const requisiteMode = useWatch({ control, name: fieldNames.requisiteMode });
 
-  const resetParams = useMemo(() => ({
-    shouldDirty: true,
-    shouldTouch: true,
-    shouldValidate: true,
-  }), []);
+  // const resetParams = useMemo(() => ({
+  //   shouldDirty: true,
+  //   shouldTouch: true,
+  //   shouldValidate: true,
+  // }), []);
 
   const isTargetModeOnly = requisiteMode === 'TARGET_ONLY';
 

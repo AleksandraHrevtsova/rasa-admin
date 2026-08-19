@@ -20,6 +20,9 @@ import Counterparty from '@/ui/pages/Counterparty';
 import Organizations from '@/ui/pages/Organizations';
 import Organization from '@/ui/pages/Organization';
 
+import Orders from '@/ui/pages/Orders';
+import Order from '@/ui/pages/Order';
+
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -53,6 +56,10 @@ export default function AppRouter() {
             <Route path={NAV.organizations} element={<ProtectedRoute><Organizations /></ProtectedRoute>} />
             <Route path={NAV.newOrganization} element={<ProtectedRoute><Organization /></ProtectedRoute>} />
             <Route path={NAV.editOrganization} element={<ProtectedRoute><Organization /></ProtectedRoute>} />
+
+            <Route path={NAV.orders} element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+            <Route path={NAV.newOrder} element={<ProtectedRoute><Order /></ProtectedRoute>} />
+            <Route path={NAV.editOrder} element={<ProtectedRoute><Order /></ProtectedRoute>} />
 
             <Route path={NAV.roles} element={<Products />} />
             <Route path={NAV.orders} element={<Products />} />

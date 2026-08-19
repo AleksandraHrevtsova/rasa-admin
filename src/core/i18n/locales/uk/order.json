@@ -1,0 +1,23 @@
+{
+  "editCurrent": "Редагування замовлення",
+  "createNew": "Створення замовлення",
+
+  "deliveryBlocked": "Блок відвантаження",
+  "deliveryUnBlocked": "Відвантаження дозволено",
+  "comment": "Коментарі",
+  "status": "Статус",
+  "source": "Канал замовлення",
+  "regularOrder": "Замовлення за графіком",
+  "irRegularOrder": "Замовлення поза графіком",
+  "submittedAt": "Додано в обробку",
+  "acceptedAt": "Підтверджено",
+  "shippedAt": "Відвантажено",
+  "completedAt": "Виконано",
+
+  "drafted": "Створене",
+  "submitted": "Відправлене",
+  "accepted": "Прийняте",
+  "shipped": "Відвантажене",
+  "completed": "Виконане",
+  "canceled": "Скасовано"
+}

@@ -1,0 +1,24 @@
+{
+  "editCurrent": "Редактирование заказа",
+  "createNew": "Создание заказа",
+
+  "deliveryBlocked": "Блок отгрузки",
+  "deliveryUnBlocked": "Отгрузка разрешена",
+  "comment": "Комментарии",
+  "status": "Статус",
+  "source": "Источник заказа",
+  "regularOrder": "Заказ по графику",
+  "irRegularOrder": "Заказ вне графика",
+  "submittedAt": "Отправлен в обработку",
+  "acceptedAt": "Подтвержден",
+  "shippedAt": "Отгружен",
+  "completedAt": "Выполнен",
+
+  "drafted": "Создан",
+  "submitted": "Отправлен",
+  "accepted": "Принят",
+  "shipped": "Отгружен",
+  "completed": "Выполнен",
+  "canceled": "Отменен"
+
+}
